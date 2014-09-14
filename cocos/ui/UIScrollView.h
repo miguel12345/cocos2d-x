@@ -338,7 +338,7 @@ protected:
     virtual void copyClonedWidgetChildren(Widget* model) override;
     
     
-    void moveChildren(float offsetX, float offsetY);
+    virtual void moveChildren(float offsetX, float offsetY);
     void autoScrollChildren(float dt);
     void bounceChildren(float dt);
     void checkBounceBoundary();
