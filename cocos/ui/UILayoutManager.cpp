@@ -46,7 +46,7 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
 {
     Size layoutSize = layout->getLayoutContentSize();
     Vector<Node*> container = layout->getLayoutElements();
-    float leftBoundary = 0.0f;
+    float leftBoundary = layout->getPadding().left;
     for (auto& subWidget : container)
     {
         Widget* child = dynamic_cast<Widget*>(subWidget);
@@ -102,7 +102,7 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
 {
     Size layoutSize = layout->getLayoutContentSize();
     Vector<Node*> container = layout->getLayoutElements();
-    float topBoundary = layoutSize.height;
+    float topBoundary = layoutSize.height - layout->getPadding().top;
     
     for (auto& subWidget : container)
     {
