@@ -1782,7 +1782,16 @@ Widget* ScrollView::findNextFocusedWidget(cocos2d::ui::Widget::FocusDirection di
     }
 }
     
+    void ScrollView::setPadding(const Padding& padding) {
+        _innerContainer->setPadding(padding);
+    }
+    
+    Padding ScrollView::getPadding() const {
+        return _innerContainer->getPadding();
+    };
+
 
 }
+
 
 NS_CC_END

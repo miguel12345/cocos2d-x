@@ -318,6 +318,11 @@ public:
      *@return the next focused widget in a layout
      */
     virtual Widget* findNextFocusedWidget(FocusDirection direction, Widget* current) override;
+    
+    
+    virtual void setPadding(const Padding& padding) override;
+    virtual Padding getPadding() const override;
+
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
