@@ -23,8 +23,8 @@ THE SOFTWARE.
 ****************************************************************************/
 
 
-#ifndef __UIExperimentalListView_H__
-#define __UIExperimentalListView_H__
+#ifndef __UILazyListView_H__
+#define __UILazyListView_H__
 
 #include "ui/UIScrollView.h"
 
@@ -33,35 +33,35 @@ NS_CC_BEGIN
 namespace experimental{
 namespace ui{
     
-class ExperimentalListViewDataSource : public Ref
+class LazyListViewDataSource : public Ref
 {
 public:
-    static ExperimentalListViewDataSource* create();
+    static LazyListViewDataSource* create();
     
-    virtual ~ExperimentalListViewDataSource();
+    virtual ~LazyListViewDataSource();
     
 public:
     std::function<int()> numElements;
     std::function<cocos2d::ui::Widget*(int,cocos2d::ui::Widget*)> elementForIndex;
-    virtual ExperimentalListViewDataSource* clone();
+    virtual LazyListViewDataSource* clone();
     bool isValid();
     
 private:
-    ExperimentalListViewDataSource();
+    LazyListViewDataSource();
     bool init();
 };
     
 typedef enum
 {
-    ExperimentalListView_ONSELECTEDITEM_START,
-    ExperimentalListView_ONSELECTEDITEM_END
-}ExperimentalListViewEventType;
+    LazyListView_ONSELECTEDITEM_START,
+    LazyListView_ONSELECTEDITEM_END
+}LazyListViewEventType;
 
-typedef void (Ref::*SEL_ExperimentalListViewEvent)(Ref*,ExperimentalListViewEventType);
-#define ExperimentalListVieweventselector(_SELECTOR) (SEL_ExperimentalListViewEvent)(&_SELECTOR)
+typedef void (Ref::*SEL_LazyListViewEvent)(Ref*,LazyListViewEventType);
+#define LazyListVieweventselector(_SELECTOR) (SEL_LazyListViewEvent)(&_SELECTOR)
 
     
-class ExperimentalListView : public ::cocos2d::ui::ScrollView
+class LazyListView : public ::cocos2d::ui::ScrollView
 {
  
     DECLARE_CLASS_GUI_INFO
@@ -83,54 +83,54 @@ public:
         ON_SELECTED_ITEM_END
     };
     
-    typedef std::function<void(Ref*, EventType)> ccExperimentalListViewCallback;
+    typedef std::function<void(Ref*, EventType)> ccLazyListViewCallback;
     
     /**
      * Default constructor
      */
-    ExperimentalListView();
+    LazyListView();
     
     /**
      * Default destructor
      */
-    virtual ~ExperimentalListView();
+    virtual ~LazyListView();
     
     /**
      * Allocates and initializes.
      */
-    static ExperimentalListView* create();
+    static LazyListView* create();
     
     /**
-     * Sets a item model for ExperimentalListView
+     * Sets a item model for LazyListView
      *
      * A model will be cloned for adding default item.
      *
-     * @param model  item model for ExperimentalListView
+     * @param model  item model for LazyListView
      */
     void setItemModel(Widget* model);
     
     /**
-     * Push back a default item(create by a cloned model) into ExperimentalListView.
+     * Push back a default item(create by a cloned model) into LazyListView.
      */
     void pushBackDefaultItem();
     
     /**
-     * Insert a default item(create by a cloned model) into ExperimentalListView.
+     * Insert a default item(create by a cloned model) into LazyListView.
      */
     void insertDefaultItem(ssize_t index);
     
     /**
-     * Push back custom item into ExperimentalListView.
+     * Push back custom item into LazyListView.
      */
     void pushBackCustomItem(Widget* item);
     
     /**
-     * Insert custom item into ExperimentalListView.
+     * Insert custom item into LazyListView.
      */
     void insertCustomItem(Widget* item, ssize_t index);
     
     /**
-     *  Removes the last item of ExperimentalListView.
+     *  Removes the last item of LazyListView.
      */
     void removeLastItem();
     
@@ -167,8 +167,8 @@ public:
     ssize_t getIndex(Widget* item) const;
     
     /**
-     * Changes the gravity of ExperimentalListView.
-     * @see ExperimentalListViewGravity
+     * Changes the gravity of LazyListView.
+     * @see LazyListViewGravity
      */
     void setGravity(Gravity gravity);
     
@@ -193,8 +193,8 @@ public:
     
     ssize_t getCurSelectedIndex() const;
     
-    CC_DEPRECATED_ATTRIBUTE void addEventListenerExperimentalListView(Ref* target, SEL_ExperimentalListViewEvent selector);
-    void addEventListener(const ccExperimentalListViewCallback& callback);
+    CC_DEPRECATED_ATTRIBUTE void addEventListenerLazyListView(Ref* target, SEL_LazyListViewEvent selector);
+    void addEventListener(const ccLazyListViewCallback& callback);
     using ScrollView::addEventListener;
 
     /**
@@ -217,8 +217,8 @@ public:
     std::pair<int, int> calcVisibleIndexRange() const;
     void adjustPadding(std::pair<int, int> syncResult);
     
-    void setDataSource(ExperimentalListViewDataSource* dataSource);
-    ExperimentalListViewDataSource* getDataSource() const;
+    void setDataSource(LazyListViewDataSource* dataSource);
+    LazyListViewDataSource* getDataSource() const;
     
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
@@ -246,22 +246,22 @@ protected:
     ssize_t _curSelectedIndex;
     bool _refreshViewDirty;
     
-    Ref*       _ExperimentalListViewEventListener;
+    Ref*       _LazyListViewEventListener;
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #elif _MSC_VER >= 1400 //vs 2005 or higher
 #pragma warning (push)
 #pragma warning (disable: 4996)
 #endif
-    SEL_ExperimentalListViewEvent    _ExperimentalListViewEventSelector;
+    SEL_LazyListViewEvent    _LazyListViewEventSelector;
 #if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
 #pragma GCC diagnostic warning "-Wdeprecated-declarations"
 #elif _MSC_VER >= 1400 //vs 2005 or higher
 #pragma warning (pop)
 #endif
-    ccExperimentalListViewCallback _eventCallback;
+    ccLazyListViewCallback _eventCallback;
     
-    ExperimentalListViewDataSource* _dataSource;
+    LazyListViewDataSource* _dataSource;
     Vector<Widget*> _cachedWidgets;
 };
 
@@ -269,4 +269,4 @@ protected:
 }
 NS_CC_END
 
-#endif /* defined(__ExperimentalListView__) */
+#endif /* defined(__LazyListView__) */

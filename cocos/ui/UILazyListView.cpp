@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIExperimentalListView.h"
+#include "ui/UILazyListView.h"
 #include "ui/UIHelper.h"
 #include "extensions/GUI/CCControlExtension/CCScale9Sprite.h"
 
@@ -33,25 +33,25 @@ namespace ui {
     using namespace cocos2d::ui;
     
     
-    ExperimentalListViewDataSource::ExperimentalListViewDataSource()
+    LazyListViewDataSource::LazyListViewDataSource()
     : numElements(nullptr)
     , elementForIndex(nullptr)
     {
     }
     
-    ExperimentalListViewDataSource::~ExperimentalListViewDataSource()
+    LazyListViewDataSource::~LazyListViewDataSource()
     {
-        CCLOGINFO("In the destructor of ExperimentalListViewDataSource, %p", this);
+        CCLOGINFO("In the destructor of LazyListViewDataSource, %p", this);
     }
     
-    bool ExperimentalListViewDataSource::init()
+    bool LazyListViewDataSource::init()
     {
         return true;
     }
 
-    ExperimentalListViewDataSource* ExperimentalListViewDataSource::create()
+    LazyListViewDataSource* LazyListViewDataSource::create()
     {
-        auto ret = new ExperimentalListViewDataSource();
+        auto ret = new LazyListViewDataSource();
         if (ret && ret->init())
         {
             ret->autorelease();
@@ -63,9 +63,9 @@ namespace ui {
         return ret;
     }
     
-    ExperimentalListViewDataSource* ExperimentalListViewDataSource::clone()
+    LazyListViewDataSource* LazyListViewDataSource::clone()
     {
-        auto ret = new ExperimentalListViewDataSource();
+        auto ret = new LazyListViewDataSource();
         if (ret && ret->init())
         {
             ret->autorelease();
@@ -80,19 +80,19 @@ namespace ui {
         return ret;
     }
     
-    bool ExperimentalListViewDataSource::isValid() {
+    bool LazyListViewDataSource::isValid() {
         return elementForIndex != nullptr && numElements != nullptr;
     }
 
     
-IMPLEMENT_CLASS_GUI_INFO(ExperimentalListView)
+IMPLEMENT_CLASS_GUI_INFO(LazyListView)
 
-ExperimentalListView::ExperimentalListView():
+LazyListView::LazyListView():
 _model(nullptr),
 _gravity(Gravity::CENTER_VERTICAL),
 _itemsMargin(0.0f),
-_ExperimentalListViewEventListener(nullptr),
-_ExperimentalListViewEventSelector(nullptr),
+_LazyListViewEventListener(nullptr),
+_LazyListViewEventSelector(nullptr),
 _curSelectedIndex(0),
 _refreshViewDirty(true),
 _eventCallback(nullptr),
@@ -102,17 +102,17 @@ _firstVisibleElementIndex(0)
     this->setTouchEnabled(true);
 }
 
-ExperimentalListView::~ExperimentalListView()
+LazyListView::~LazyListView()
 {
-    _ExperimentalListViewEventListener = nullptr;
-    _ExperimentalListViewEventSelector = nullptr;
+    _LazyListViewEventListener = nullptr;
+    _LazyListViewEventSelector = nullptr;
     _items.clear();
     CC_SAFE_RELEASE(_model);
 }
 
-ExperimentalListView* ExperimentalListView::create()
+LazyListView* LazyListView::create()
 {
-    ExperimentalListView* widget = new ExperimentalListView();
+    LazyListView* widget = new LazyListView();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -122,7 +122,7 @@ ExperimentalListView* ExperimentalListView::create()
     return nullptr;
 }
 
-bool ExperimentalListView::init()
+bool LazyListView::init()
 {
     if (ScrollView::init())
     {
@@ -132,7 +132,7 @@ bool ExperimentalListView::init()
     return false;
 }
 
-void ExperimentalListView::setItemModel(Widget *model)
+void LazyListView::setItemModel(Widget *model)
 {
     if (!model)
     {
@@ -143,7 +143,7 @@ void ExperimentalListView::setItemModel(Widget *model)
     CC_SAFE_RETAIN(_model);
 }
 
-void ExperimentalListView::updateInnerContainerSize()
+void LazyListView::updateInnerContainerSize()
 {
     switch (_direction)
     {
@@ -166,7 +166,7 @@ void ExperimentalListView::updateInnerContainerSize()
     }
 }
 
-void ExperimentalListView::remedyLayoutParameter(Widget *item)
+void LazyListView::remedyLayoutParameter(Widget *item)
 {
     if (!item)
     {
@@ -265,7 +265,7 @@ void ExperimentalListView::remedyLayoutParameter(Widget *item)
     
 }
 
-void ExperimentalListView::pushBackDefaultItem()
+void LazyListView::pushBackDefaultItem()
 {
     if (!_model)
     {
@@ -277,7 +277,7 @@ void ExperimentalListView::pushBackDefaultItem()
     _refreshViewDirty = true;
 }
 
-void ExperimentalListView::insertDefaultItem(ssize_t index)
+void LazyListView::insertDefaultItem(ssize_t index)
 {
     if (!_model)
     {
@@ -294,14 +294,14 @@ void ExperimentalListView::insertDefaultItem(ssize_t index)
 }
 
 
-void ExperimentalListView::pushBackCustomItem(Widget* item)
+void LazyListView::pushBackCustomItem(Widget* item)
 {
     remedyLayoutParameter(item);
     addChild(item);
     _refreshViewDirty = true;
 }
     
-void ExperimentalListView::addChild(cocos2d::Node *child, int zOrder, int tag)
+void LazyListView::addChild(cocos2d::Node *child, int zOrder, int tag)
 {
     ScrollView::addChild(child, zOrder, tag);
 
@@ -312,17 +312,17 @@ void ExperimentalListView::addChild(cocos2d::Node *child, int zOrder, int tag)
     }
 }
     
-void ExperimentalListView::addChild(cocos2d::Node *child)
+void LazyListView::addChild(cocos2d::Node *child)
 {
-    ExperimentalListView::addChild(child, child->getLocalZOrder(), child->getName());
+    LazyListView::addChild(child, child->getLocalZOrder(), child->getName());
 }
 
-void ExperimentalListView::addChild(cocos2d::Node *child, int zOrder)
+void LazyListView::addChild(cocos2d::Node *child, int zOrder)
 {
-    ExperimentalListView::addChild(child, zOrder, child->getName());
+    LazyListView::addChild(child, zOrder, child->getName());
 }
  
-void ExperimentalListView::addChild(Node* child, int zOrder, const std::string &name)
+void LazyListView::addChild(Node* child, int zOrder, const std::string &name)
 {
     ScrollView::addChild(child, zOrder, name);
     
@@ -333,7 +333,7 @@ void ExperimentalListView::addChild(Node* child, int zOrder, const std::string &
     }
 }
     
-void ExperimentalListView::removeChild(cocos2d::Node *child, bool cleaup)
+void LazyListView::removeChild(cocos2d::Node *child, bool cleaup)
 {
     Widget* widget = dynamic_cast<Widget*>(child);
     if (widget) {
@@ -343,18 +343,18 @@ void ExperimentalListView::removeChild(cocos2d::Node *child, bool cleaup)
     ScrollView::removeChild(child, cleaup);
 }
     
-void ExperimentalListView::removeAllChildren()
+void LazyListView::removeAllChildren()
 {
     this->removeAllChildrenWithCleanup(true);
 }
     
-void ExperimentalListView::removeAllChildrenWithCleanup(bool cleanup)
+void LazyListView::removeAllChildrenWithCleanup(bool cleanup)
 {
     ScrollView::removeAllChildrenWithCleanup(cleanup);
     _items.clear();
 }
 
-void ExperimentalListView::insertCustomItem(Widget* item, ssize_t index)
+void LazyListView::insertCustomItem(Widget* item, ssize_t index)
 {
     _items.insert(index, item);
     ScrollView::addChild(item);
@@ -363,7 +363,7 @@ void ExperimentalListView::insertCustomItem(Widget* item, ssize_t index)
     _refreshViewDirty = true;
 }
 
-void ExperimentalListView::removeItem(ssize_t index)
+void LazyListView::removeItem(ssize_t index)
 {
     Widget* item = getItem(index);
     if (!item)
@@ -375,17 +375,17 @@ void ExperimentalListView::removeItem(ssize_t index)
     _refreshViewDirty = true;
 }
 
-void ExperimentalListView::removeLastItem()
+void LazyListView::removeLastItem()
 {
     removeItem(_items.size() -1);
 }
     
-void ExperimentalListView::removeAllItems()
+void LazyListView::removeAllItems()
 {
     removeAllChildren();
 }
 
-Widget* ExperimentalListView::getItem(ssize_t index)const
+Widget* LazyListView::getItem(ssize_t index)const
 {
     if (index < 0 || index >= _items.size())
     {
@@ -394,12 +394,12 @@ Widget* ExperimentalListView::getItem(ssize_t index)const
     return _items.at(index);
 }
 
-Vector<Widget*>& ExperimentalListView::getItems()
+Vector<Widget*>& LazyListView::getItems()
 {
     return _items;
 }
 
-ssize_t ExperimentalListView::getIndex(Widget *item) const
+ssize_t LazyListView::getIndex(Widget *item) const
 {
     if (!item)
     {
@@ -408,7 +408,7 @@ ssize_t ExperimentalListView::getIndex(Widget *item) const
     return _items.getIndex(item);
 }
 
-void ExperimentalListView::setGravity(Gravity gravity)
+void LazyListView::setGravity(Gravity gravity)
 {
     if (_gravity == gravity)
     {
@@ -418,7 +418,7 @@ void ExperimentalListView::setGravity(Gravity gravity)
     _refreshViewDirty = true;
 }
 
-void ExperimentalListView::setItemsMargin(float margin)
+void LazyListView::setItemsMargin(float margin)
 {
     if (_itemsMargin == margin)
     {
@@ -428,12 +428,12 @@ void ExperimentalListView::setItemsMargin(float margin)
     _refreshViewDirty = true;
 }
     
-float ExperimentalListView::getItemsMargin()const
+float LazyListView::getItemsMargin()const
 {
     return _itemsMargin;
 }
 
-void ExperimentalListView::setDirection(Direction dir)
+void LazyListView::setDirection(Direction dir)
 {
     switch (dir)
     {
@@ -452,12 +452,12 @@ void ExperimentalListView::setDirection(Direction dir)
     ScrollView::setDirection(dir);
 }
     
-void ExperimentalListView::requestRefreshView()
+void LazyListView::requestRefreshView()
 {
     _refreshViewDirty = true;
 }
 
-void ExperimentalListView::refreshView()
+void LazyListView::refreshView()
 {
     ssize_t length = _items.size();
     for (int i=0; i<length; i++)
@@ -469,7 +469,7 @@ void ExperimentalListView::refreshView()
     updateInnerContainerSize();
 }
     
-void ExperimentalListView::doLayout()
+void LazyListView::doLayout()
 {
     Layout::doLayout();
     
@@ -484,27 +484,27 @@ void ExperimentalListView::doLayout()
     }
 }
     
-void ExperimentalListView::addEventListenerExperimentalListView(Ref *target, SEL_ExperimentalListViewEvent selector)
+void LazyListView::addEventListenerLazyListView(Ref *target, SEL_LazyListViewEvent selector)
 {
-    _ExperimentalListViewEventListener = target;
-    _ExperimentalListViewEventSelector = selector;
+    _LazyListViewEventListener = target;
+    _LazyListViewEventSelector = selector;
 }
 
     
-void ExperimentalListView::addEventListener(const ccExperimentalListViewCallback& callback)
+void LazyListView::addEventListener(const ccLazyListViewCallback& callback)
 {
     _eventCallback = callback;
 }
     
-void ExperimentalListView::selectedItemEvent(TouchEventType event)
+void LazyListView::selectedItemEvent(TouchEventType event)
 {
     switch (event)
     {
         case TouchEventType::BEGAN:
         {
-            if (_ExperimentalListViewEventListener && _ExperimentalListViewEventSelector)
+            if (_LazyListViewEventListener && _LazyListViewEventSelector)
             {
-                (_ExperimentalListViewEventListener->*_ExperimentalListViewEventSelector)(this, ExperimentalListView_ONSELECTEDITEM_START);
+                (_LazyListViewEventListener->*_LazyListViewEventSelector)(this, LazyListView_ONSELECTEDITEM_START);
             }
             if (_eventCallback) {
                 _eventCallback(this,EventType::ON_SELECTED_ITEM_START);
@@ -513,9 +513,9 @@ void ExperimentalListView::selectedItemEvent(TouchEventType event)
         break;
         default:
         {
-            if (_ExperimentalListViewEventListener && _ExperimentalListViewEventSelector)
+            if (_LazyListViewEventListener && _LazyListViewEventSelector)
             {
-                (_ExperimentalListViewEventListener->*_ExperimentalListViewEventSelector)(this, ExperimentalListView_ONSELECTEDITEM_END);
+                (_LazyListViewEventListener->*_LazyListViewEventSelector)(this, LazyListView_ONSELECTEDITEM_END);
             }
             if (_eventCallback) {
                 _eventCallback(this, EventType::ON_SELECTED_ITEM_END);
@@ -526,7 +526,7 @@ void ExperimentalListView::selectedItemEvent(TouchEventType event)
 
 }
     
-void ExperimentalListView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch* touch)
+void LazyListView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch* touch)
 {
     ScrollView::interceptTouchEvent(event, sender, touch);
     if (event != TouchEventType::MOVED)
@@ -547,53 +547,53 @@ void ExperimentalListView::interceptTouchEvent(TouchEventType event, Widget *sen
     }
 }
     
-ssize_t ExperimentalListView::getCurSelectedIndex() const
+ssize_t LazyListView::getCurSelectedIndex() const
 {
     return _curSelectedIndex;
 }
 
-void ExperimentalListView::onSizeChanged()
+void LazyListView::onSizeChanged()
 {
     ScrollView::onSizeChanged();
     _refreshViewDirty = true;
 }
 
-std::string ExperimentalListView::getDescription() const
+std::string LazyListView::getDescription() const
 {
-    return "ExperimentalListView";
+    return "LazyListView";
 }
 
-Widget* ExperimentalListView::createCloneInstance()
+Widget* LazyListView::createCloneInstance()
 {
-    return ExperimentalListView::create();
+    return LazyListView::create();
 }
 
-void ExperimentalListView::copyClonedWidgetChildren(Widget* model)
+void LazyListView::copyClonedWidgetChildren(Widget* model)
 {
-    auto& arrayItems = static_cast<ExperimentalListView*>(model)->getItems();
+    auto& arrayItems = static_cast<LazyListView*>(model)->getItems();
     for (auto& item : arrayItems)
     {
         pushBackCustomItem(item->clone());
     }
 }
 
-void ExperimentalListView::copySpecialProperties(Widget *widget)
+void LazyListView::copySpecialProperties(Widget *widget)
 {
-    ExperimentalListView* ExperimentalListViewEx = dynamic_cast<ExperimentalListView*>(widget);
-    if (ExperimentalListViewEx)
+    LazyListView* LazyListViewEx = dynamic_cast<LazyListView*>(widget);
+    if (LazyListViewEx)
     {
         ScrollView::copySpecialProperties(widget);
-        setItemModel(ExperimentalListViewEx->_model);
-        setItemsMargin(ExperimentalListViewEx->_itemsMargin);
-        setGravity(ExperimentalListViewEx->_gravity);
-        setDataSource(ExperimentalListViewEx->getDataSource());
-        _ExperimentalListViewEventListener = ExperimentalListViewEx->_ExperimentalListViewEventListener;
-        _ExperimentalListViewEventSelector = ExperimentalListViewEx->_ExperimentalListViewEventSelector;
-        _eventCallback = ExperimentalListViewEx->_eventCallback;
+        setItemModel(LazyListViewEx->_model);
+        setItemsMargin(LazyListViewEx->_itemsMargin);
+        setGravity(LazyListViewEx->_gravity);
+        setDataSource(LazyListViewEx->getDataSource());
+        _LazyListViewEventListener = LazyListViewEx->_LazyListViewEventListener;
+        _LazyListViewEventSelector = LazyListViewEx->_LazyListViewEventSelector;
+        _eventCallback = LazyListViewEx->_eventCallback;
     }
 }
 
-void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
+void LazyListView::moveChildren(float offsetX, float offsetY)  {
     ScrollView::moveChildren(offsetX,offsetY);
     std::pair<int, int> visibleIndexRange = calcVisibleIndexRange();
     std::pair<int, int> syncResult = syncVisibleElements(visibleIndexRange.first,visibleIndexRange.second);
@@ -601,7 +601,7 @@ void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
 }
     
     
-    std::pair<int, int> ExperimentalListView::calcVisibleIndexRange() const {
+    std::pair<int, int> LazyListView::calcVisibleIndexRange() const {
     
         Rect visibleBoundingBox = getVisibleBoundingBox();
         
@@ -633,7 +633,7 @@ void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
         CCASSERT(false, "");
     }
     
-    Rect ExperimentalListView::getVisibleBoundingBox() const {
+    Rect LazyListView::getVisibleBoundingBox() const {
         switch (_direction) {
             case Direction::VERTICAL:
                 return Rect(0, _innerContainer->getPosition().y, _contentSize.width, getContentSize().height);
@@ -650,7 +650,7 @@ void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
         CCASSERT(false, "");
     }
 
-    std::pair<int, int> ExperimentalListView::syncVisibleElements(int firstVisibileElementIndex , int lastVisibileElementIndex ) {
+    std::pair<int, int> LazyListView::syncVisibleElements(int firstVisibileElementIndex , int lastVisibileElementIndex ) {
         
         std::pair<int, int> syncResult;
         
@@ -699,7 +699,7 @@ void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
         return syncResult;
     }
     
-    void ExperimentalListView::adjustPadding(std::pair<int, int> syncResult) {
+    void LazyListView::adjustPadding(std::pair<int, int> syncResult) {
         
         Padding curPadding = getPadding();
         int topRemovals = syncResult.first;
@@ -720,13 +720,13 @@ void ExperimentalListView::moveChildren(float offsetX, float offsetY)  {
         setPadding(curPadding);
     }
     
-    void ExperimentalListView::setDataSource(ExperimentalListViewDataSource* dataSource) {
+    void LazyListView::setDataSource(LazyListViewDataSource* dataSource) {
         CC_SAFE_RELEASE_NULL(_dataSource);
         _dataSource = dataSource;
         CC_SAFE_RETAIN(_dataSource);
     }
     
-    ExperimentalListViewDataSource* ExperimentalListView::getDataSource() const {
+    LazyListViewDataSource* LazyListView::getDataSource() const {
         return _dataSource;
     }
     
