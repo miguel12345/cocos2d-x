@@ -57,8 +57,8 @@ void AppDelegate::initGLContextAttrs()
 bool AppDelegate::applicationDidFinishLaunching()
 {
     // As an example, load config file
-    // XXX: This should be loaded before the Director is initialized,
-    // XXX: but at this point, the director is already initialized
+    // FIXME:: This should be loaded before the Director is initialized,
+    // FIXME:: but at this point, the director is already initialized
     Configuration::getInstance()->loadConfigFile("configs/config-example.plist");
 
     // initialize director
@@ -96,6 +96,7 @@ bool AppDelegate::applicationDidFinishLaunching()
         searchPaths.push_back("ccs-res/hd/scenetest/UIComponentTest");
         searchPaths.push_back("ccs-res/hd/scenetest/TriggerTest");
         searchPaths.push_back("ccs-res");
+        searchPaths.push_back("Manifests");
         director->setContentScaleFactor(resourceSize.height/designSize.height);
     }
     else
@@ -115,7 +116,7 @@ bool AppDelegate::applicationDidFinishLaunching()
     
     fileUtils->setSearchPaths(searchPaths);
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) || (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8)
     // a bug in DirectX 11 level9-x on the device prevents ResolutionPolicy::NO_BORDER from working correctly
     glview->setDesignResolutionSize(designSize.width, designSize.height, ResolutionPolicy::SHOW_ALL);
 #else
@@ -123,17 +124,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 #endif
 
     auto scene = Scene::create();
-    auto layer = new TestController();
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WP8) && (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
-    layer->addConsoleAutoTest();
-#endif
+    auto layer = new (std::nothrow) TestController();
     layer->autorelease();
     layer->addConsoleAutoTest();
     scene->addChild(layer);
     director->runWithScene(scene);
 
     // Enable Remote Console
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     auto console = director->getConsole();
     console->listenOnTCP(5678);
     Configuration *conf = Configuration::getInstance();
@@ -142,7 +139,6 @@ bool AppDelegate::applicationDidFinishLaunching()
     {
         layer->startAutoRun();
     }
-#endif
     
     return true;
 }

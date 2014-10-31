@@ -26,7 +26,7 @@ THE SOFTWARE.
 #ifndef __CC_APPLICATION_PROTOCOL_H__
 #define __CC_APPLICATION_PROTOCOL_H__
 
-#include "base/CCPlatformMacros.h"
+#include "platform/CCPlatformMacros.h"
 #include "base/CCScriptSupport.h"
 #include "base/CCAutoreleasePool.h"
 
@@ -133,6 +133,15 @@ public:
      * @lua NA
      */
     virtual Platform getTargetPlatform() = 0;
+    
+    /**
+     @brief Open url in default browser
+     @param String with url to open.
+     @return true if the resource located by the URL was successfully opened; otherwise false.
+     * @js NA
+     * @lua NA
+     */
+    virtual bool openURL(const std::string &url) = 0;
 };
 
 // end of platform group

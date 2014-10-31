@@ -77,7 +77,7 @@ Slider::~Slider()
 
 Slider* Slider::create()
 {
-    Slider* widget = new Slider();
+    Slider* widget = new (std::nothrow) Slider();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -336,7 +336,7 @@ void Slider::setPercent(int percent)
     _percent = percent;
     float res = percent / 100.0f;
     float dis = _barLength * res;
-    _slidBallRenderer->setPosition(Vec2(dis, _contentSize.height / 2.0f));
+    _slidBallRenderer->setPosition(dis, _contentSize.height / 2.0f);
     if (_scale9Enabled)
     {
         _progressBarRenderer->setPreferredSize(Size(dis,_progressBarTextureSize.height));
@@ -449,7 +449,7 @@ void Slider::adaptRenderers()
     }
 }
 
-const Size& Slider::getVirtualRendererSize() const
+Size Slider::getVirtualRendererSize() const
 {
     return _barRenderer->getContentSize();
 }
@@ -461,7 +461,12 @@ Node* Slider::getVirtualRenderer()
 
 void Slider::barRendererScaleChangedWithSize()
 {
-    if (_ignoreSize)
+    if (_unifySize)
+    {
+        _barLength = _contentSize.width;
+        _barRenderer->setPreferredSize(_contentSize);
+    }
+    else if (_ignoreSize)
     {
         
         _barRenderer->setScale(1.0f);
@@ -494,7 +499,11 @@ void Slider::barRendererScaleChangedWithSize()
 
 void Slider::progressBarRendererScaleChangedWithSize()
 {
-    if (_ignoreSize)
+    if (_unifySize)
+    {
+        _progressBarRenderer->setPreferredSize(_contentSize);
+    }
+    else if (_ignoreSize)
     {
         if (!_scale9Enabled)
         {

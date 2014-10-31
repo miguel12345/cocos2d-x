@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "CCTextFieldTTF.h"
+#include "2d/CCTextFieldTTF.h"
 
 #include "base/CCDirector.h"
 
@@ -72,7 +72,7 @@ TextFieldTTF::~TextFieldTTF()
 
 TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const Size& dimensions, TextHAlignment alignment, const std::string& fontName, float fontSize)
 {
-    TextFieldTTF *ret = new TextFieldTTF();
+    TextFieldTTF *ret = new (std::nothrow) TextFieldTTF();
     if(ret && ret->initWithPlaceHolder("", dimensions, alignment, fontName, fontSize))
     {
         ret->autorelease();
@@ -88,7 +88,7 @@ TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeho
 
 TextFieldTTF * TextFieldTTF::textFieldWithPlaceHolder(const std::string& placeholder, const std::string& fontName, float fontSize)
 {
-    TextFieldTTF *ret = new TextFieldTTF();
+    TextFieldTTF *ret = new (std::nothrow) TextFieldTTF();
     if(ret && ret->initWithPlaceHolder("", fontName, fontSize))
     {
         ret->autorelease();
@@ -142,7 +142,11 @@ bool TextFieldTTF::attachWithIME()
         auto pGlView = Director::getInstance()->getOpenGLView();
         if (pGlView)
         {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WP8 && CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
             pGlView->setIMEKeyboardState(true);
+#else
+            pGlView->setIMEKeyboardState(true, _inputText);
+#endif
         }
     }
     return ret;
@@ -157,7 +161,11 @@ bool TextFieldTTF::detachWithIME()
         auto glView = Director::getInstance()->getOpenGLView();
         if (glView)
         {
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WP8 && CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
             glView->setIMEKeyboardState(false);
+#else
+            glView->setIMEKeyboardState(false, "");
+#endif
         }
     }
     return ret;

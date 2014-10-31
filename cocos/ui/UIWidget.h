@@ -37,7 +37,7 @@ class EventListenerTouchOneByOne;
 
 
 namespace ui {
-    
+    class LayoutComponent;
 typedef enum
 {
     TOUCH_EVENT_BEGAN,
@@ -416,7 +416,7 @@ public:
      *
      * @return size percent
      */
-    const Vec2& getSizePercent() const;
+    const Vec2& getSizePercent();
 
     /**
      * Checks a point if is in widget's space
@@ -489,7 +489,7 @@ public:
     virtual Node* getVirtualRenderer();
 
 
-    virtual const Size& getVirtualRendererSize() const;
+    virtual Size getVirtualRendererSize() const;
     
 
     /**
@@ -510,14 +510,28 @@ public:
 	int getActionTag()const;
     
     /**
-     *@brief Allow widget touch events to propagate to its parents. Set false will disable propagation
+     * @brief Allow widget touch events to propagate to its parents. Set false will disable propagation
+     * @since v3.3
      */
     void setPropagateTouchEvents(bool isPropagate);
-    bool isPropagateTouchEvents()const;
+    
     /**
-     *@brief Specify widget to swallow touches or not
+     * Return whether the widget is propagate touch events to its parents or not
+     * @since v3.3
+     */
+     
+    bool isPropagateTouchEvents()const;
+    
+    /**
+     * @brief Specify widget to swallow touches or not
+     * @since v3.3
      */
     void setSwallowTouches(bool swallow);
+    
+    /**
+     * Return whether the widget is swallowing touch or not
+     * @since v3.3
+     */
     bool isSwallowTouches()const;
     
     /**
@@ -582,6 +596,12 @@ public:
      * use this function to manually specify the next focused widget regards to each direction
      */
     std::function<Widget*(FocusDirection)> onNextFocusedWidget;
+    
+    /**
+     *@param enable Unify Size of a widget
+     *@return void
+     */
+    void setUnifySizeEnabled(bool enable);
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -618,6 +638,10 @@ CC_CONSTRUCTOR_ACCESS:
      *@return void
      */
     void  dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
+    /**
+     *@return true represent the widget use Unify Size, false represent the widget couldn't use Unify Size
+     */
+    bool isUnifySizeEnabled()const;
     
 protected:
     //call back function called when size changed.
@@ -657,8 +681,10 @@ protected:
     bool isAncestorsVisible(Node* node);
 
     void cleanupWidget();
+    LayoutComponent* getOrCreateLayoutComponent();
 
 protected:
+    bool _unifySize;
     bool _enabled;
     bool _bright;
     bool _touchEnabled;

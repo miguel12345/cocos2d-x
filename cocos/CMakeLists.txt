@@ -25,87 +25,164 @@
 
 # this CMakeLists is to generate libcocos2d.a
 
-include_directories(
-  ${CMAKE_CURRENT_SOURCE_DIR}/platform/desktop
-  ${CMAKE_CURRENT_SOURCE_DIR}/audio/include
-  ${CMAKE_CURRENT_SOURCE_DIR}/editor-support
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/tinyxml2
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/unzip
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/edtaa3func
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk/include/chipmunk
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/jpeg/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/png/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/tiff/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/webp/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/glfw3/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/freetype2/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/websockets/include/${PLATFORM_FOLDER}
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/xxhash
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/ConvertUTF
-  ${CMAKE_CURRENT_SOURCE_DIR}/../external/linux-specific/fmod/include/${ARCH_DIR}
+cmake_minimum_required(VERSION 2.8)
+
+if(WINDOWS)
+  ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+endif()
+
+if(WINDOWS AND NOT BUILD_STATIC)
+  ADD_DEFINITIONS (-D_USRDLL)
+endif()
+
+include(2d/CMakeLists.txt)
+include(3d/CMakeLists.txt)
+include(platform/CMakeLists.txt)
+include(physics/CMakeLists.txt)
+include(math/CMakeLists.txt)
+include(renderer/CMakeLists.txt)
+include(base/CMakeLists.txt)
+include(deprecated/CMakeLists.txt)
+include(ui/CMakeLists.txt)
+include(network/CMakeLists.txt)
+include(audio/CMakeLists.txt)
+include(storage/CMakeLists.txt)
+
+include(editor-support/cocosbuilder/CMakeLists.txt)
+include(editor-support/cocostudio/CMakeLists.txt)
+include(editor-support/spine/CMakeLists.txt)
+
+include(../extensions/CMakeLists.txt)
+
+set(COCOS_EDITOR_SUPPORT_SRC
+  ${COCOS_CCB_SRC}
+  ${COCOS_CS_SRC}
+  ${COCOS_SPINE_SRC}
 )
 
+set(COCOS_SRC cocos2d.cpp
+    ${COCOS_2D_SRC}
+    ${COCOS_3D_SRC}
+    ${COCOS_PLATFORM_SRC}
+    ${COCOS_PHYSICS_SRC}
+    ${COCOS_MATH_SRC}
+    ${COCOS_RENDERER_SRC}
+    ${COCOS_BASE_SRC}
+    ${COCOS_AUDIO_SRC}
+    ${COCOS_UI_SRC}
+    ${COCOS_DEPRECATED_SRC}
+    ${COCOS_NETWORK_SRC}
+    ${COCOS_EDITOR_SUPPORT_SRC}
+    ${COCOS_EXTENSIONS_SRC}
+    )
 
-# cocos2d source files and header files
-file(GLOB core_source_files 
-     "${CMAKE_CURRENT_SOURCE_DIR}/cocos2d.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/ccFPSImages.c"
-     "${CMAKE_CURRENT_SOURCE_DIR}/2d/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/3d/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/audio/linux/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/deprecated/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/cocosbuilder/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/spine/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/math/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/network/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/physics/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/physics/chipmunk/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/platform/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/platform/linux/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/platform/desktop/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/renderer/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/storage/local-storage/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/ui/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/tinyxml2/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/xxhash/*.c"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/unzip/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk/src/*.c"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/chipmunk/src/constraints/*.c"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/edtaa3func/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/ConvertUTF/*.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../external/ConvertUTF/*.c"
-     )
-file(GLOB_RECURSE cocostudio_source_files "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/cocostudio/*.cpp")
-file(GLOB_RECURSE extensions_source_files "${CMAKE_CURRENT_SOURCE_DIR}/../extensions/*.cpp")
-file(GLOB_RECURSE box2d_source_files "${CMAKE_CURRENT_SOURCE_DIR}/../external/Box2D/*.cpp")
-set(cocos2d_source_files ${chipmunk_source_files} ${box2d_source_files} ${core_source_files} ${cocostudio_source_files}  ${extensions_source_files})
-# exclude files specific for other platforms
-list(REMOVE_ITEM cocos2d_source_files 
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/CCController-android.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/CCUserDefaultAndroid.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/ui/UIVideoPlayerAndroid.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/storage/local-storage/LocalStorageAndroid.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/CCEventController.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/base/CCEventListenerController.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../extensions/GUI/CCEditBox/CCEditBoxImplAndroid.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../extensions/GUI/CCEditBox/CCEditBoxImplWin.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../extensions/GUI/CCEditBox/CCEditBoxImplWp8.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/editor-support/cocostudio/proj.wp8/pch.cpp"
-     "${CMAKE_CURRENT_SOURCE_DIR}/../extensions/proj.wp8/pch.cpp")
+if(MACOSX OR APPLE)
+  include(FindFreetype REQUIRED)
 
-add_library(cocos2d STATIC ${cocos2d_source_files})
+  if(NOT FREETYPE_FOUND)
+    if(IOS)
+      FIND_LIBRARY(FREETYPE_LIBRARIES NAMES libfreetype PATHS "../external/freetype2/prebuilt/ios" DOC "Freetype includes")
+      find_path(FREETYPE_INCLUDE_DIRS ft2build.h "../external/freetype2/include/ios" "../external/freetype2/include/ios/freetype" DOC "Freetype includes")
 
-if ( CMAKE_SIZEOF_VOID_P EQUAL 8 )
-    set(FMOD_LIB "fmodex64")
+    elseif()
+      FIND_LIBRARY(FREETYPE_LIBRARIES NAMES libfreetype PATHS "../external/freetype2/prebuilt/mac" DOC "Freetype includes")
+      find_path(FREETYPE_INCLUDE_DIRS ft2build.h "../external/freetype2/include/mac" "../external/freetype2/include/mac/freetype" DOC "Freetype includes")
+    endif(IOS)
+  endif(NOT FREETYPE_FOUND)
+
+  find_package(Freetype REQUIRED)
+  include_directories(${FREETYPE_INCLUDE_DIRS})
+
+endif()
+
+if(MINGW)
+  find_package(Freetype REQUIRED)
+  find_package(WebP REQUIRED)
+  #find_package(MiniZip REQUIRED)
+  #${MINIZIP_INCLUDE_DIR}
+
+  #find_package(GLFW REQUIRED)
+  #${GLFW_INCLUDE_DIRS}
+
+  find_package(ZLIB REQUIRED)
+
+  find_package(Chipmunk REQUIRED)
+
+  message( STATUS "ZLIB dirs: ${ZLIB_INCLUDE_DIRS}")
+  message( STATUS "WEBP dirs: ${WEBP_INCLUDE_DIRS}")
+  message( STATUS "FREETYPE dirs: ${FREETYPE_INCLUDE_DIRS}")
+  message( STATUS "Chipmunk dirs: ${CHIPMUNK_INCLUDE_DIRS}")
+
+  include_directories(${FREETYPE_INCLUDE_DIRS} ${WEBP_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIRS} ${CHIPMUNK_INCLUDE_DIRS})
+
 else()
+
+  #todo: provide prebuild versions of minizip for android ios mac and msvc
+  #done: prebuilt version for mingw-w64 (linux distros should have them also)
+  # check for opensuse the buildbot system arch and ubuntu
+
+  include_directories(
+    ../external/unzip)
+
+endif()
+
+  #todo: provide prebuild versions of the xx libs for all platforms
+  include_directories(
+    ../external/xxhash
+    ../external/xxtea)
+
+
+add_library(cocos2d ${BUILD_TYPE} ${COCOS_SRC})
+
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(FMOD_LIB "fmodex64")
+elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     set(FMOD_LIB "fmodex")
 endif()
-target_link_libraries(cocos2d jpeg webp tiff freetype fontconfig png pthread glfw GLEW GL X11 rt z ${FMOD_LIB} curl)
+
+if(MINGW)
+  set(PLATFORM_SPECIFIC_LIBS z jpeg png webp tiff curl websockets glfw3 glew32 opengl32 iconv freetype bz2)
+elseif(WINDOWS)
+  set(PLATFORM_SPECIFIC_LIBS libjpeg libpng libwebp libtiff libcurl_imp libwebsockets freetype250 glfw3 glew32 opengl32 libiconv libzlib)
+elseif(LINUX)
+  set(PLATFORM_SPECIFIC_LIBS jpeg webp tiff freetype curl websockets ssl crypto
+  fontconfig png pthread glfw GLEW GL X11 rt z protobuf ${FMOD_LIB})
+elseif(MACOSX OR APPLE)
+ INCLUDE_DIRECTORIES ( /System/Library/Frameworks )
+
+ FIND_LIBRARY(COCOA_LIBRARY Cocoa)
+ FIND_LIBRARY(OPENGL_LIBRARY OpenGL )
+ FIND_LIBRARY(AUDIOTOOLBOX_LIBRARY AudioToolbox)
+ FIND_LIBRARY(OPENAL_LIBRARY OpenAL )
+ FIND_LIBRARY(QUARTZCORE_LIBRARY QuartzCore )
+ FIND_LIBRARY(APPLICATIONSERVICES_LIBRARY ApplicationServices)
+ FIND_LIBRARY(IOKIT_LIBRARY IOKit)
+ FIND_LIBRARY(FOUNDATION_LIBRARY Foundation)
+
+  set(PLATFORM_SPECIFIC_LIBS
+    z jpeg png webp tiff curl glfw3
+    websockets freetype
+    ${COCOA_LIBRARY}
+    ${OPENGL_LIBRARY}
+    ${OPENAL_LIBRARY}
+    ${AUDIOTOOLBOX_LIBRARY}
+    ${QUARTZCORE_LIBRARY}
+    ${APPLICATIONSERVICES_LIBRARY}
+    ${IOKIT_LIBRARY}
+    ${FOUNDATION_LIBRARY}
+  )
+
+elseif(ANDROID)
+  set(PLATFORM_SPECIFIC_LIBS GLESv2 log z android)
+else()
+  message( FATAL_ERROR "Unsupported platform, CMake will exit" )
+endif()
+
+target_link_libraries(cocos2d chipmunk box2d tinyxml2 unzip xxhash ${PLATFORM_SPECIFIC_LIBS})
 
 set_target_properties(cocos2d
     PROPERTIES
     ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
+    VERSION "${COCOS2D_X_VERSION}"
 )
-

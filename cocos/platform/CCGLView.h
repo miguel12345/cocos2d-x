@@ -105,6 +105,10 @@ public:
 
     /** Open or close IME keyboard , subclass must implement this method. */
     virtual void setIMEKeyboardState(bool open) = 0;
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WP8 || CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    virtual void setIMEKeyboardState(bool open, std::string str) = 0;
+#endif
     
     virtual bool windowShouldClose() { return false; };
 
@@ -220,6 +224,11 @@ public:
      * Get the opengl view port rectangle.
      */
     const Rect& getViewPortRect() const;
+    
+    /**
+     * Get list of all active touches
+     */
+    std::vector<Touch*> getAllTouches() const;
 
     /**
      * Get scale factor of the horizontal direction.

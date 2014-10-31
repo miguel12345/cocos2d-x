@@ -1,36 +1,34 @@
 set(APP_NAME cpp-empty-test)
 
 if(ANDROID)
-
   set(PLATFORM_SRC
     proj.android/jni/hellocpp/main.cpp
   )
 
 elseif(WINDOWS)
-
   set(PLATFORM_SRC
     proj.win32/main.cpp
   )
 
 elseif(IOS)
-
   set(PLATFORM_SRC
     proj.ios/main.m
     proj.ios/AppController.mm
     proj.ios/RootViewController.mm
   )
 
-elseif(MACOSX)
-
+elseif(MACOSX OR APPLE)
   set(PLATFORM_SRC
-    proj.mac/main.m
+    proj.mac/main.cpp
   )
 
 elseif(LINUX)
-
   set(PLATFORM_SRC
     proj.linux/main.cpp
   )
+
+else()
+  message( FATAL_ERROR "Unsupported platform, CMake will exit" )
 
 endif()
 
@@ -54,12 +52,12 @@ if(MSVC)
   #get our dlls
   add_custom_command(TARGET ${APP_NAME} PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E copy
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/win32-specific/gles/prebuilt/glew32.dll 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external/win32-specific/gles/prebuilt/glew32.dll 
 					 ${CMAKE_CURRENT_BINARY_DIR})
 
   add_custom_command(TARGET ${APP_NAME} PRE_BUILD
                      COMMAND ${CMAKE_COMMAND} -E copy
-                     ${CMAKE_CURRENT_SOURCE_DIR}/../../../external/win32-specific/zlib/prebuilt/zlib1.dll 
+                     ${CMAKE_CURRENT_SOURCE_DIR}/../../external/win32-specific/zlib/prebuilt/zlib1.dll 
 					 ${CMAKE_CURRENT_BINARY_DIR}/Debug)
 
   #Visual Studio Defaults to wrong type
@@ -76,6 +74,7 @@ else()
     COMMAND ${CMAKE_COMMAND} -E remove_directory ${APP_BIN_DIR}/Resources
     COMMAND ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/Resources ${APP_BIN_DIR}/Resources
     )
+
 endif()
 
 target_link_libraries(${APP_NAME} cocos2d)

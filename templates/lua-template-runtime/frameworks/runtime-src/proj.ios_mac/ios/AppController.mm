@@ -29,8 +29,7 @@
 #import "AppController.h"
 #import "AppDelegate.h"
 #import "RootViewController.h"
-#import "CCEAGLView.h"
-#include "ConfigParser.h"
+#import "platform/ios/CCEAGLView-ios.h"
 
 @implementation AppController
 
@@ -48,9 +47,7 @@ static AppDelegate s_sharedApplication;
     cocos2d::GLViewImpl::convertAttrs();
 
     // Override point for customization after application launch.
-    
-    ConfigParser::getInstance()->readConfig();
-    
+
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
     CCEAGLView *eaglView = [CCEAGLView viewWithFrame: [window bounds]

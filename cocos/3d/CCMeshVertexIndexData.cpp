@@ -49,7 +49,7 @@ NS_CC_BEGIN
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 MeshIndexData* MeshIndexData::create(const std::string& id, MeshVertexData* vertexData, IndexBuffer* indexbuffer, const AABB& aabb)
 {
-    auto meshindex = new MeshIndexData();
+    auto meshindex = new (std::nothrow) MeshIndexData();
     
     meshindex->_id = id;
     meshindex->_indexBuffer = indexbuffer;
@@ -82,7 +82,7 @@ MeshIndexData::~MeshIndexData()
 
 MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
 {
-    auto vertexdata = new MeshVertexData();
+    auto vertexdata = new (std::nothrow) MeshVertexData();
     int pervertexsize = meshdata.getPerVertexSize();
     vertexdata->_vertexBuffer = VertexBuffer::create(pervertexsize, (int)(meshdata.vertex.size() / (pervertexsize / 4)));
     vertexdata->_vertexData = VertexData::create();
@@ -121,9 +121,9 @@ MeshVertexData* MeshVertexData::create(const MeshData& meshdata)
     return vertexdata;
 }
 
-const AABB& MeshVertexData::calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index)
+AABB MeshVertexData::calculateAABB(const std::vector<float>& vertex, int stride, const std::vector<unsigned short>& index)
 {
-    static AABB aabb;
+    AABB aabb;
     stride /= 4;
     for(const auto& it : index)
     {

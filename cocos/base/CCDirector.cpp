@@ -32,22 +32,22 @@ THE SOFTWARE.
 #include <string>
 
 #include "2d/CCDrawingPrimitives.h"
-#include "2d/CCScene.h"
 #include "2d/CCSpriteFrameCache.h"
 #include "platform/CCFileUtils.h"
-#include "platform/CCImage.h"
+
 #include "2d/CCActionManager.h"
 #include "2d/CCFontFNT.h"
 #include "2d/CCFontAtlasCache.h"
 #include "2d/CCAnimationCache.h"
 #include "2d/CCTransition.h"
 #include "2d/CCFontFreeType.h"
+#include "2d/CCLabelAtlas.h"
 #include "renderer/CCGLProgramCache.h"
 #include "renderer/CCGLProgramStateCache.h"
 #include "renderer/CCTextureCache.h"
 #include "renderer/ccGLStateCache.h"
 #include "renderer/CCRenderer.h"
-#include "base/CCCamera.h"
+#include "2d/CCCamera.h"
 #include "base/CCUserDefault.h"
 #include "base/ccFPSImages.h"
 #include "base/CCScheduler.h"
@@ -55,14 +55,10 @@ THE SOFTWARE.
 #include "base/CCEventDispatcher.h"
 #include "base/CCEventCustom.h"
 #include "base/CCConsole.h"
-#include "base/CCTouch.h"
 #include "base/CCAutoreleasePool.h"
-#include "base/CCProfiling.h"
 #include "base/CCConfiguration.h"
-#include "base/CCNS.h"
-#include "math/CCMath.h"
-#include "CCApplication.h"
-#include "CCGLViewImpl.h"
+#include "platform/CCApplication.h"
+//#include "platform/CCGLViewImpl.h"
 
 /**
  Position of the FPS
@@ -76,7 +72,7 @@ THE SOFTWARE.
 using namespace std;
 
 NS_CC_BEGIN
-// XXX it should be a Director ivar. Move it there once support for multiple directors is added
+// FIXME: it should be a Director ivar. Move it there once support for multiple directors is added
 
 // singleton stuff
 static DisplayLinkDirector *s_SharedDirector = nullptr;
@@ -137,19 +133,19 @@ bool Director::init(void)
     _contentScaleFactor = 1.0f;
 
     // scheduler
-    _scheduler = new Scheduler();
+    _scheduler = new (std::nothrow) Scheduler();
     // action manager
-    _actionManager = new ActionManager();
+    _actionManager = new (std::nothrow) ActionManager();
     _scheduler->scheduleUpdate(_actionManager, Scheduler::PRIORITY_SYSTEM, false);
 
-    _eventDispatcher = new EventDispatcher();
-    _eventAfterDraw = new EventCustom(EVENT_AFTER_DRAW);
+    _eventDispatcher = new (std::nothrow) EventDispatcher();
+    _eventAfterDraw = new (std::nothrow) EventCustom(EVENT_AFTER_DRAW);
     _eventAfterDraw->setUserData(this);
-    _eventAfterVisit = new EventCustom(EVENT_AFTER_VISIT);
+    _eventAfterVisit = new (std::nothrow) EventCustom(EVENT_AFTER_VISIT);
     _eventAfterVisit->setUserData(this);
-    _eventAfterUpdate = new EventCustom(EVENT_AFTER_UPDATE);
+    _eventAfterUpdate = new (std::nothrow) EventCustom(EVENT_AFTER_UPDATE);
     _eventAfterUpdate->setUserData(this);
-    _eventProjectionChanged = new EventCustom(EVENT_PROJECTION_CHANGED);
+    _eventProjectionChanged = new (std::nothrow) EventCustom(EVENT_PROJECTION_CHANGED);
     _eventProjectionChanged->setUserData(this);
 
 
@@ -157,11 +153,10 @@ bool Director::init(void)
     initTextureCache();
     initMatrixStack();
 
-    _renderer = new Renderer;
+    _renderer = new (std::nothrow) Renderer;
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
-    _console = new Console;
-#endif
+    _console = new (std::nothrow) Console;
+
     return true;
 }
 
@@ -185,9 +180,8 @@ Director::~Director(void)
 
     delete _renderer;
 
-#if (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     delete _console;
-#endif
+
 
     CC_SAFE_RELEASE(_eventDispatcher);
     
@@ -241,7 +235,7 @@ void Director::setGLDefaultValues()
     CCASSERT(_openGLView, "opengl view should not be null");
 
     setAlphaBlending(true);
-    // XXX: Fix me, should enable/disable depth test according the depth format as cocos2d-iphone did
+    // FIXME: Fix me, should enable/disable depth test according the depth format as cocos2d-iphone did
     // [self setDepthTest: view_.depthFormat];
     setDepthTest(false);
     setProjection(_projection);
@@ -277,7 +271,8 @@ void Director::drawScene()
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     /* to avoid flickr, nextScene MUST be here: after tick and before draw.
-     XXX: Which bug is this one. It seems that it can't be reproduced with v0.9 */
+     * FIXME: Which bug is this one. It seems that it can't be reproduced with v0.9
+     */
     if (_nextScene)
     {
         setNextScene();
@@ -287,41 +282,11 @@ void Director::drawScene()
     
     if (_runningScene)
     {
-        Camera* defaultCamera = nullptr;
-        const auto& cameras = _runningScene->_cameras;
-        //draw with camera
-        for (size_t i = 0; i < cameras.size(); i++)
-        {
-            Camera::_visitingCamera = cameras[i];
-            if (Camera::_visitingCamera->getCameraFlag() == CameraFlag::DEFAULT)
-            {
-                defaultCamera = Camera::_visitingCamera;
-                continue;
-            }
-            
-            pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-            loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, Camera::_visitingCamera->getViewProjectionMatrix());
-            
-            //visit the scene
-            _runningScene->visit(_renderer, Mat4::IDENTITY, 0);
-            _renderer->render();
-            
-            popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        }
-        //draw with default camera
-        if (defaultCamera)
-        {
-            Camera::_visitingCamera = defaultCamera;
-            pushMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-            loadMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION, Camera::_visitingCamera->getViewProjectionMatrix());
-            
-            //visit the scene
-            _runningScene->visit(_renderer, Mat4::IDENTITY, 0);
-            _renderer->render();
-            
-            popMatrix(MATRIX_STACK_TYPE::MATRIX_STACK_PROJECTION);
-        }
-        Camera::_visitingCamera = nullptr;
+        //clear draw stats
+        _renderer->clearDrawStats();
+        
+        //render the scene
+        _runningScene->render(_renderer);
         
         _eventDispatcher->dispatchEvent(_eventAfterVisit);
     }
@@ -438,9 +403,9 @@ TextureCache* Director::getTextureCache() const
 void Director::initTextureCache()
 {
 #ifdef EMSCRIPTEN
-    _textureCache = new TextureCacheEmscripten();
+    _textureCache = new (std::nothrow) TextureCacheEmscripten();
 #else
-    _textureCache = new TextureCache();
+    _textureCache = new (std::nothrow) TextureCache();
 #endif // EMSCRIPTEN
 }
 
@@ -1008,7 +973,19 @@ void Director::purgeDirector()
     FontFreeType::shutdownFreeType();
 
     // purge all managed caches
+    
+#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+#elif _MSC_VER >= 1400 //vs 2005 or higher
+#pragma warning (push)
+#pragma warning (disable: 4996)
+#endif
     DrawPrimitives::free();
+#if defined(__GNUC__) && ((__GNUC__ >= 4) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 1)))
+#pragma GCC diagnostic warning "-Wdeprecated-declarations"
+#elif _MSC_VER >= 1400 //vs 2005 or higher
+#pragma warning (pop)
+#endif
     AnimationCache::destroyInstance();
     SpriteFrameCache::destroyInstance();
     GLProgramCache::destroyInstance();
@@ -1158,7 +1135,7 @@ void Director::calculateMPF()
 // returns the FPS image data pointer and len
 void Director::getFPSImageData(unsigned char** datapointer, ssize_t* length)
 {
-    // XXX fixed me if it should be used 
+    // FIXME: fixed me if it should be used 
     *datapointer = cc_fps_images_png;
     *length = cc_fps_images_len();
 }
@@ -1188,7 +1165,7 @@ void Director::createStatsLabel()
     ssize_t dataLength = 0;
     getFPSImageData(&data, &dataLength);
 
-    Image* image = new Image();
+    Image* image = new (std::nothrow) Image();
     bool isOK = image->initWithImageData(data, dataLength);
     if (! isOK) {
         CCLOGERROR("%s", "Fails: init fps_images");
@@ -1297,8 +1274,10 @@ void DisplayLinkDirector::startAnimation()
 
     _invalid = false;
 
+#ifndef WP8_SHADER_COMPILER
     Application::getInstance()->setAnimationInterval(_animationInterval);
-    
+#endif
+
     // fix issue #3509, skip one fps to avoid incorrect time calculation.
     setNextDeltaTimeZero(true);
 }

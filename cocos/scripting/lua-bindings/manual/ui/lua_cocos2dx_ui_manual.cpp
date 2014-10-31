@@ -88,7 +88,8 @@ static int lua_cocos2dx_Widget_addTouchEventListener(lua_State* L)
         self->addTouchEventListener([=](cocos2d::Ref* ref,Widget::TouchEventType eventType){
             handleUIEvent(handler, ref, (int)eventType);
         });
-                
+        
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -149,6 +150,7 @@ static int lua_cocos2dx_CheckBox_addEventListener(lua_State* L)
             handleUIEvent(handler, ref, (int)eventType);
         });
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -210,6 +212,7 @@ static int lua_cocos2dx_Slider_addEventListener(lua_State* L)
             handleUIEvent(handler, ref, (int)eventType);
         });
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -271,6 +274,7 @@ static int lua_cocos2dx_TextField_addEventListener(lua_State* L)
             handleUIEvent(handler, ref, (int)eventType);
         });
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -332,6 +336,7 @@ static int lua_cocos2dx_PageView_addEventListener(lua_State* L)
             handleUIEvent(handler, ref, (int)eventType);
         });
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -393,6 +398,7 @@ static int lua_cocos2dx_ScrollView_addEventListener(lua_State* L)
             handleUIEvent(handler, ref, (int)eventType);
         });
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -455,6 +461,7 @@ static int lua_cocos2dx_ListView_addEventListener(lua_State* L)
         };
         self->addEventListener((ui::ListView::ccListViewCallback)listViewCallback);
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -506,6 +513,7 @@ static int lua_cocos2dx_ListView_addScrollViewEventListener(lua_State* L)
         };
         self->addEventListener((ui::ScrollView::ccScrollViewCallback)scrollViewCallback);
         
+        ScriptHandlerMgr::getInstance()->addCustomHandler((void*)self, handler);
         return 0;
     }
     
@@ -671,6 +679,112 @@ static void extendLayoutParameter(lua_State* L)
     lua_pop(L, 1);
 }
 
+
+static int tolua_cocos2d_EditBox_registerScriptEditBoxHandler(lua_State* tolua_S)
+{
+    if (NULL == tolua_S)
+        return 0;
+    
+    int argc = 0;
+    EditBox* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+	if (!tolua_isusertype(tolua_S,1,"ccui.EditBox",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = static_cast<EditBox*>(tolua_tousertype(tolua_S,1,0));
+    
+#if COCOS2D_DEBUG >= 1
+	if (nullptr == self) {
+		tolua_error(tolua_S,"invalid 'self' in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'\n", NULL);
+		return 0;
+	}
+#endif
+    
+    argc = lua_gettop(tolua_S) - 1;
+    
+    if (1 == argc)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!toluafix_isfunction(tolua_S,2,"LUA_FUNCTION",0,&tolua_err))
+        {
+            goto tolua_lerror;
+        }
+#endif
+        LUA_FUNCTION handler = (  toluafix_ref_function(tolua_S,2,0));
+        self->registerScriptEditBoxHandler(handler);
+        return 0;
+    }
+    
+    CCLOG("%s function of EditBox  has wrong number of arguments: %d, was expecting %d\n", "ccui.EditBox:registerScriptEditBoxHandler", argc, 1);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'tolua_cocos2d_EditBox_registerScriptEditBoxHandler'.",&tolua_err);
+    return 0;
+#endif
+    
+}
+
+static int tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler(lua_State* tolua_S)
+{
+    
+    if (NULL == tolua_S)
+        return 0;
+    
+    int argc = 0;
+    EditBox* self = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+	if (!tolua_isusertype(tolua_S,1,"ccui.EditBox",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    self = static_cast<EditBox*>(tolua_tousertype(tolua_S,1,0));
+    
+#if COCOS2D_DEBUG >= 1
+	if (nullptr == self) {
+		tolua_error(tolua_S,"invalid 'self' in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'\n", NULL);
+		return 0;
+	}
+#endif
+    
+    argc = lua_gettop(tolua_S) - 1;
+    
+    if (0 == argc)
+    {
+        self->unregisterScriptEditBoxHandler();
+        return 0;
+    }
+    
+    CCLOG("%s function of EditBox  has wrong number of arguments: %d, was expecting %d\n", "ccui.EditBox:unregisterScriptEditBoxHandler", argc, 0);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler'.",&tolua_err);
+    return 0;
+#endif
+}
+
+static void extendEditBox(lua_State* tolua_S)
+{
+    lua_pushstring(tolua_S, "ccui.EditBox");
+    lua_rawget(tolua_S, LUA_REGISTRYINDEX);
+    if (lua_istable(tolua_S,-1))
+    {
+        lua_pushstring(tolua_S,"registerScriptEditBoxHandler");
+        lua_pushcfunction(tolua_S,tolua_cocos2d_EditBox_registerScriptEditBoxHandler );
+        lua_rawset(tolua_S,-3);
+        lua_pushstring(tolua_S,"unregisterScriptEditBoxHandler");
+        lua_pushcfunction(tolua_S,tolua_cocos2d_EditBox_unregisterScriptEditBoxHandler );
+        lua_rawset(tolua_S,-3);
+    }
+    lua_pop(tolua_S, 1);
+}
+
 int register_all_cocos2dx_ui_manual(lua_State* L)
 {
     if (nullptr == L)
@@ -683,7 +797,8 @@ int register_all_cocos2dx_ui_manual(lua_State* L)
     extendScrollView(L);
     extendListView(L);
     extendLayoutParameter(L);
-    
+    extendEditBox(L);
+
     return 0;
 }
 
@@ -701,7 +816,5 @@ int register_ui_moudle(lua_State* L)
     }
     lua_pop(L, 1);
     
-    LuaEngine::getInstance()->executeScriptFile("DeprecatedUIEnum");
-    LuaEngine::getInstance()->executeScriptFile("DeprecatedUIFunc");
     return 1;
 }

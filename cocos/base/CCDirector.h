@@ -28,17 +28,14 @@ THE SOFTWARE.
 #ifndef __CCDIRECTOR_H__
 #define __CCDIRECTOR_H__
 
-#include "base/CCPlatformMacros.h"
-
-#include "base/CCRef.h"
-#include "base/ccTypes.h"
-#include "math/CCGeometry.h"
-#include "base/CCVector.h"
-#include "CCGL.h"
-#include "2d/CCLabelAtlas.h"
-#include "2d/CCScene.h"
 #include <stack>
+
+#include "platform/CCPlatformMacros.h"
+#include "base/CCRef.h"
+#include "base/CCVector.h"
+#include "2d/CCScene.h"
 #include "math/CCMath.h"
+#include "platform/CCGL.h"
 #include "platform/CCGLView.h"
 
 NS_CC_BEGIN
@@ -50,7 +47,6 @@ NS_CC_BEGIN
 
 /* Forward declarations. */
 class LabelAtlas;
-class Scene;
 //class GLView;
 class DirectorDelegate;
 class Node;
@@ -63,9 +59,7 @@ class TextureCache;
 class Renderer;
 class Camera;
 
-#if  (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
 class Console;
-#endif
 
 /**
 @brief Class that creates and handles the main Window and manages how
@@ -246,7 +240,7 @@ public:
      */
     Vec2 convertToUI(const Vec2& point);
 
-    /// XXX: missing description 
+    /// FIXME: missing description 
     float getZEye() const;
 
     // Scene Management
@@ -395,9 +389,7 @@ public:
     /** Returns the Console 
      @since v3.0
      */
-#if  (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     Console* getConsole() const { return _console; }
-#endif
 
     /* Gets delta time since last tick to main loop */
 	float getDeltaTime() const;
@@ -507,10 +499,8 @@ protected:
     /* Renderer for the Director */
     Renderer *_renderer;
 
-#if  (CC_TARGET_PLATFORM != CC_PLATFORM_WINRT)
     /* Console for the director */
     Console *_console;
-#endif
 
     // GLView will recreate stats labels to fit visible rect
     friend class GLView;

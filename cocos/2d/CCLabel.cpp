@@ -45,7 +45,7 @@ const int Label::DistanceFieldFontSize = 50;
 
 Label* Label::create()
 {
-    auto ret = new Label();
+    auto ret = new (std::nothrow) Label();
 
     if (ret)
     {
@@ -69,7 +69,7 @@ Label* Label::create(const std::string& text, const std::string& font, float fon
 
 Label* Label::createWithSystemFont(const std::string& text, const std::string& font, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
-    auto ret = new Label(nullptr,hAlignment,vAlignment);
+    auto ret = new (std::nothrow) Label(nullptr,hAlignment,vAlignment);
 
     if (ret)
     {
@@ -89,7 +89,7 @@ Label* Label::createWithSystemFont(const std::string& text, const std::string& f
 
 Label* Label::createWithTTF(const std::string& text, const std::string& fontFile, float fontSize, const Size& dimensions /* = Size::ZERO */, TextHAlignment hAlignment /* = TextHAlignment::LEFT */, TextVAlignment vAlignment /* = TextVAlignment::TOP */)
 {
-    auto ret = new Label(nullptr,hAlignment,vAlignment);
+    auto ret = new (std::nothrow) Label(nullptr,hAlignment,vAlignment);
 
     if (ret && FileUtils::getInstance()->isFileExist(fontFile))
     {
@@ -111,7 +111,7 @@ Label* Label::createWithTTF(const std::string& text, const std::string& fontFile
 
 Label* Label::createWithTTF(const TTFConfig& ttfConfig, const std::string& text, TextHAlignment alignment /* = TextHAlignment::CENTER */, int maxLineWidth /* = 0 */)
 {
-    auto ret = new Label(nullptr,alignment);
+    auto ret = new (std::nothrow) Label(nullptr,alignment);
 
     if (ret && FileUtils::getInstance()->isFileExist(ttfConfig.fontFilePath) && ret->setTTFConfig(ttfConfig))
     {
@@ -128,7 +128,7 @@ Label* Label::createWithTTF(const TTFConfig& ttfConfig, const std::string& text,
 
 Label* Label::createWithBMFont(const std::string& bmfontFilePath, const std::string& text,const TextHAlignment& alignment /* = TextHAlignment::LEFT */, int maxLineWidth /* = 0 */, const Vec2& imageOffset /* = Vec2::ZERO */)
 {
-    auto ret = new Label(nullptr,alignment);
+    auto ret = new (std::nothrow) Label(nullptr,alignment);
 
     if (ret && ret->setBMFontFilePath(bmfontFilePath,imageOffset))
     {
@@ -145,7 +145,7 @@ Label* Label::createWithBMFont(const std::string& bmfontFilePath, const std::str
 
 Label* Label::createWithCharMap(const std::string& plistFile)
 {
-    auto ret = new Label();
+    auto ret = new (std::nothrow) Label();
 
     if (ret && ret->setCharMap(plistFile))
     {
@@ -159,7 +159,7 @@ Label* Label::createWithCharMap(const std::string& plistFile)
 
 Label* Label::createWithCharMap(Texture2D* texture, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto ret = new Label();
+    auto ret = new (std::nothrow) Label();
 
     if (ret && ret->setCharMap(texture,itemWidth,itemHeight,startCharMap))
     {
@@ -173,7 +173,7 @@ Label* Label::createWithCharMap(Texture2D* texture, int itemWidth, int itemHeigh
 
 Label* Label::createWithCharMap(const std::string& charMapFile, int itemWidth, int itemHeight, int startCharMap)
 {
-    auto ret = new Label();
+    auto ret = new (std::nothrow) Label();
 
     if (ret && ret->setCharMap(charMapFile,itemWidth,itemHeight,startCharMap))
     {
@@ -395,7 +395,13 @@ void Label::setFontAtlas(FontAtlas* atlas,bool distanceFieldEnabled /* = false *
         _commonLineHeight = _fontAtlas->getCommonLineHeight();
         _contentDirty = true;
     }
+#if CC_TARGET_PLATFORM != CC_PLATFORM_WP8
     _useDistanceField = distanceFieldEnabled;
+#else
+    // some older Windows Phones cannot run the ccShader_Label_df.frag program
+    // so we must disable distance field
+    _useDistanceField = false;
+#endif
     _useA8Shader = useA8Shader;
 
     if (_currentLabelType != LabelType::TTF)
@@ -772,7 +778,7 @@ void Label::enableShadow(const Color4B& shadowColor /* = Color4B::BLACK */,const
     auto contentScaleFactor = CC_CONTENT_SCALE_FACTOR();
     _shadowOffset.width = offset.width * contentScaleFactor;
     _shadowOffset.height = offset.height * contentScaleFactor;
-    //todo:support blur for shadow
+    //TODO: support blur for shadow
     _shadowBlurRadius = 0;
 
     if (_textSprite && _shadowNode)
@@ -892,7 +898,7 @@ void Label::createSpriteWithFontDefinition()
 {
     _currentLabelType = LabelType::STRING_TEXTURE;
 
-    auto texture = new Texture2D;
+    auto texture = new (std::nothrow) Texture2D;
     texture->initWithString(_originalUTF8String.c_str(),_fontDefinition);
 
     _textSprite = Sprite::createWithTexture(texture);
@@ -1157,8 +1163,8 @@ Sprite * Label::getLetter(int letterIndex)
 
             sp = Sprite::createWithTexture(_fontAtlas->getTexture(letter.def.textureID),uvRect);
             sp->setBatchNode(_batchNodes[letter.def.textureID]);
-            sp->setPosition(Vec2(letter.position.x + uvRect.size.width / 2, 
-                letter.position.y - uvRect.size.height / 2));
+            sp->setPosition(letter.position.x + uvRect.size.width / 2,
+                letter.position.y - uvRect.size.height / 2);
             sp->setOpacity(_realOpacity);
 
             _batchNodes[letter.def.textureID]->addSpriteWithoutQuad(sp, letter.atlasIndex, letterIndex);
@@ -1226,6 +1232,15 @@ void Label::computeStringNumLines()
     _currNumLines = quantityOfLines;
 }
 
+int Label::getStringNumLines() const {
+    if (_contentDirty)
+    {
+        const_cast<Label*>(this)->updateContent();
+    }
+
+    return _currNumLines;
+}
+
 int Label::getStringLength() const
 {
     return static_cast<int>(_currentUTF16String.length());
@@ -1239,13 +1254,11 @@ bool Label::isOpacityModifyRGB() const
 
 void Label::setOpacityModifyRGB(bool isOpacityModifyRGB)
 {
-    _isOpacityModifyRGB = isOpacityModifyRGB;
-
-    for(const auto& child: _children) {
-        child->setOpacityModifyRGB(_isOpacityModifyRGB);
+    if (isOpacityModifyRGB != _isOpacityModifyRGB)
+    {
+        _isOpacityModifyRGB = isOpacityModifyRGB;
+        updateColor();
     }
-
-    _reusedLetter->setOpacityModifyRGB(true);
 }
 
 void Label::updateDisplayedColor(const Color3B& parentColor)

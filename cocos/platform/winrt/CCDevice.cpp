@@ -23,14 +23,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "base/CCPlatformConfig.h"
+#include "platform/CCPlatformConfig.h"
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT) ||  (CC_TARGET_PLATFORM == CC_PLATFORM_WP8) 
 
 #include "cocos2d.h"
 #include "platform/CCDevice.h"
 #include "platform/CCFileUtils.h"
 #include "platform/winrt/CCFreeTypeFont.h"
-#include "CCStdC.h"
+#include "platform/CCStdC.h"
 
 using namespace Windows::Graphics::Display;
 using namespace Windows::Devices::Sensors;
@@ -42,8 +42,14 @@ CCFreeTypeFont sFT;
 
 int Device::getDPI()
 {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_WP8
 	static const float dipsPerInch = 96.0f;
 	return floor(DisplayProperties::LogicalDpi / dipsPerInch + 0.5f); // Round to nearest integer.
+#elif defined WP8_SHADER_COMPILER
+    return 0;
+#else
+    return cocos2d::GLViewImpl::sharedOpenGLView()->GetDPI();
+#endif
 }
 
 static Accelerometer^ sAccelerometer = nullptr;
@@ -51,8 +57,17 @@ static Accelerometer^ sAccelerometer = nullptr;
 
 void Device::setAccelerometerEnabled(bool isEnabled)
 {
+#ifndef WP8_SHADER_COMPILER
     static Windows::Foundation::EventRegistrationToken sToken;
     static bool sEnabled = false;
+
+    // we always need to reset the accelerometer
+    if (sAccelerometer)
+    {
+        sAccelerometer->ReadingChanged -= sToken;
+        sAccelerometer = nullptr;
+        sEnabled = false;
+    }
 
 	if (isEnabled)
 	{
@@ -83,7 +98,6 @@ void Device::setAccelerometerEnabled(bool isEnabled)
 			acc.z = reading->AccelerationZ;
             acc.timestamp = 0;
 
-#if CC_TARGET_PLATFORM == CC_PLATFORM_WP8
             auto orientation = GLViewImpl::sharedOpenGLView()->getDeviceOrientation();
 
             switch (orientation)
@@ -113,22 +127,12 @@ void Device::setAccelerometerEnabled(bool isEnabled)
 				acc.y = reading->AccelerationY;
                 break;
             }
-#endif
+
 	        std::shared_ptr<cocos2d::InputEvent> event(new AccelerometerEvent(acc));
             cocos2d::GLViewImpl::sharedOpenGLView()->QueueEvent(event);
 		});
 	}
-	else
-	{
-        if (sAccelerometer)
-        {
-            sAccelerometer->ReadingChanged -= sToken;
-            sAccelerometer = nullptr;
-        }
-
-        sEnabled = false;
-	}
-
+#endif
 }
 
 void Device::setAccelerometerInterval(float interval)
