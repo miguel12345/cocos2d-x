@@ -31,6 +31,8 @@
 
 #import "math/CCGeometry.h"
 #import "CCDirectorCaller-ios.h"
+#include "CCNotificationCenter.h"
+#include "CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -175,7 +177,7 @@ bool Application::openURL(const std::string &url)
 }
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
-
+    cocos2d::Director::getInstance()->applicationScreenSizeChanged(newWidth,newHeight);
 }
 
 NS_CC_END

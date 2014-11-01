@@ -74,6 +74,9 @@ public:
     virtual void end() override;
     virtual void swapBuffers() override;
     virtual void setIMEKeyboardState(bool bOpen) override;
+    
+    virtual void applicationScreenSizeChanged(int newWidth, int newHeight) override;
+
 
 protected:
     GLViewImpl();
