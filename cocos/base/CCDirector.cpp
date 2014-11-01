@@ -59,6 +59,7 @@ THE SOFTWARE.
 #include "base/CCConfiguration.h"
 #include "platform/CCApplication.h"
 //#include "platform/CCGLViewImpl.h"
+#include "UILayout.h"
 
 /**
  Position of the FPS
@@ -1255,6 +1256,22 @@ void Director::setEventDispatcher(EventDispatcher* dispatcher)
         CC_SAFE_RETAIN(dispatcher);
         CC_SAFE_RELEASE(_eventDispatcher);
         _eventDispatcher = dispatcher;
+    }
+}
+
+
+void Director::applicationScreenSizeChanged(int newWidth,int newHeight) {
+    
+    _openGLView->applicationScreenSizeChanged(newWidth,newHeight);
+    _winSizeInPoints = _openGLView->getDesignResolutionSize();
+    getRunningScene()->setContentSize(_winSizeInPoints);
+    setProjection(getProjection());
+    for (const auto& child : getRunningScene()->getChildren())
+    {
+        ui::Layout* rootLayout = dynamic_cast<ui::Layout*>(child);
+        if (rootLayout) {
+            rootLayout->updateSizeAndPosition();
+        }
     }
 }
 

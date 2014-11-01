@@ -398,6 +398,8 @@ public:
      *  get Frame Rate
      */
     float getFrameRate() const { return _frameRate; }
+    
+    void applicationScreenSizeChanged(int newWidth,int newHeight);
 
 protected:
     void purgeDirector();
