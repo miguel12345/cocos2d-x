@@ -60,7 +60,9 @@ public:
 
         INVALID_URL,
 
-        INVALID_STORAGE_PATH
+        INVALID_STORAGE_PATH,
+        
+        CANCELLED
     };
 
     struct Error
@@ -82,6 +84,24 @@ public:
         std::string name;
         double downloaded;
         double totalToDownload;
+    };
+    
+    class DownloadHandler
+    {
+        friend class Downloader;
+        friend int downloadProgressFunc(Downloader::DownloadHandler* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
+
+    private:
+        
+        ProgressData _progressData;
+        std::atomic<bool> _cancelled;
+        
+       
+        
+    public:
+        DownloadHandler():_cancelled(false){};
+        void cancel();
+        bool isCancelled();
     };
 
     struct DownloadUnit
@@ -127,7 +147,7 @@ public:
     
     void downloadToBufferSync(const std::string &srcUrl, unsigned char *buffer, const long &size, const std::string &customId = "");
 
-    void downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
+    std::weak_ptr<DownloadHandler> downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
 
     void downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
     
@@ -156,7 +176,7 @@ protected:
     
     void downloadToBuffer(const std::string &srcUrl, const std::string &customId, const StreamData &buffer, const ProgressData &data);
 
-    void download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, const ProgressData &data);
+    void download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, std::shared_ptr<Downloader::DownloadHandler> download);
     
     void groupBatchDownload(const DownloadUnits &units);
 
@@ -189,7 +209,7 @@ private:
     bool _supportResuming;
 };
 
-int downloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
+int downloadProgressFunc(Downloader::DownloadHandler* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
 
 NS_CC_EXT_END
 

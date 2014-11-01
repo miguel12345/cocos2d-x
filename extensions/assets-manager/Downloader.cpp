@@ -115,8 +115,15 @@ int batchDownloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownl
 }
 
 // Compare to batchDownloadProgressFunc, this only handles progress information notification
-int downloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded)
+int downloadProgressFunc(Downloader::DownloadHandler *download, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded)
 {
+    Downloader::ProgressData* ptr = &download->_progressData;
+ 
+    if (download->isCancelled()) {
+        
+        return 1;
+    }
+    
     if (ptr->totalToDownload == 0)
     {
         ptr->totalToDownload = totalToDownload;
@@ -386,31 +393,37 @@ void Downloader::downloadToBuffer(const std::string &srcUrl, const std::string &
     });
 }
 
-void Downloader::downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
+std::weak_ptr<Downloader::DownloadHandler> Downloader::downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
 {
     FileDescriptor fDesc;
-    ProgressData pData;
+    auto downloadState = std::make_shared<Downloader::DownloadHandler>();
+    ProgressData& pData = downloadState->_progressData;
     prepareDownload(srcUrl, storagePath, customId, false, &fDesc, &pData);
     if (fDesc.fp != NULL)
     {
-        auto t = std::thread(&Downloader::download, this, srcUrl, customId, fDesc, pData);
+        auto t = std::thread(&Downloader::download, this, srcUrl, customId, fDesc, downloadState);
         t.detach();
     }
+    
+    return downloadState;
 }
 
 void Downloader::downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
 {
     FileDescriptor fDesc;
-    ProgressData pData;
+    auto downloadState = std::make_shared<Downloader::DownloadHandler>();
+    ProgressData& pData = downloadState->_progressData;
     prepareDownload(srcUrl, storagePath, customId, false, &fDesc, &pData);
     if (fDesc.fp != NULL)
     {
-        download(srcUrl, customId, fDesc, pData);
+        download(srcUrl, customId, fDesc, downloadState);
     }
 }
 
-void Downloader::download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, const ProgressData &data)
+void Downloader::download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, std::shared_ptr<Downloader::DownloadHandler> download)
 {
+    const ProgressData& data = download->_progressData;
+    
     std::weak_ptr<Downloader> ptr = shared_from_this();
     CURL *curl = curl_easy_init();
     if (!curl)
@@ -425,7 +438,7 @@ void Downloader::download(const std::string &srcUrl, const std::string &customId
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, fDesc.fp);
     curl_easy_setopt(curl, CURLOPT_NOPROGRESS, false);
     curl_easy_setopt(curl, CURLOPT_PROGRESSFUNCTION, downloadProgressFunc);
-    curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, &data);
+    curl_easy_setopt(curl, CURLOPT_PROGRESSDATA, download.get());
     curl_easy_setopt(curl, CURLOPT_FAILONERROR, true);
     if (_connectionTimeout) curl_easy_setopt(curl, CURLOPT_CONNECTTIMEOUT, _connectionTimeout);
     curl_easy_setopt(curl, CURLOPT_NOSIGNAL, 1L);
@@ -448,7 +461,7 @@ void Downloader::download(const std::string &srcUrl, const std::string &customId
     {
         _fileUtils->renameFile(data.path, data.name + TEMP_EXT, data.name);
         
-        Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]{
+        Director::getInstance()->getScheduler()->performFunctionInCocosThread([=,&download]{
             if (!ptr.expired())
             {
                 std::shared_ptr<Downloader> downloader = ptr.lock();
@@ -458,6 +471,7 @@ void Downloader::download(const std::string &srcUrl, const std::string &customId
                 {
                     successCB(data.url, data.path + data.name, data.customId);
                 }
+                
             }
         });
     }
@@ -675,6 +689,14 @@ void Downloader::groupBatchDownload(const DownloadUnits &units)
     }
     
     clearBatchDownloadData();
+}
+
+void Downloader::DownloadHandler::cancel() {
+    _cancelled = true;
+}
+
+bool Downloader::DownloadHandler::isCancelled() {
+    return _cancelled == true;
 }
 
 NS_CC_EXT_END
