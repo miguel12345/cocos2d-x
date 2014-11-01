@@ -27,6 +27,7 @@ THE SOFTWARE.
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
+#include "extensions/assets-manager/TextureDownloader.h"
 
 NS_CC_BEGIN
 
@@ -67,6 +68,8 @@ public:
     static ImageView* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
     
 
+    static ImageView* create(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType placeholderTexType = TextureResType::LOCAL);
+    
     /**
      * Load texture for imageview.
      *
@@ -115,6 +118,9 @@ CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
     virtual bool init(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
+    virtual bool init(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType texType);
+    
+    virtual void onExit() override;
 
 protected:
     virtual void initRenderer() override;
@@ -128,6 +134,13 @@ protected:
     void imageTextureScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
+    
+    void onRemoteTextureLoadedFinished(bool success, const std::string& imageFileName);
+    void onRemoteTextureReady(const std::string& imageFileName);
+    void onRemoteTextureFailed();
+    
+    std::weak_ptr<extension::TextureDownloader::TextureDownloadHandler> _textureDownloadHandler;
+    
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;

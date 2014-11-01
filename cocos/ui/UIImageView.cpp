@@ -63,6 +63,19 @@ ImageView* ImageView::create(const std::string &imageFileName, TextureResType te
     return nullptr;
 }
 
+ImageView* ImageView::create(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType placeholderTexType) {
+    ImageView *widget = new (std::nothrow) ImageView;
+    if (widget && widget->init(imageUrl,placeholderFileName,placeholderTexType)) {
+        
+        widget->autorelease();
+        
+        return widget;
+    }
+    CC_SAFE_DELETE(widget);
+    return nullptr;
+    
+}
+    
 ImageView* ImageView::create()
 {
     ImageView* widget = new (std::nothrow) ImageView();
@@ -98,6 +111,22 @@ bool ImageView::init(const std::string &imageFileName, TextureResType texType)
         }
         
         this->loadTexture(imageFileName, texType);
+    } while (0);
+    return bRet;
+}
+    
+bool ImageView::init(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType texType)
+{
+    bool bRet = true;
+    do {
+        if (!ImageView::init(placeholderFileName,texType)) {
+            bRet = false;
+            break;
+        }
+        
+        extension::TextureDownloader* textureDownloader = extension::TextureDownloader::getInstance();
+        _textureDownloadHandler = textureDownloader->downloadTextureAsync(imageUrl, CC_CALLBACK_2(ImageView::onRemoteTextureLoadedFinished, this));
+        
     } while (0);
     return bRet;
 }
@@ -301,7 +330,35 @@ void ImageView::copySpecialProperties(Widget *widget)
         setCapInsets(imageView->_capInsets);
     }
 }
+    
+void ImageView::onRemoteTextureLoadedFinished(bool success, const std::string& imageFileName) {
+    if (success) {
+        onRemoteTextureReady(imageFileName);
+    }
+    else {
+        onRemoteTextureFailed();
+    }
+}
 
+    
+void ImageView::onRemoteTextureReady(const std::string& imageFileName) {
+    _imageRenderer->initWithFile(imageFileName);
+    _imageRendererAdaptDirty = true;
+}
+    
+void ImageView::onRemoteTextureFailed() {
+    //TODO
+}
+    
+void ImageView::onExit() {
+    
+    Widget::onExit();
+    
+    if (!_textureDownloadHandler.expired()) {
+        _textureDownloadHandler.lock()->cancel();
+    }
+}
+    
 }
 
 NS_CC_END
