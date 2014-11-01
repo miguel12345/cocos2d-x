@@ -64,6 +64,14 @@ public:
         
         CANCELLED
     };
+    
+    enum class CacheStrategy
+    {
+        NO_CACHE,
+        
+        USE_CACHE,
+        
+    };
 
     struct Error
     {
@@ -147,7 +155,7 @@ public:
     
     void downloadToBufferSync(const std::string &srcUrl, unsigned char *buffer, const long &size, const std::string &customId = "");
 
-    std::weak_ptr<DownloadHandler> downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
+    std::weak_ptr<DownloadHandler> downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "", CacheStrategy cacheStrategy = CacheStrategy::NO_CACHE);
 
     void downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
     
@@ -180,11 +188,11 @@ protected:
     
     void groupBatchDownload(const DownloadUnits &units);
 
-    void notifyError(ErrorCode code, const std::string &msg = "", const std::string &customId = "", int curle_code = 0, int curlm_code = 0);
+    void notifyError(ErrorCode code, const std::string &url, const std::string &msg = "", const std::string &customId = "", int curle_code = 0, int curlm_code = 0);
     
-    void notifyError(const std::string &msg, int curlm_code, const std::string &customId = "");
+    void notifyError(const std::string &msg, const std::string &url, int curlm_code, const std::string &customId = "");
     
-    void notifyError(const std::string &msg, const std::string &customId, int curle_code);
+    void notifyError(const std::string &msg, const std::string &url, const std::string &customId, int curle_code);
 
 private:
 
