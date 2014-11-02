@@ -114,13 +114,17 @@ public:
     virtual Size getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     
+    virtual void onExit() override;
+    
+    void setKeepAspectRatio(bool keepAspectRatio);
+    
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
     virtual bool init(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
     virtual bool init(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType texType);
     
-    virtual void onExit() override;
+    
 
 protected:
     virtual void initRenderer() override;
@@ -150,6 +154,7 @@ protected:
     TextureResType _imageTexType;
     Size _imageTextureSize;
     bool _imageRendererAdaptDirty;
+    bool _keepAspectRatio;
 };
 
 }

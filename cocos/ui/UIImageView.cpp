@@ -42,7 +42,8 @@ _imageRenderer(nullptr),
 _textureFile(""),
 _imageTexType(TextureResType::LOCAL),
 _imageTextureSize(_contentSize),
-_imageRendererAdaptDirty(true)
+_imageRendererAdaptDirty(true),
+_keepAspectRatio(false)
 {
 
 }
@@ -300,8 +301,19 @@ void ImageView::imageTextureScaleChangedWithSize()
                 _imageRenderer->setScale(1.0f);
                 return;
             }
-            float scaleX = _contentSize.width / textureSize.width;
-            float scaleY = _contentSize.height / textureSize.height;
+            
+            float scaleX = 0.0f;
+            float scaleY = 0.0f;
+            
+            if (_keepAspectRatio) {
+                scaleX = scaleY = std::min(_contentSize.width / textureSize.width,
+                                      _contentSize.height / textureSize.height);
+            }
+            else {
+                scaleX = _contentSize.width / textureSize.width;
+                scaleY = _contentSize.height / textureSize.height;
+            }
+            
             _imageRenderer->setScaleX(scaleX);
             _imageRenderer->setScaleY(scaleY);
         }
@@ -357,6 +369,10 @@ void ImageView::onExit() {
     if (!_textureDownloadHandler.expired()) {
         _textureDownloadHandler.lock()->cancel();
     }
+}
+
+void ImageView::setKeepAspectRatio(bool keepAspectRatio) {
+    _keepAspectRatio = keepAspectRatio;
 }
     
 }
