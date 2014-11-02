@@ -118,6 +118,7 @@ public:
     virtual void onEnter() override;
     
     void setKeepAspectRatio(bool keepAspectRatio);
+    void updateRemoteImageUrl(std::string imageUrl);
     
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.

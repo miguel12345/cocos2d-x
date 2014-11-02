@@ -339,6 +339,7 @@ void ImageView::copySpecialProperties(Widget *widget)
         setScale9Enabled(imageView->_scale9Enabled);
         loadTexture(imageView->_textureFile, imageView->_imageTexType);
         setCapInsets(imageView->_capInsets);
+        setKeepAspectRatio(imageView->_keepAspectRatio);
     }
 }
     
@@ -383,6 +384,11 @@ void ImageView::onEnter() {
 
 void ImageView::setKeepAspectRatio(bool keepAspectRatio) {
     _keepAspectRatio = keepAspectRatio;
+}
+
+void ImageView::updateRemoteImageUrl(std::string imageUrl) {
+    loadTexture(_textureFile);
+    _remoteImageUrl = imageUrl;
 }
     
 }
