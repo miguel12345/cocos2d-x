@@ -115,6 +115,7 @@ public:
     virtual Node* getVirtualRenderer() override;
     
     virtual void onExit() override;
+    virtual void onEnter() override;
     
     void setKeepAspectRatio(bool keepAspectRatio);
     
@@ -155,6 +156,7 @@ protected:
     Size _imageTextureSize;
     bool _imageRendererAdaptDirty;
     bool _keepAspectRatio;
+    std::string _remoteImageUrl;
 };
 
 }

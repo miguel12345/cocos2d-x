@@ -125,8 +125,7 @@ bool ImageView::init(const std::string& imageUrl, const std::string& placeholder
             break;
         }
         
-        extension::TextureDownloader* textureDownloader = extension::TextureDownloader::getInstance();
-        _textureDownloadHandler = textureDownloader->downloadTextureAsync(imageUrl, CC_CALLBACK_2(ImageView::onRemoteTextureLoadedFinished, this));
+        _remoteImageUrl = imageUrl;
         
     } while (0);
     return bRet;
@@ -369,6 +368,17 @@ void ImageView::onExit() {
     if (!_textureDownloadHandler.expired()) {
         _textureDownloadHandler.lock()->cancel();
     }
+}
+    
+void ImageView::onEnter() {
+    
+    Widget::onEnter();
+    
+    if (!_remoteImageUrl.empty()) {
+        extension::TextureDownloader* textureDownloader = extension::TextureDownloader::getInstance();
+        _textureDownloadHandler = textureDownloader->downloadTextureAsync(_remoteImageUrl, CC_CALLBACK_2(ImageView::onRemoteTextureLoadedFinished, this));
+    }
+    
 }
 
 void ImageView::setKeepAspectRatio(bool keepAspectRatio) {
