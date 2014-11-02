@@ -49,6 +49,40 @@ static GLint g_sStencilBits = -1;
 static GLint s_layer = -1;
     
 IMPLEMENT_CLASS_GUI_INFO(Layout)
+    
+const Padding Padding::ZERO = Padding(0,0,0,0);
+
+Padding::Padding(void) : left(0), top(0), right(0), bottom(0)
+{
+}
+
+Padding::Padding(float l, float t, float r, float b) : left(l), top(t), right(r), bottom(b)
+{
+}
+
+Padding::Padding(const Padding& other) : left(other.left), top(other.top), right(other.right), bottom(other.bottom)
+{
+}
+
+Padding& Padding::operator= (const Padding& other)
+{
+    setPadding(other.left, other.top, other.right, other.bottom);
+    return *this;
+}
+
+void Padding::setPadding(float l, float t, float r, float b)
+{
+    left = l;
+    top = t;
+    right = r;
+    bottom = b;
+}
+
+bool Padding::equals(const Padding &target) const
+{
+    return (left == target.left && top == target.top && right == target.right && bottom == target.bottom);
+}
+
 
 Layout::Layout():
 _clippingEnabled(false),
@@ -91,7 +125,8 @@ _backGroundImageOpacity(255),
 _passFocusToChild(true),
 _loopFocus(false),
 _isFocusPassing(false),
-_isInterceptTouch(false)
+_isInterceptTouch(false),
+_padding(Padding::ZERO)
 {
     //no-op
 }
@@ -1893,6 +1928,15 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
         return current;
     }
 }
+
+Padding Layout::getPadding() const {
+    return _padding;
+}
+
+void Layout::setPadding(const Padding& other) {
+    _padding = other;
+}
+
     
 }
 NS_CC_END

@@ -36,11 +36,31 @@ class DrawNode;
 class LayerColor;
 class LayerGradient;
 
-
 namespace ui {
     
 class LayoutManager;
 class Scale9Sprite;
+    
+class Padding
+{
+public:
+    float left;
+    float top;
+    float right;
+    float bottom;
+    
+public:
+    Padding();
+    Padding(float l, float t, float r, float b);
+    Padding(const Padding& other);
+    Padding& operator= (const Padding& other);
+    void setPadding(float l, float t, float r, float b);
+    bool equals(const Padding& target) const;
+    
+    static const Padding ZERO;
+    
+};
+
 
 class CC_GUI_DLL LayoutProtocol
 {
@@ -52,7 +72,9 @@ public:
     virtual Size getLayoutContentSize()const = 0;
     virtual const Vector<Node*>& getLayoutElements()const = 0;
     virtual void doLayout() = 0;
+    virtual Padding getPadding()const = 0;
 };
+    
 
 /**
  *  @js NA
@@ -317,6 +339,9 @@ public:
      * @return return the index of widget in the layout
      */
     std::function<int(FocusDirection, Widget*)> onPassFocusToChild;
+    
+    virtual Padding getPadding() const override;
+    virtual void setPadding(const Padding& padding);
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
@@ -527,6 +552,9 @@ protected:
     bool _passFocusToChild;
      //when finding the next focused widget, use this variable to pass focus between layout & widget
     bool _isFocusPassing;
+    
+    //layout
+    Padding _padding;
 };
     
 }
