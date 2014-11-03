@@ -56,6 +56,7 @@ THE SOFTWARE.
 #include "ui/UIScale9Sprite.h"
 #include "ui/UIEditBox/UIEditBox.h"
 #include "ui/UILayoutComponent.h"
+#include "ui/UILazyListView.h"
 
 NS_CC_BEGIN
 namespace ui {

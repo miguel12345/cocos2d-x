@@ -59,7 +59,7 @@ THE SOFTWARE.
 #include "base/CCConfiguration.h"
 #include "platform/CCApplication.h"
 //#include "platform/CCGLViewImpl.h"
-#include "UILayout.h"
+#include "ui/UILayout.h"
 
 /**
  Position of the FPS
