@@ -1262,6 +1262,10 @@ void Director::setEventDispatcher(EventDispatcher* dispatcher)
 
 void Director::applicationScreenSizeChanged(int newWidth,int newHeight) {
     
+    if(!_openGLView || !getRunningScene()) {
+        return;
+    }
+    
     _openGLView->applicationScreenSizeChanged(newWidth,newHeight);
     _winSizeInPoints = _openGLView->getDesignResolutionSize();
     getRunningScene()->setContentSize(_winSizeInPoints);

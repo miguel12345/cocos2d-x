@@ -182,7 +182,7 @@ bool Application::openURL(const std::string &url)
 }
 
 void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
-
+    cocos2d::Director::getInstance()->applicationScreenSizeChanged(newWidth,newHeight);
 }
 
 NS_CC_END
