@@ -251,7 +251,7 @@ public:
     virtual id getCocoaWindow() = 0;
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
     
-    virtual void applicationScreenSizeChanged(int newWidth, int newHeight) = 0;
+    virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
     
 protected:
     void updateDesignResolutionSize();
