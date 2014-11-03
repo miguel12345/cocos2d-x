@@ -140,18 +140,6 @@ bool GLViewImpl::initWithRect(const std::string& viewName, Rect rect, float fram
     return true;
 }
 
-void GLViewImpl::applicationScreenSizeChanged(int newWidth, int newHeight) {
-    CCEAGLView *glview = (CCEAGLView*) _eaglview;
-
-    _screenSize.width= [glview getWidth];
-    _screenSize.height = [glview getHeight];
-    
-    if (_resolutionPolicy == ResolutionPolicy::UNKNOWN) {
-        _designResolutionSize.width = _screenSize.width;
-        _designResolutionSize.height = _screenSize.height;
-    }
-}
-
 bool GLViewImpl::initWithFullScreen(const std::string& viewName)
 {
     CGRect rect = [[UIScreen mainScreen] bounds];

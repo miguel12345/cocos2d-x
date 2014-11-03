@@ -453,4 +453,15 @@ float GLView::getScaleY() const
     return _scaleY;
 }
 
+void GLView::applicationScreenSizeChanged(int newWidth, int newHeight) {
+    
+    _screenSize.width= newWidth;
+    _screenSize.height = newHeight;
+    
+    if (_resolutionPolicy == ResolutionPolicy::UNKNOWN) {
+        _designResolutionSize.width = _screenSize.width;
+        _designResolutionSize.height = _screenSize.height;
+    }
+}
+
 NS_CC_END
