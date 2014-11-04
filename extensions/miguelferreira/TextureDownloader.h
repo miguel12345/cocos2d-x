@@ -23,7 +23,7 @@
 #ifndef __TextureDownloader__
 #define __TextureDownloader__
 
-#include "Downloader.h"
+#include "extensions/assets-manager/Downloader.h"
 
 NS_CC_EXT_BEGIN
 

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UILazyListView.h"
+#include "UILazyListView.h"
 #include "ui/UIHelper.h"
 
 NS_CC_BEGIN
@@ -657,6 +657,7 @@ std::pair<int, int> LazyListView::calcVisibleIndexRange() const {
     }
     
     CCASSERT(false, "");
+    return std::pair<int,int>(0,0);
 }
 
 Rect LazyListView::getVisibleBoundingBox() const {
@@ -674,6 +675,7 @@ Rect LazyListView::getVisibleBoundingBox() const {
     }
     
     CCASSERT(false, "");
+    return Rect(0,0,0,0);
 }
 
 std::pair<int, int> LazyListView::syncVisibleElements(int firstVisibileElementIndex , int lastVisibileElementIndex ) {

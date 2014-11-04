@@ -22,11 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#ifndef __UIIMAGEVIEW_H__
-#define __UIIMAGEVIEW_H__
+#ifndef __UIImageViewExtended_H__
+#define __UIImageViewExtended_H__
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
+#include "extensions/miguelferreira/TextureDownloader.h"
 
 NS_CC_BEGIN
 
@@ -36,7 +37,7 @@ namespace ui {
 *   @js NA
 *   @lua NA
 */
-class CC_GUI_DLL ImageView : public Widget
+class CC_GUI_DLL ImageViewExtended : public Widget
 {
     
     DECLARE_CLASS_GUI_INFO
@@ -45,30 +46,32 @@ public:
     /**
      * Default constructor
      */
-    ImageView();
+    ImageViewExtended();
 
     /**
      * Default destructor
      */
-    virtual ~ImageView();
+    virtual ~ImageViewExtended();
 
     /**
      * Allocates and initializes.
      */
-    static ImageView* create();
+    static ImageViewExtended* create();
     
     /**
-     * create a  imageview 
+     * create a  ImageViewExtended 
      *
      * @param imageFileName   file name of texture.
      *
      * @param texType    @see TextureResType
      */
-    static ImageView* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
+    static ImageViewExtended* create(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
     
 
+    static ImageViewExtended* create(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType placeholderTexType = TextureResType::LOCAL);
+    
     /**
-     * Load texture for imageview.
+     * Load texture for ImageViewExtended.
      *
      * @param fileName   file name of texture.
      *
@@ -77,13 +80,13 @@ public:
     void loadTexture(const std::string& fileName,TextureResType texType = TextureResType::LOCAL);
 
     /**
-     * Updates the texture rect of the ImageView in points.
+     * Updates the texture rect of the ImageViewExtended in points.
      * It will call setTextureRect:rotated:untrimmedSize with rotated = NO, and utrimmedSize = rect.size.
      */
     void setTextureRect(const Rect& rect);
 
     /**
-     * Sets if imageview is using scale9 renderer.
+     * Sets if ImageViewExtended is using scale9 renderer.
      *
      * @param able true that using scale9 renderer, false otherwise.
      */
@@ -92,9 +95,9 @@ public:
     bool isScale9Enabled()const;
 
     /**
-     * Sets capinsets for imageview, if imageview is using scale9 renderer.
+     * Sets capinsets for ImageViewExtended, if ImageViewExtended is using scale9 renderer.
      *
-     * @param capInsets    capinsets for imageview
+     * @param capInsets    capinsets for ImageViewExtended
      */
     void setCapInsets(const Rect &capInsets);
 
@@ -111,10 +114,19 @@ public:
     virtual Size getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     
+    virtual void onExit() override;
+    virtual void onEnter() override;
+    
+    void setKeepAspectRatio(bool keepAspectRatio);
+    void updateRemoteImageUrl(std::string imageUrl);
+    
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
     virtual bool init(const std::string& imageFileName, TextureResType texType = TextureResType::LOCAL);
+    virtual bool init(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType texType);
+    
+    
 
 protected:
     virtual void initRenderer() override;
@@ -128,6 +140,13 @@ protected:
     void imageTextureScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
+    
+    void onRemoteTextureLoadedFinished(bool success, const std::string& imageFileName);
+    void onRemoteTextureReady(const std::string& imageFileName);
+    void onRemoteTextureFailed();
+    
+    std::weak_ptr<extension::TextureDownloader::TextureDownloadHandler> _textureDownloadHandler;
+    
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;
@@ -137,10 +156,12 @@ protected:
     TextureResType _imageTexType;
     Size _imageTextureSize;
     bool _imageRendererAdaptDirty;
+    bool _keepAspectRatio;
+    std::string _remoteImageUrl;
 };
 
 }
 
 NS_CC_END
 
-#endif /* defined(__CocoGUI__ImageView__) */
+#endif /* defined(__CocoGUI__ImageViewExtended__) */

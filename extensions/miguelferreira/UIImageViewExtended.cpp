@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 ****************************************************************************/
 
-#include "ui/UIImageView.h"
+#include "extensions/miguelferreira/UIImageViewExtended.h"
 #include "ui/UIScale9Sprite.h"
 #include "2d/CCSprite.h"
 
@@ -32,9 +32,9 @@ namespace ui {
     
 static const int IMAGE_RENDERER_Z = (-1);
     
-IMPLEMENT_CLASS_GUI_INFO(ImageView)
+IMPLEMENT_CLASS_GUI_INFO(ImageViewExtended)
 
-ImageView::ImageView():
+ImageViewExtended::ImageViewExtended():
 _scale9Enabled(false),
 _prevIgnoreSize(true),
 _capInsets(Rect::ZERO),
@@ -42,19 +42,20 @@ _imageRenderer(nullptr),
 _textureFile(""),
 _imageTexType(TextureResType::LOCAL),
 _imageTextureSize(_contentSize),
-_imageRendererAdaptDirty(true)
+_imageRendererAdaptDirty(true),
+_keepAspectRatio(false)
 {
 
 }
 
-ImageView::~ImageView()
+ImageViewExtended::~ImageViewExtended()
 {
     
 }
     
-ImageView* ImageView::create(const std::string &imageFileName, TextureResType texType)
+ImageViewExtended* ImageViewExtended::create(const std::string &imageFileName, TextureResType texType)
 {
-    ImageView *widget = new (std::nothrow) ImageView;
+    ImageViewExtended *widget = new (std::nothrow) ImageViewExtended;
     if (widget && widget->init(imageFileName, texType)) {
         widget->autorelease();
         return widget;
@@ -63,9 +64,22 @@ ImageView* ImageView::create(const std::string &imageFileName, TextureResType te
     return nullptr;
 }
 
-ImageView* ImageView::create()
+ImageViewExtended* ImageViewExtended::create(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType placeholderTexType) {
+    ImageViewExtended *widget = new (std::nothrow) ImageViewExtended;
+    if (widget && widget->init(imageUrl,placeholderFileName,placeholderTexType)) {
+        
+        widget->autorelease();
+        
+        return widget;
+    }
+    CC_SAFE_DELETE(widget);
+    return nullptr;
+    
+}
+    
+ImageViewExtended* ImageViewExtended::create()
 {
-    ImageView* widget = new (std::nothrow) ImageView();
+    ImageViewExtended* widget = new (std::nothrow) ImageViewExtended();
     if (widget && widget->init())
     {
         widget->autorelease();
@@ -75,7 +89,7 @@ ImageView* ImageView::create()
     return nullptr;
 }
     
-bool ImageView::init()
+bool ImageViewExtended::init()
 {
     bool ret = true;
     do {
@@ -88,7 +102,7 @@ bool ImageView::init()
     return ret;
 }
     
-bool ImageView::init(const std::string &imageFileName, TextureResType texType)
+bool ImageViewExtended::init(const std::string &imageFileName, TextureResType texType)
 {
     bool bRet = true;
     do {
@@ -101,8 +115,23 @@ bool ImageView::init(const std::string &imageFileName, TextureResType texType)
     } while (0);
     return bRet;
 }
+    
+bool ImageViewExtended::init(const std::string& imageUrl, const std::string& placeholderFileName, TextureResType texType)
+{
+    bool bRet = true;
+    do {
+        if (!ImageViewExtended::init(placeholderFileName,texType)) {
+            bRet = false;
+            break;
+        }
+        
+        _remoteImageUrl = imageUrl;
+        
+    } while (0);
+    return bRet;
+}
 
-void ImageView::initRenderer()
+void ImageViewExtended::initRenderer()
 {
     _imageRenderer = Scale9Sprite::create();
     _imageRenderer->setScale9Enabled(false);
@@ -110,7 +139,7 @@ void ImageView::initRenderer()
     addProtectedChild(_imageRenderer, IMAGE_RENDERER_Z, -1);
 }
 
-void ImageView::loadTexture(const std::string& fileName, TextureResType texType)
+void ImageViewExtended::loadTexture(const std::string& fileName, TextureResType texType)
 {
     if (fileName.empty())
     {
@@ -139,7 +168,7 @@ void ImageView::loadTexture(const std::string& fileName, TextureResType texType)
     _imageRendererAdaptDirty = true;
 }
 
-void ImageView::setTextureRect(const Rect &rect)
+void ImageViewExtended::setTextureRect(const Rect &rect)
 {
     //This API should be refactor
     if (_scale9Enabled)
@@ -159,18 +188,18 @@ void ImageView::setTextureRect(const Rect &rect)
     }
 }
     
-void ImageView::updateFlippedX()
+void ImageViewExtended::updateFlippedX()
 {
     _imageRenderer->setFlippedX(_flippedX);
 }
     
-void ImageView::updateFlippedY()
+void ImageViewExtended::updateFlippedY()
 {
     _imageRenderer->setFlippedY(_flippedY);
 
 }
 
-void ImageView::setScale9Enabled(bool able)
+void ImageViewExtended::setScale9Enabled(bool able)
 {
     if (_scale9Enabled == able)
     {
@@ -194,12 +223,12 @@ void ImageView::setScale9Enabled(bool able)
     setCapInsets(_capInsets);
 }
     
-bool ImageView::isScale9Enabled()const
+bool ImageViewExtended::isScale9Enabled()const
 {
     return _scale9Enabled;
 }
 
-void ImageView::ignoreContentAdaptWithSize(bool ignore)
+void ImageViewExtended::ignoreContentAdaptWithSize(bool ignore)
 {
     if (!_scale9Enabled || (_scale9Enabled && !ignore))
     {
@@ -208,7 +237,7 @@ void ImageView::ignoreContentAdaptWithSize(bool ignore)
     }
 }
 
-void ImageView::setCapInsets(const Rect &capInsets)
+void ImageViewExtended::setCapInsets(const Rect &capInsets)
 {
     _capInsets = capInsets;
     if (!_scale9Enabled)
@@ -218,18 +247,18 @@ void ImageView::setCapInsets(const Rect &capInsets)
     _imageRenderer->setCapInsets(capInsets);
 }
 
-const Rect& ImageView::getCapInsets()const
+const Rect& ImageViewExtended::getCapInsets()const
 {
     return _capInsets;
 }
 
-void ImageView::onSizeChanged()
+void ImageViewExtended::onSizeChanged()
 {
     Widget::onSizeChanged();
     _imageRendererAdaptDirty = true;
 }
     
-void ImageView::adaptRenderers()
+void ImageViewExtended::adaptRenderers()
 {
     if (_imageRendererAdaptDirty)
     {
@@ -238,17 +267,17 @@ void ImageView::adaptRenderers()
     }
 }
 
-Size ImageView::getVirtualRendererSize() const
+Size ImageViewExtended::getVirtualRendererSize() const
 {
     return _imageTextureSize;
 }
 
-Node* ImageView::getVirtualRenderer()
+Node* ImageViewExtended::getVirtualRenderer()
 {
     return _imageRenderer;
 }
 
-void ImageView::imageTextureScaleChangedWithSize()
+void ImageViewExtended::imageTextureScaleChangedWithSize()
 {
     if (_ignoreSize)
     {
@@ -271,8 +300,19 @@ void ImageView::imageTextureScaleChangedWithSize()
                 _imageRenderer->setScale(1.0f);
                 return;
             }
-            float scaleX = _contentSize.width / textureSize.width;
-            float scaleY = _contentSize.height / textureSize.height;
+            
+            float scaleX = 0.0f;
+            float scaleY = 0.0f;
+            
+            if (_keepAspectRatio) {
+                scaleX = scaleY = std::min(_contentSize.width / textureSize.width,
+                                      _contentSize.height / textureSize.height);
+            }
+            else {
+                scaleX = _contentSize.width / textureSize.width;
+                scaleY = _contentSize.height / textureSize.height;
+            }
+            
             _imageRenderer->setScaleX(scaleX);
             _imageRenderer->setScaleY(scaleY);
         }
@@ -280,28 +320,77 @@ void ImageView::imageTextureScaleChangedWithSize()
     _imageRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
 }
 
-std::string ImageView::getDescription() const
+std::string ImageViewExtended::getDescription() const
 {
-    return "ImageView";
+    return "ImageViewExtended";
 }
 
-Widget* ImageView::createCloneInstance()
+Widget* ImageViewExtended::createCloneInstance()
 {
-    return ImageView::create();
+    return ImageViewExtended::create();
 }
 
-void ImageView::copySpecialProperties(Widget *widget)
+void ImageViewExtended::copySpecialProperties(Widget *widget)
 {
-    ImageView* imageView = dynamic_cast<ImageView*>(widget);
-    if (imageView)
+    ImageViewExtended* imageViewExtended = dynamic_cast<ImageViewExtended*>(widget);
+    if (imageViewExtended)
     {
-        _prevIgnoreSize = imageView->_prevIgnoreSize;
-        setScale9Enabled(imageView->_scale9Enabled);
-        loadTexture(imageView->_textureFile, imageView->_imageTexType);
-        setCapInsets(imageView->_capInsets);
+        _prevIgnoreSize = imageViewExtended->_prevIgnoreSize;
+        setScale9Enabled(imageViewExtended->_scale9Enabled);
+        loadTexture(imageViewExtended->_textureFile, imageViewExtended->_imageTexType);
+        setCapInsets(imageViewExtended->_capInsets);
+        setKeepAspectRatio(imageViewExtended->_keepAspectRatio);
+    }
+}
+    
+void ImageViewExtended::onRemoteTextureLoadedFinished(bool success, const std::string& imageFileName) {
+    if (success) {
+        onRemoteTextureReady(imageFileName);
+    }
+    else {
+        onRemoteTextureFailed();
     }
 }
 
+    
+void ImageViewExtended::onRemoteTextureReady(const std::string& imageFileName) {
+    _imageRenderer->initWithFile(imageFileName);
+    _imageRendererAdaptDirty = true;
+}
+    
+void ImageViewExtended::onRemoteTextureFailed() {
+    //TODO
+}
+    
+void ImageViewExtended::onExit() {
+    
+    Widget::onExit();
+    
+    if (!_textureDownloadHandler.expired()) {
+        _textureDownloadHandler.lock()->cancel();
+    }
+}
+    
+void ImageViewExtended::onEnter() {
+    
+    Widget::onEnter();
+    
+    if (!_remoteImageUrl.empty()) {
+        extension::TextureDownloader* textureDownloader = extension::TextureDownloader::getInstance();
+        _textureDownloadHandler = textureDownloader->downloadTextureAsync(_remoteImageUrl, CC_CALLBACK_2(ImageViewExtended::onRemoteTextureLoadedFinished, this));
+    }
+    
+}
+
+void ImageViewExtended::setKeepAspectRatio(bool keepAspectRatio) {
+    _keepAspectRatio = keepAspectRatio;
+}
+
+void ImageViewExtended::updateRemoteImageUrl(std::string imageUrl) {
+    loadTexture(_textureFile);
+    _remoteImageUrl = imageUrl;
+}
+    
 }
 
 NS_CC_END
