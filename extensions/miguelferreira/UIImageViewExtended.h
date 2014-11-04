@@ -145,7 +145,7 @@ protected:
     void onRemoteTextureReady(const std::string& imageFileName);
     void onRemoteTextureFailed();
     
-    std::weak_ptr<extension::TextureDownloader::TextureDownloadHandler> _textureDownloadHandler;
+    std::weak_ptr<extension::mf::TextureDownloader::TextureDownloadHandler> _textureDownloadHandler;
     
 protected:
     bool _scale9Enabled;

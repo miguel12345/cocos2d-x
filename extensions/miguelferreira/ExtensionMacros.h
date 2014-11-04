@@ -1,5 +1,7 @@
 /****************************************************************************
- Copyright (c) 2014 Miguel Ferreira
+ Copyright (c) 2012 cocos2d-x.org
+ 
+ http://www.cocos2d-x.org
  
  Permission is hereby granted, free of charge, to any person obtaining a copy
  of this software and associated documentation files (the "Software"), to deal
@@ -20,43 +22,13 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __TextureDownloader__
-#define __TextureDownloader__
+#ifndef __MFEXTENSIONMARCROS_H__
+#define __MFEXTENSIONMARCROS_H__
 
-#include "extensions/miguelferreira/DownloaderExtended.h"
+#define NS_CC_MF_EXT_BEGIN                     namespace cocos2d { namespace extension { namespace miguelferreira {
+#define NS_CC_MF_EXT_END                       }}}
+#define USING_NS_CC_MF_EXT                     using namespace cocos2d::extension::miguelferreira
 
-namespace cocos2d { namespace extension { namespace mf {
 
+#endif /* __EXTENSIONMARCROS_H__ */
 
-class CC_EX_DLL TextureDownloader : public Ref
-{
-    
-public:
-    
-    class TextureDownloadHandler {
-        
-        friend class TextureDownloader;
-        
-    public:
-        void cancel();
-    private:
-        std::weak_ptr<extension::DownloaderExtended::DownloadHandler> _download;
-        std::string _imageFileName;
-    };
-    
-    std::weak_ptr<TextureDownloadHandler> downloadTextureAsync(const std::string& imageUrl,const std::function<void(bool success, std::string imagePath)>& callback);
-    
-    bool init();
-    
-    static TextureDownloader* getInstance();
-    
-private:
-    
-    std::shared_ptr<extension::DownloaderExtended> _downloader;
-    std::unordered_map<std::string, std::function<void(bool success)>> _callbacks;
-    std::string imagesFolder;
-    
-};
-
-}}}
-#endif /* defined(__TextureDownloader__) */

@@ -90,6 +90,13 @@
 -- @param #mat4_table mat
         
 --------------------------------
+-- 
+-- @function [parent=#Director] applicationScreenSizeChanged 
+-- @param self
+-- @param #int newWidth
+-- @param #int newHeight
+        
+--------------------------------
 --  This object will be visited after the main scene is visited.<br>
 -- This object MUST implement the "visit" selector.<br>
 -- Useful to hook a notification object, like Notifications (http:github.com/manucorporat/CCNotifications)<br>

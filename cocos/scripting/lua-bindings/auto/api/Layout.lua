@@ -123,6 +123,12 @@
         
 --------------------------------
 -- 
+-- @function [parent=#Layout] setPadding 
+-- @param self
+-- @param #ccui.Padding padding
+        
+--------------------------------
+-- 
 -- @function [parent=#Layout] getBackGroundImageColor 
 -- @param self
 -- @return color3b_table#color3b_table ret (return value: color3b_table)
@@ -188,6 +194,12 @@
 -- @function [parent=#Layout] getLayoutType 
 -- @param self
 -- @return int#int ret (return value: int)
+        
+--------------------------------
+-- 
+-- @function [parent=#Layout] getPadding 
+-- @param self
+-- @return Padding#Padding ret (return value: ccui.Padding)
         
 --------------------------------
 -- param pass To specify whether the layout pass its focus to its child

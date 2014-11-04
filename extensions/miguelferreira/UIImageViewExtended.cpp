@@ -376,7 +376,7 @@ void ImageViewExtended::onEnter() {
     Widget::onEnter();
     
     if (!_remoteImageUrl.empty()) {
-        extension::TextureDownloader* textureDownloader = extension::TextureDownloader::getInstance();
+        extension::mf::TextureDownloader* textureDownloader = extension::mf::TextureDownloader::getInstance();
         _textureDownloadHandler = textureDownloader->downloadTextureAsync(_remoteImageUrl, CC_CALLBACK_2(ImageViewExtended::onRemoteTextureLoadedFinished, this));
     }
     

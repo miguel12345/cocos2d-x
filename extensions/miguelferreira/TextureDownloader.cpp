@@ -25,8 +25,8 @@
 #include "TextureDownloader.h"
 #include "cocos2d.h"
 
-USING_NS_CC_EXT;
-USING_NS_CC;
+using namespace cocos2d::extension::mf;
+using namespace cocos2d::extension;
 
 static TextureDownloader *s_SharedTextureDownloader = nullptr;
 
@@ -48,7 +48,7 @@ bool TextureDownloader::init() {
     imagesFolder = FileUtils::getInstance()->getWritablePath()+"cache_images/";
     FileUtils::getInstance()->createDirectory(imagesFolder);
     
-    _downloader = std::make_shared<Downloader>();
+    _downloader = std::make_shared<DownloaderExtended>();
     
     _downloader->setSuccessCallback([this](const std::string & imageUrl, const std::string &, const std::string &){
         if (_callbacks[imageUrl]) {
@@ -56,7 +56,7 @@ bool TextureDownloader::init() {
         }
     });
     
-    _downloader->setErrorCallback([this](const Downloader::Error & error){
+    _downloader->setErrorCallback([this](const DownloaderExtended::Error & error){
         
         const std::string imageUrl = error.url;
         

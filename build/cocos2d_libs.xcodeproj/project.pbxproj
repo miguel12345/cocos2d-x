@@ -1148,6 +1148,10 @@
 		1E8C501A1A08473C0012B83B /* UILazyListView.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E8C50131A08473C0012B83B /* UILazyListView.cpp */; };
 		1E8C501B1A08473C0012B83B /* UILazyListView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E8C50141A08473C0012B83B /* UILazyListView.h */; };
 		1E8C501C1A08473C0012B83B /* UILazyListView.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E8C50141A08473C0012B83B /* UILazyListView.h */; };
+		1E9B327F1A09894100948B02 /* DownloaderExtended.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B327D1A09894100948B02 /* DownloaderExtended.cpp */; };
+		1E9B32801A09894100948B02 /* DownloaderExtended.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1E9B327D1A09894100948B02 /* DownloaderExtended.cpp */; };
+		1E9B32811A09894100948B02 /* DownloaderExtended.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E9B327E1A09894100948B02 /* DownloaderExtended.h */; };
+		1E9B32821A09894100948B02 /* DownloaderExtended.h in Headers */ = {isa = PBXBuildFile; fileRef = 1E9B327E1A09894100948B02 /* DownloaderExtended.h */; };
 		29031E0719BFE8D400EFA1DF /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29031E0619BFE8D400EFA1DF /* libchipmunk.a */; };
 		29031E0919BFE8DE00EFA1DF /* libchipmunk.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 29031E0819BFE8DE00EFA1DF /* libchipmunk.a */; };
 		292DB13D19B4574100A80320 /* UIEditBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 292DB12F19B4574100A80320 /* UIEditBox.cpp */; };
@@ -2338,6 +2342,8 @@
 		1E8C50121A08473C0012B83B /* TextureDownloader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TextureDownloader.h; sourceTree = "<group>"; };
 		1E8C50131A08473C0012B83B /* UILazyListView.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = UILazyListView.cpp; sourceTree = "<group>"; };
 		1E8C50141A08473C0012B83B /* UILazyListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UILazyListView.h; sourceTree = "<group>"; };
+		1E9B327D1A09894100948B02 /* DownloaderExtended.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = DownloaderExtended.cpp; sourceTree = "<group>"; };
+		1E9B327E1A09894100948B02 /* DownloaderExtended.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DownloaderExtended.h; sourceTree = "<group>"; };
 		29031E0619BFE8D400EFA1DF /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = prebuilt/mac/libchipmunk.a; sourceTree = "<group>"; };
 		29031E0819BFE8DE00EFA1DF /* libchipmunk.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libchipmunk.a; path = prebuilt/ios/libchipmunk.a; sourceTree = "<group>"; };
 		2905F9E918CF08D000240AA3 /* CocosGUI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CocosGUI.cpp; sourceTree = "<group>"; };
@@ -4142,6 +4148,8 @@
 		1E8C500F1A08473C0012B83B /* miguelferreira */ = {
 			isa = PBXGroup;
 			children = (
+				1E9B327D1A09894100948B02 /* DownloaderExtended.cpp */,
+				1E9B327E1A09894100948B02 /* DownloaderExtended.h */,
 				1E13B3E21A08CFE600BCA0B6 /* UIImageViewExtended.cpp */,
 				1E13B3E31A08CFE600BCA0B6 /* UIImageViewExtended.h */,
 				1E8C50111A08473C0012B83B /* TextureDownloader.cpp */,
@@ -5417,6 +5425,7 @@
 				3828C0D519EB8ACA002AB57B /* map-util.h in Headers */,
 				50643BE219BFCF1800EF68ED /* CCPlatformConfig.h in Headers */,
 				B29A7DF519EE1B7700872B35 /* Skeleton.h in Headers */,
+				1E9B32811A09894100948B02 /* DownloaderExtended.h in Headers */,
 				3828C0D119EB8ACA002AB57B /* common.h in Headers */,
 				5034CA49191D591100CE6051 /* ccShader_Label_df.frag in Headers */,
 				292DB14119B4574100A80320 /* UIEditBoxImpl.h in Headers */,
@@ -5856,6 +5865,7 @@
 				B230ED7419B417AE00364AA8 /* CCTrianglesCommand.h in Headers */,
 				50ED2BE119BEAF7900A0AB90 /* UIEditBoxImpl-win32.h in Headers */,
 				15AE1ACB19AAD40300C27E9E /* b2MouseJoint.h in Headers */,
+				1E9B32821A09894100948B02 /* DownloaderExtended.h in Headers */,
 				50ABBD3F1925AB0000A911A9 /* CCGeometry.h in Headers */,
 				B29A7DD019EE1B7700872B35 /* RegionAttachment.h in Headers */,
 				15AE1AD319AAD40300C27E9E /* b2RopeJoint.h in Headers */,
@@ -6319,6 +6329,7 @@
 				15AE1A2C19AAD3D500C27E9E /* b2DynamicTree.cpp in Sources */,
 				15AE184019AAD2F700C27E9E /* CCSprite3D.cpp in Sources */,
 				46A170E61807CECA005B8026 /* CCPhysicsBody.cpp in Sources */,
+				1E9B327F1A09894100948B02 /* DownloaderExtended.cpp in Sources */,
 				50ABBDA71925AB4100A911A9 /* CCRenderCommand.cpp in Sources */,
 				15AE1B9B19AADFDF00C27E9E /* UIRelativeBox.cpp in Sources */,
 				50ABBD501925AB0000A911A9 /* Quaternion.cpp in Sources */,
@@ -6835,6 +6846,7 @@
 				50ABBE4E1925AB6F00A911A9 /* CCEventCustom.cpp in Sources */,
 				15AE1BF519AAE01E00C27E9E /* CCControlSlider.cpp in Sources */,
 				15AE181719AAD2F700C27E9E /* CCAttachNode.cpp in Sources */,
+				1E9B32801A09894100948B02 /* DownloaderExtended.cpp in Sources */,
 				15AE18B719AAD33D00C27E9E /* CCBSequenceProperty.cpp in Sources */,
 				B29A7E3819EE1B7700872B35 /* AnimationStateData.c in Sources */,
 				3828C0E019EB8ACA002AB57B /* stringprintf.cc in Sources */,

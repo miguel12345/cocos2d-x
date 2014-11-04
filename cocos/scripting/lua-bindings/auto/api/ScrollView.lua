@@ -308,6 +308,18 @@
         
 --------------------------------
 -- 
+-- @function [parent=#ScrollView] getPadding 
+-- @param self
+-- @return Padding#Padding ret (return value: ccui.Padding)
+        
+--------------------------------
+-- 
+-- @function [parent=#ScrollView] setPadding 
+-- @param self
+-- @param #ccui.Padding padding
+        
+--------------------------------
+-- 
 -- @function [parent=#ScrollView] getChildrenCount 
 -- @param self
 -- @return long#long ret (return value: long)

@@ -22,8 +22,8 @@
  THE SOFTWARE.
  ****************************************************************************/
 
-#ifndef __Downloader__
-#define __Downloader__
+#ifndef __DownloaderExtended__
+#define __DownloaderExtended__
 
 #include "platform/CCFileUtils.h"
 #include "extensions/ExtensionMacros.h"
@@ -33,10 +33,11 @@
 #include <string>
 #include <functional>
 #include <memory>
+#include <atomic>
 
 NS_CC_EXT_BEGIN
 
-class CC_EX_DLL Downloader : public std::enable_shared_from_this<Downloader>
+class CC_EX_DLL DownloaderExtended : public std::enable_shared_from_this<DownloaderExtended>
 {
 public:
 
@@ -60,7 +61,17 @@ public:
 
         INVALID_URL,
 
-        INVALID_STORAGE_PATH
+        INVALID_STORAGE_PATH,
+        
+        CANCELLED
+    };
+    
+    enum class CacheStrategy
+    {
+        NO_CACHE,
+        
+        USE_CACHE,
+        
     };
 
     struct Error
@@ -75,13 +86,31 @@ public:
 
     struct ProgressData
     {
-        std::weak_ptr<Downloader> downloader;
+        std::weak_ptr<DownloaderExtended> DownloaderExtended;
         std::string customId;
         std::string url;
         std::string path;
         std::string name;
         double downloaded;
         double totalToDownload;
+    };
+    
+    class DownloadHandler
+    {
+        friend class DownloaderExtended;
+        friend int downloadProgressFunc(DownloaderExtended::DownloadHandler* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
+
+    private:
+        
+        ProgressData _progressData;
+        std::atomic<bool> _cancelled;
+        
+       
+        
+    public:
+        DownloadHandler():_cancelled(false){};
+        void cancel();
+        bool isCancelled();
     };
 
     struct DownloadUnit
@@ -101,7 +130,7 @@ public:
     
     typedef std::unordered_map<std::string, DownloadUnit> DownloadUnits;
     
-    typedef std::function<void(const Downloader::Error &)> ErrorCallback;
+    typedef std::function<void(const DownloaderExtended::Error &)> ErrorCallback;
     typedef std::function<void(double, double, const std::string &, const std::string &)> ProgressCallback;
     typedef std::function<void(const std::string &, const std::string &, const std::string &)> SuccessCallback;
 
@@ -127,7 +156,7 @@ public:
     
     void downloadToBufferSync(const std::string &srcUrl, unsigned char *buffer, const long &size, const std::string &customId = "");
 
-    void downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
+    std::weak_ptr<DownloadHandler> downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "", CacheStrategy cacheStrategy = CacheStrategy::NO_CACHE);
 
     void downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
     
@@ -138,9 +167,9 @@ public:
     /**
      *  The default constructor.
      */
-    Downloader();
+    DownloaderExtended();
 
-    ~Downloader();
+    ~DownloaderExtended();
 
 protected:
     
@@ -156,15 +185,15 @@ protected:
     
     void downloadToBuffer(const std::string &srcUrl, const std::string &customId, const StreamData &buffer, const ProgressData &data);
 
-    void download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, const ProgressData &data);
+    void download(const std::string &srcUrl, const std::string &customId, const FileDescriptor &fDesc, std::shared_ptr<DownloaderExtended::DownloadHandler> download);
     
     void groupBatchDownload(const DownloadUnits &units);
 
-    void notifyError(ErrorCode code, const std::string &msg = "", const std::string &customId = "", int curle_code = 0, int curlm_code = 0);
+    void notifyError(ErrorCode code, const std::string &url, const std::string &msg = "", const std::string &customId = "", int curle_code = 0, int curlm_code = 0);
     
-    void notifyError(const std::string &msg, int curlm_code, const std::string &customId = "");
+    void notifyError(const std::string &msg, const std::string &url, int curlm_code, const std::string &customId = "");
     
-    void notifyError(const std::string &msg, const std::string &customId, int curle_code);
+    void notifyError(const std::string &msg, const std::string &url, const std::string &customId, int curle_code);
 
 private:
 
@@ -189,8 +218,8 @@ private:
     bool _supportResuming;
 };
 
-int downloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
+int downloadProgressFunc(DownloaderExtended::DownloadHandler* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
 
 NS_CC_EXT_END
 
-#endif /* defined(__Downloader__) */
+#endif /* defined(__DownloaderExtended__) */

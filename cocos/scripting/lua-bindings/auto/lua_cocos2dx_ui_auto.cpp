@@ -4395,6 +4395,52 @@ int lua_cocos2dx_ui_Layout_setClippingEnabled(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Layout_setPadding(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Layout* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Layout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Layout_setPadding'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::ui::Padding arg0;
+
+        ok &= luaval_to_object<cocos2d::ui::Padding>(tolua_S, 2, "ccui.Padding",&arg0);
+        if(!ok)
+            return 0;
+        cobj->setPadding(arg0);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Layout:setPadding",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Layout_setPadding'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Layout_getBackGroundImageColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4882,6 +4928,50 @@ int lua_cocos2dx_ui_Layout_getLayoutType(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Layout_getPadding(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Layout* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Layout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Layout_getPadding'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        cocos2d::ui::Padding ret = cobj->getPadding();
+        object_to_luaval<cocos2d::ui::Padding>(tolua_S, "ccui.Padding",(cocos2d::ui::Padding)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Layout:getPadding",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Layout_getPadding'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Layout_setPassFocusToChild(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5191,6 +5281,7 @@ int lua_register_cocos2dx_ui_Layout(lua_State* tolua_S)
         tolua_function(tolua_S,"getBackGroundImageCapInsets",lua_cocos2dx_ui_Layout_getBackGroundImageCapInsets);
         tolua_function(tolua_S,"getBackGroundColor",lua_cocos2dx_ui_Layout_getBackGroundColor);
         tolua_function(tolua_S,"setClippingEnabled",lua_cocos2dx_ui_Layout_setClippingEnabled);
+        tolua_function(tolua_S,"setPadding",lua_cocos2dx_ui_Layout_setPadding);
         tolua_function(tolua_S,"getBackGroundImageColor",lua_cocos2dx_ui_Layout_getBackGroundImageColor);
         tolua_function(tolua_S,"isBackGroundImageScale9Enabled",lua_cocos2dx_ui_Layout_isBackGroundImageScale9Enabled);
         tolua_function(tolua_S,"getBackGroundColorType",lua_cocos2dx_ui_Layout_getBackGroundColorType);
@@ -5202,6 +5293,7 @@ int lua_register_cocos2dx_ui_Layout(lua_State* tolua_S)
         tolua_function(tolua_S,"getBackGroundImageTextureSize",lua_cocos2dx_ui_Layout_getBackGroundImageTextureSize);
         tolua_function(tolua_S,"forceDoLayout",lua_cocos2dx_ui_Layout_forceDoLayout);
         tolua_function(tolua_S,"getLayoutType",lua_cocos2dx_ui_Layout_getLayoutType);
+        tolua_function(tolua_S,"getPadding",lua_cocos2dx_ui_Layout_getPadding);
         tolua_function(tolua_S,"setPassFocusToChild",lua_cocos2dx_ui_Layout_setPassFocusToChild);
         tolua_function(tolua_S,"getBackGroundStartColor",lua_cocos2dx_ui_Layout_getBackGroundStartColor);
         tolua_function(tolua_S,"setBackGroundImageScale9Enabled",lua_cocos2dx_ui_Layout_setBackGroundImageScale9Enabled);
