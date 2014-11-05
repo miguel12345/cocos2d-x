@@ -4425,7 +4425,7 @@ int lua_cocos2dx_ui_Layout_setPadding(lua_State* tolua_S)
     {
         cocos2d::ui::Padding arg0;
 
-        ok &= luaval_to_object<cocos2d::ui::Padding>(tolua_S, 2, "ccui.Padding",&arg0);
+        ok &= luaval_to_padding(tolua_S, 2, &arg0, "ccui.Layout:setPadding");
         if(!ok)
             return 0;
         cobj->setPadding(arg0);
@@ -4959,7 +4959,7 @@ int lua_cocos2dx_ui_Layout_getPadding(lua_State* tolua_S)
         if(!ok)
             return 0;
         cocos2d::ui::Padding ret = cobj->getPadding();
-        object_to_luaval<cocos2d::ui::Padding>(tolua_S, "ccui.Padding",(cocos2d::ui::Padding)ret);
+        padding_to_luaval(tolua_S, ret);
         return 1;
     }
     CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Layout:getPadding",argc, 0);

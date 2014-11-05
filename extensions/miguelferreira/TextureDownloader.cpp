@@ -26,7 +26,6 @@
 #include "cocos2d.h"
 
 using namespace cocos2d::extension::mf;
-using namespace cocos2d::extension;
 
 static TextureDownloader *s_SharedTextureDownloader = nullptr;
 
@@ -69,7 +68,7 @@ bool TextureDownloader::init() {
     return true;
 }
 
-void TextureDownloader::TextureDownloadHandler::cancel() {
+void TextureDownloadHandler::cancel() {
     
     if (!_download.expired()) {
         _download.lock()->cancel();
@@ -78,13 +77,13 @@ void TextureDownloader::TextureDownloadHandler::cancel() {
     Director::getInstance()->getTextureCache()->unbindImageAsync(_imageFileName);
 }
 
-std::weak_ptr<TextureDownloader::TextureDownloadHandler> TextureDownloader::downloadTextureAsync(const std::string& imageUrl,const std::function<void(bool success,std::string imagePath)>& callback) {
+std::weak_ptr<TextureDownloadHandler> TextureDownloader::downloadTextureAsync(const std::string& imageUrl,const std::function<void(bool success,std::string imagePath)>& callback) {
     
     std::string imageLocalPath = imagesFolder;
     std::string fileName = std::string(imageUrl.begin()+imageUrl.rfind("/")+1,imageUrl.end());
     imageLocalPath += fileName;
     
-    std::shared_ptr<TextureDownloader::TextureDownloadHandler> textDownloadHandler = std::make_shared<TextureDownloader::TextureDownloadHandler>();
+    std::shared_ptr<TextureDownloadHandler> textDownloadHandler = std::make_shared<TextureDownloadHandler>();
     
     _callbacks[imageUrl] = [this,callback,imageUrl,imageLocalPath,textDownloadHandler](bool success) {
         

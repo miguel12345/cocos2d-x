@@ -3001,3 +3001,66 @@ void quaternion_to_luaval(lua_State* L,const cocos2d::Quaternion& inValue)
     lua_pushnumber(L, (lua_Number) inValue.w);             /* L: table key value*/
     lua_rawset(L, -3);
 }
+
+
+void padding_to_luaval(lua_State* L,const cocos2d::ui::Padding& padding)
+{
+    if (NULL  == L)
+        return;
+    
+    lua_newtable(L);                                    /* L: table */
+    lua_pushstring(L, "left");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) padding.left);             /* L: table key value*/
+    lua_rawset(L, -3);                                  /* table[key] = value, L: table */
+    lua_pushstring(L, "top");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) padding.top);             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "right");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) padding.right);             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "bottom");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) padding.bottom);             /* L: table key value*/
+    lua_rawset(L, -3);
+}
+
+bool luaval_to_padding(lua_State* L,int lo,cocos2d::ui::Padding* outValue, const char* funcName)
+{
+    if (nullptr == L || nullptr == outValue)
+        return false;
+    
+    bool ok = true;
+    
+    tolua_Error tolua_err;
+    if (!tolua_istable(L, lo, 0, &tolua_err) )
+    {
+#if COCOS2D_DEBUG >=1
+        luaval_to_native_err(L,"#ferror:",&tolua_err,funcName);
+#endif
+        ok = false;
+    }
+    
+    
+    if (ok)
+    {
+        lua_pushstring(L, "left");
+        lua_gettable(L, lo);
+        outValue->left = lua_isnil(L, -1) ? 0 : lua_tonumber(L, -1);
+        lua_pop(L, 1);
+        
+        lua_pushstring(L, "top");
+        lua_gettable(L, lo);
+        outValue->top = lua_isnil(L, -1) ? 0 : lua_tonumber(L, -1);
+        lua_pop(L, 1);
+        
+        lua_pushstring(L, "bottom");
+        lua_gettable(L, lo);
+        outValue->bottom = lua_isnil(L, -1) ? 0 : lua_tonumber(L, -1);
+        lua_pop(L, 1);
+        
+        lua_pushstring(L, "right");
+        lua_gettable(L, lo);
+        outValue->right = lua_isnil(L, -1) ? 0 : lua_tonumber(L, -1);
+        lua_pop(L, 1);
+    }
+    return ok;
+}

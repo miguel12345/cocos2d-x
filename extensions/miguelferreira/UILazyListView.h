@@ -29,9 +29,7 @@ THE SOFTWARE.
 #include "ui/UIScrollView.h"
 #include "ui/GUIExport.h"
 
-NS_CC_BEGIN
-
-namespace ui{
+namespace cocos2d { namespace extension { namespace mf {
     
     class LazyListViewDataSource : public Ref
     {
@@ -60,7 +58,7 @@ typedef enum
 typedef void (Ref::*SEL_LazyListViewEvent)(Ref*,LazyListViewEventType);
 #define LazyListVieweventselector(_SELECTOR) (SEL_LazyListViewEvent)(&_SELECTOR)
 
-class CC_GUI_DLL LazyListView : public ScrollView
+    class CC_GUI_DLL LazyListView : public cocos2d::ui::ScrollView
 {
  
     DECLARE_CLASS_GUI_INFO
@@ -265,7 +263,6 @@ protected:
 
 };
 
-}
-NS_CC_END
+}}}
 
 #endif /* defined(__LazyListView__) */

@@ -127,9 +127,7 @@ def main():
         output_dir = '%s/cocos/scripting/lua-bindings/auto-mf' % project_root
 
         cmd_args = {
-                    'cocos2dx_ui.ini' : ('cocos2dx_ui', 'lua_cocos2dx_ui_auto'),
-                    'cocos2dx_mf.ini' : ('cocos2dx_mf', 'lua_cocos2dx_mf'),
-                    'cocos2dx_extension.ini' : ('cocos2dx_extension', 'lua_cocos2dx_extension')
+                    'cocos2dx_ui.ini' : ('cocos2dx_ui', 'lua_cocos2dx_ui_mf_auto')
                             }
 
         target = 'lua'

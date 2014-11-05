@@ -35,7 +35,7 @@
 #include <memory>
 #include <atomic>
 
-NS_CC_EXT_BEGIN
+namespace cocos2d { namespace extension { namespace mf {
 
 class CC_EX_DLL DownloaderExtended : public std::enable_shared_from_this<DownloaderExtended>
 {
@@ -220,6 +220,6 @@ private:
 
 int downloadProgressFunc(DownloaderExtended::DownloadHandler* ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded);
 
-NS_CC_EXT_END
+}}}
 
 #endif /* defined(__DownloaderExtended__) */

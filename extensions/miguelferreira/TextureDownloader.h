@@ -28,11 +28,6 @@
 namespace cocos2d { namespace extension { namespace mf {
 
 
-class CC_EX_DLL TextureDownloader : public Ref
-{
-    
-public:
-    
     class TextureDownloadHandler {
         
         friend class TextureDownloader;
@@ -40,9 +35,14 @@ public:
     public:
         void cancel();
     private:
-        std::weak_ptr<extension::DownloaderExtended::DownloadHandler> _download;
+        std::weak_ptr<DownloaderExtended::DownloadHandler> _download;
         std::string _imageFileName;
     };
+    
+class CC_EX_DLL TextureDownloader : public Ref
+{
+    
+public:
     
     std::weak_ptr<TextureDownloadHandler> downloadTextureAsync(const std::string& imageUrl,const std::function<void(bool success, std::string imagePath)>& callback);
     
@@ -52,7 +52,7 @@ public:
     
 private:
     
-    std::shared_ptr<extension::DownloaderExtended> _downloader;
+    std::shared_ptr<DownloaderExtended> _downloader;
     std::unordered_map<std::string, std::function<void(bool success)>> _callbacks;
     std::string imagesFolder;
     

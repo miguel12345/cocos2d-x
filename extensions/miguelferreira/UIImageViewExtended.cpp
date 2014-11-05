@@ -23,13 +23,12 @@ THE SOFTWARE.
 ****************************************************************************/
 
 #include "extensions/miguelferreira/UIImageViewExtended.h"
-#include "ui/UIScale9Sprite.h"
 #include "2d/CCSprite.h"
 
-NS_CC_BEGIN
+using namespace cocos2d::extension::mf;
+using namespace cocos2d::ui;
+using namespace cocos2d;
 
-namespace ui {
-    
 static const int IMAGE_RENDERER_Z = (-1);
     
 IMPLEMENT_CLASS_GUI_INFO(ImageViewExtended)
@@ -390,7 +389,3 @@ void ImageViewExtended::updateRemoteImageUrl(std::string imageUrl) {
     loadTexture(_textureFile);
     _remoteImageUrl = imageUrl;
 }
-    
-}
-
-NS_CC_END

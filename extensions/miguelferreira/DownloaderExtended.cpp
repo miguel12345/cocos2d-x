@@ -37,7 +37,7 @@
 
 #define TEMP_EXT            ".temp"
 
-USING_NS_CC_EXT;
+using namespace cocos2d::extension::mf;
 USING_NS_CC;
 
 size_t fileWriteFunc(void *ptr, size_t size, size_t nmemb, void *userdata)
@@ -116,7 +116,7 @@ int batchDownloadProgressFunc(DownloaderExtended::ProgressData *ptr, double tota
 }
 
 // Compare to batchDownloadProgressFunc, this only handles progress information notification
-int cocos2d::extension::downloadProgressFunc(DownloaderExtended::DownloadHandler *download, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded)
+int cocos2d::extension::mf::downloadProgressFunc(DownloaderExtended::DownloadHandler *download, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded)
 {
     DownloaderExtended::ProgressData* ptr = &download->_progressData;
  

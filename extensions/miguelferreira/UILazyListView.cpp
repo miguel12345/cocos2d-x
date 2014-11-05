@@ -25,9 +25,9 @@ THE SOFTWARE.
 #include "UILazyListView.h"
 #include "ui/UIHelper.h"
 
-NS_CC_BEGIN
-
-namespace ui {
+using namespace cocos2d::extension::mf;
+using namespace cocos2d::ui;
+using namespace cocos2d;
     
 LazyListViewDataSource::LazyListViewDataSource()
 : numElements(nullptr)
@@ -747,5 +747,3 @@ void LazyListView::adjustPadding(std::pair<int, int> syncResult) {
     }
     setPadding(curPadding);
 }
-}
-NS_CC_END

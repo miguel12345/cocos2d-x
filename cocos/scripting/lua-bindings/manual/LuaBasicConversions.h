@@ -30,6 +30,7 @@ extern "C" {
 }
 #include "tolua_fix.h"
 #include "cocos2d.h"
+#include "ui/CocosGUI.h"
 
 using namespace cocos2d;
 
@@ -79,6 +80,8 @@ extern bool luaval_to_blendfunc(lua_State* L, int lo, cocos2d::BlendFunc* outVal
 extern bool luaval_to_ttfconfig(lua_State* L, int lo, cocos2d::TTFConfig* outValue, const char* funcName = "");
 extern bool luaval_to_uniform(lua_State* L, int lo, cocos2d::Uniform* outValue, const char* funcName = "");
 extern bool luaval_to_vertexattrib(lua_State* L, int lo, cocos2d::VertexAttrib* outValue, const char* funcName = "");
+extern bool luaval_to_padding(lua_State* L,int lo,cocos2d::ui::Padding* outValue, const char* funcName = "");
+
 
 static inline bool luaval_to_point(lua_State* L,int lo,cocos2d::Vec2* outValue, const char* funcName = "")
 {
@@ -388,5 +391,6 @@ void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue);
 void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue);
 void ccvector_ushort_to_luaval(lua_State* L, const std::vector<unsigned short>& inValue);
 void quaternion_to_luaval(lua_State* L,const cocos2d::Quaternion& inValue);
+void padding_to_luaval(lua_State* L,const cocos2d::ui::Padding& padding);
 
 #endif //__COCOS2DX_SCRIPTING_LUA_COCOS2DXSUPPORT_LUABAISCCONVERSIONS_H__

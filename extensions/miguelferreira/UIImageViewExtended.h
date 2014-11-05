@@ -27,17 +27,16 @@ THE SOFTWARE.
 
 #include "ui/UIWidget.h"
 #include "ui/GUIExport.h"
+#include "ui/UIScale9Sprite.h"
 #include "extensions/miguelferreira/TextureDownloader.h"
 
-NS_CC_BEGIN
-
-namespace ui {
-    class Scale9Sprite;
+namespace cocos2d { namespace extension { namespace mf {
+    
 /**
 *   @js NA
 *   @lua NA
 */
-class CC_GUI_DLL ImageViewExtended : public Widget
+    class CC_GUI_DLL ImageViewExtended : public cocos2d::ui::Widget
 {
     
     DECLARE_CLASS_GUI_INFO
@@ -145,13 +144,13 @@ protected:
     void onRemoteTextureReady(const std::string& imageFileName);
     void onRemoteTextureFailed();
     
-    std::weak_ptr<extension::mf::TextureDownloader::TextureDownloadHandler> _textureDownloadHandler;
+    std::weak_ptr<TextureDownloadHandler> _textureDownloadHandler;
     
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;
     Rect _capInsets;
-    Scale9Sprite* _imageRenderer;
+    ui::Scale9Sprite* _imageRenderer;
     std::string _textureFile;
     TextureResType _imageTexType;
     Size _imageTextureSize;
@@ -160,8 +159,6 @@ protected:
     std::string _remoteImageUrl;
 };
 
-}
-
-NS_CC_END
+}}}
 
 #endif /* defined(__CocoGUI__ImageViewExtended__) */
