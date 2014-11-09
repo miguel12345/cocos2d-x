@@ -33,8 +33,14 @@
 #include <string>
 #include <functional>
 #include <memory>
+#include <atomic>
 
 NS_CC_EXT_BEGIN
+
+struct DownloadHandler
+{
+    std::shared_ptr<std::atomic<bool>> cancelled;
+};;
 
 class CC_EX_DLL Downloader : public std::enable_shared_from_this<Downloader>
 {
@@ -82,6 +88,7 @@ public:
         std::string name;
         double downloaded;
         double totalToDownload;
+        std::shared_ptr<std::atomic<bool>> cancelled;
     };
 
     struct DownloadUnit
@@ -127,7 +134,7 @@ public:
     
     void downloadToBufferSync(const std::string &srcUrl, unsigned char *buffer, const long &size, const std::string &customId = "");
 
-    void downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
+    DownloadHandler downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
 
     void downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId = "");
     

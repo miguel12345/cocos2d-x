@@ -119,6 +119,13 @@
 -- @param self
         
 --------------------------------
+-- 
+-- @function [parent=#GLView] applicationScreenSizeChanged 
+-- @param self
+-- @param #int newWidth
+-- @param #int newHeight
+        
+--------------------------------
 -- Set the design resolution size.<br>
 -- param width Design resolution width.<br>
 -- param height Design resolution height.<br>

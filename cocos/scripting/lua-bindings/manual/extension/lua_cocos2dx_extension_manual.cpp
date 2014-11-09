@@ -924,6 +924,203 @@ tolua_lerror:
 #endif
 }
 
+int lua_cocos2dx_extension_DownloaderLua_setProgressCallback(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::extension::DownloaderLua* cobj = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.DownloaderLua",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::extension::DownloaderLua*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_DownloaderLua_setProgressCallback'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+#if COCOS2D_DEBUG >= 1
+        if (!toluafix_isfunction(tolua_S,2,"LUA_FUNCTION",0,&tolua_err))
+        {
+            goto tolua_lerror;
+        }
+#endif
+        
+        LUA_FUNCTION handler = (  toluafix_ref_function(tolua_S,2,0));
+        
+        cobj->setProgressCallback([=](double total, double downloaded, const std::string &url, const std::string &customId){
+            
+            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+            
+            stack->pushFloat(total);
+            stack->pushFloat(downloaded);
+            stack->pushString(url.c_str());
+            stack->pushString(customId.c_str());
+            
+            stack->executeFunctionByHandler(handler, 4);
+            stack->clean();
+            
+        });
+        
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DownloaderLua:setProgressCallback",argc, 1);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_DownloaderLua_setProgressCallback'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+
+void downloader_error_code_to_luaval(lua_State* L,const cocos2d::extension::Downloader::Error& inValue)
+{
+    if (NULL  == L)
+        return;
+    
+    lua_newtable(L);                                    /* L: table */
+    lua_pushstring(L, "code");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) inValue.code);             /* L: table key value*/
+    lua_rawset(L, -3);                                  /* table[key] = value, L: table */
+    lua_pushstring(L, "curlm_code");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) inValue.curlm_code);             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "curle_code");                             /* L: table key */
+    lua_pushnumber(L, (lua_Number) inValue.curle_code);             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "message");                             /* L: table key */
+    lua_pushstring(L, inValue.message.c_str());             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "customId");                             /* L: table key */
+    lua_pushstring(L, inValue.customId.c_str());             /* L: table key value*/
+    lua_rawset(L, -3);
+    lua_pushstring(L, "url");                             /* L: table key */
+    lua_pushstring(L, inValue.url.c_str());             /* L: table key value*/
+    lua_rawset(L, -3);
+}
+
+int lua_cocos2dx_extension_DownloaderLua_setErrorCallback(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::extension::DownloaderLua* cobj = nullptr;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.DownloaderLua",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::extension::DownloaderLua*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_DownloaderLua_setErrorCallback'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        LUA_FUNCTION handler = (  toluafix_ref_function(tolua_S,2,0));
+        
+        cobj->setErrorCallback([=](const Downloader::Error & error){
+            
+            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+            
+            downloader_error_code_to_luaval(tolua_S,error);
+
+            stack->executeFunctionByHandler(handler, 1);
+            stack->clean();
+            
+        });
+        
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DownloaderLua:setErrorCallback",argc, 1);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_DownloaderLua_setErrorCallback'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+int lua_cocos2dx_extension_DownloaderLua_setSuccessCallback(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::extension::DownloaderLua* cobj = nullptr;
+    bool ok  = true;
+    
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+    
+    
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.DownloaderLua",0,&tolua_err)) goto tolua_lerror;
+#endif
+    
+    cobj = (cocos2d::extension::DownloaderLua*)tolua_tousertype(tolua_S,1,0);
+    
+#if COCOS2D_DEBUG >= 1
+    if (!cobj)
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_extension_DownloaderLua_setSuccessCallback'", nullptr);
+        return 0;
+    }
+#endif
+    
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1)
+    {
+        LUA_FUNCTION handler = (  toluafix_ref_function(tolua_S,2,0));
+        
+        cobj->setSuccessCallback([=](const std::string& url, const std::string& path, const std::string& customId){
+            
+            LuaStack* stack = LuaEngine::getInstance()->getLuaStack();
+            
+            stack->pushString(url.c_str());
+            stack->pushString(path.c_str());
+            stack->pushString(customId.c_str());
+            
+            stack->executeFunctionByHandler(handler, 3);
+            stack->clean();
+            
+        });
+        
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.DownloaderLua:setSuccessCallback",argc, 1);
+    return 0;
+    
+#if COCOS2D_DEBUG >= 1
+tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_extension_DownloaderLua_setSuccessCallback'.",&tolua_err);
+#endif
+    
+    return 0;
+}
+
 static void extendTableView(lua_State* L)
 {
     lua_pushstring(L, "cc.TableView");
@@ -935,6 +1132,19 @@ static void extendTableView(lua_State* L)
         tolua_function(L, "create", lua_cocos2dx_TableView_create);
         tolua_function(L, "registerScriptHandler", lua_cocos2d_TableView_registerScriptHandler);
         tolua_function(L, "unregisterScriptHandler", lua_cocos2d_TableView_unregisterScriptHandler);
+    }
+    lua_pop(L, 1);
+}
+
+static void extendDownloaderLua(lua_State* L)
+{
+    lua_pushstring(L, "cc.DownloaderLua");
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    if (lua_istable(L,-1))
+    {
+        tolua_function(L, "setProgressCallback", lua_cocos2dx_extension_DownloaderLua_setProgressCallback);
+        tolua_function(L, "setSuccessCallback", lua_cocos2dx_extension_DownloaderLua_setSuccessCallback);
+        tolua_function(L, "setErrorCallback", lua_cocos2dx_extension_DownloaderLua_setErrorCallback);
     }
     lua_pop(L, 1);
 }
@@ -1014,6 +1224,8 @@ int register_all_cocos2dx_extension_manual(lua_State* tolua_S)
     extendTableView(tolua_S);
     extendManifest(tolua_S);
     extendEventListenerAssetsManagerEx(tolua_S);
+    extendDownloaderLua(tolua_S);
+    
     return 0;
 }
 

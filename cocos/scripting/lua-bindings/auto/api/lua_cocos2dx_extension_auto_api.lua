@@ -86,4 +86,9 @@
 -- @field [parent=#cc] EventListenerAssetsManagerEx#EventListenerAssetsManagerEx EventListenerAssetsManagerEx preloaded module
 
 
+--------------------------------------------------------
+-- the cc DownloaderLua
+-- @field [parent=#cc] DownloaderLua#DownloaderLua DownloaderLua preloaded module
+
+
 return nil

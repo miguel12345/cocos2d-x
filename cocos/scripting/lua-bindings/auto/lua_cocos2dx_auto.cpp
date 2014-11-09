@@ -10056,6 +10056,55 @@ int lua_cocos2dx_GLView_swapBuffers(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_GLView_applicationScreenSizeChanged(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::GLView* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.GLView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::GLView*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_GLView_applicationScreenSizeChanged'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        int arg0;
+        int arg1;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.GLView:applicationScreenSizeChanged");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.GLView:applicationScreenSizeChanged");
+        if(!ok)
+            return 0;
+        cobj->applicationScreenSizeChanged(arg0, arg1);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.GLView:applicationScreenSizeChanged",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_GLView_applicationScreenSizeChanged'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_GLView_setDesignResolutionSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -10654,6 +10703,7 @@ int lua_register_cocos2dx_GLView(lua_State* tolua_S)
         tolua_function(tolua_S,"getDesignResolutionSize",lua_cocos2dx_GLView_getDesignResolutionSize);
         tolua_function(tolua_S,"windowShouldClose",lua_cocos2dx_GLView_windowShouldClose);
         tolua_function(tolua_S,"swapBuffers",lua_cocos2dx_GLView_swapBuffers);
+        tolua_function(tolua_S,"applicationScreenSizeChanged",lua_cocos2dx_GLView_applicationScreenSizeChanged);
         tolua_function(tolua_S,"setDesignResolutionSize",lua_cocos2dx_GLView_setDesignResolutionSize);
         tolua_function(tolua_S,"getResolutionPolicy",lua_cocos2dx_GLView_getResolutionPolicy);
         tolua_function(tolua_S,"isRetinaDisplay",lua_cocos2dx_GLView_isRetinaDisplay);
@@ -11254,6 +11304,55 @@ int lua_cocos2dx_Director_loadMatrix(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Director_loadMatrix'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_Director_applicationScreenSizeChanged(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::Director* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.Director",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::Director*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_Director_applicationScreenSizeChanged'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        int arg0;
+        int arg1;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "cc.Director:applicationScreenSizeChanged");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "cc.Director:applicationScreenSizeChanged");
+        if(!ok)
+            return 0;
+        cobj->applicationScreenSizeChanged(arg0, arg1);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.Director:applicationScreenSizeChanged",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_Director_applicationScreenSizeChanged'.",&tolua_err);
 #endif
 
     return 0;
@@ -13501,6 +13600,7 @@ int lua_register_cocos2dx_Director(lua_State* tolua_S)
         tolua_function(tolua_S,"setAlphaBlending",lua_cocos2dx_Director_setAlphaBlending);
         tolua_function(tolua_S,"popToRootScene",lua_cocos2dx_Director_popToRootScene);
         tolua_function(tolua_S,"loadMatrix",lua_cocos2dx_Director_loadMatrix);
+        tolua_function(tolua_S,"applicationScreenSizeChanged",lua_cocos2dx_Director_applicationScreenSizeChanged);
         tolua_function(tolua_S,"getNotificationNode",lua_cocos2dx_Director_getNotificationNode);
         tolua_function(tolua_S,"getWinSize",lua_cocos2dx_Director_getWinSize);
         tolua_function(tolua_S,"getTextureCache",lua_cocos2dx_Director_getTextureCache);

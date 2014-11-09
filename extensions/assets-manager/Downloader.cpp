@@ -117,6 +117,10 @@ int batchDownloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownl
 // Compare to batchDownloadProgressFunc, this only handles progress information notification
 int downloadProgressFunc(Downloader::ProgressData *ptr, double totalToDownload, double nowDownloaded, double totalToUpLoad, double nowUpLoaded)
 {
+    if (ptr->cancelled.get()->load()) {
+        return 1;
+    }
+    
     if (ptr->totalToDownload == 0)
     {
         ptr->totalToDownload = totalToDownload;
@@ -231,6 +235,7 @@ void Downloader::prepareDownload(const std::string &srcUrl, const std::string &s
     pData->downloader = downloader;
     pData->downloaded = 0;
     pData->totalToDownload = 0;
+    pData->cancelled = std::make_shared<std::atomic<bool>>(false);
     
     fDesc->fp = nullptr;
     fDesc->curl = nullptr;
@@ -386,7 +391,7 @@ void Downloader::downloadToBuffer(const std::string &srcUrl, const std::string &
     });
 }
 
-void Downloader::downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
+DownloadHandler Downloader::downloadAsync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
 {
     FileDescriptor fDesc;
     ProgressData pData;
@@ -396,6 +401,9 @@ void Downloader::downloadAsync(const std::string &srcUrl, const std::string &sto
         auto t = std::thread(&Downloader::download, this, srcUrl, customId, fDesc, pData);
         t.detach();
     }
+    DownloadHandler  downloadHandler;
+    downloadHandler.cancelled = pData.cancelled;
+    return downloadHandler;
 }
 
 void Downloader::downloadSync(const std::string &srcUrl, const std::string &storagePath, const std::string &customId/* = ""*/)
