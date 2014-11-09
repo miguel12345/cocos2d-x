@@ -234,6 +234,12 @@
 -- @param #bool flippedY
         
 --------------------------------
+-- 
+-- @function [parent=#Widget] getWidgetParent 
+-- @param self
+-- @return Widget#Widget ret (return value: ccui.Widget)
+        
+--------------------------------
 -- Sets whether the widget is enabled<br>
 -- true if the widget is enabled, widget may be touched , false if the widget is disabled, widget cannot be touched.<br>
 -- The default value is true, a widget is default to enabled<br>

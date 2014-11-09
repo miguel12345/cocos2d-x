@@ -602,6 +602,8 @@ public:
      *@return void
      */
     void setUnifySizeEnabled(bool enable);
+    
+    Widget* getWidgetParent();
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -673,7 +675,6 @@ protected:
     virtual void copySpecialProperties(Widget* model);
     virtual void copyClonedWidgetChildren(Widget* model);
     
-    Widget* getWidgetParent();
     void updateContentSizeWithTextureSize(const Size& size);
     
     bool isAncestorsEnabled();
