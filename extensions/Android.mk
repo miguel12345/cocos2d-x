@@ -10,6 +10,7 @@ assets-manager/AssetsManager.cpp \
 assets-manager/Downloader.cpp \
 assets-manager/Manifest.cpp \
 assets-manager/AssetsManagerEx.cpp \
+assets-manager/DownloaderLua.cpp \
 assets-manager/CCEventAssetsManagerEx.cpp \
 assets-manager/CCEventListenerAssetsManagerEx.cpp \
 GUI/CCControlExtension/CCControl.cpp \
