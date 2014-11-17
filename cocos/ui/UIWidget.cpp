@@ -152,6 +152,8 @@ _customSize(Size::ZERO),
 _ignoreSize(false),
 _affectByClipping(false),
 _sizeType(SizeType::ABSOLUTE),
+_widthSizeType(SizeType::ABSOLUTE),
+_heigthSizeType(SizeType::ABSOLUTE),
 _sizePercent(Vec2::ZERO),
 _positionType(PositionType::ABSOLUTE),
 _positionPercent(Vec2::ZERO),
@@ -336,6 +338,35 @@ void Widget::setSizePercent(const Vec2 &percent)
     }
     _customSize = cSize;
 }
+    
+void Widget::setSizeValues(const Size &values) {
+    
+    Size contentSize = Size(0, 0);
+    Vec2 sizePercent = Vec2(0, 0);
+    
+    if (_widthSizeType == SizeType::ABSOLUTE) {
+        contentSize.width = values.width;
+    }
+    else {
+        sizePercent.x = values.width;
+    }
+    
+    if (_heigthSizeType == SizeType::ABSOLUTE) {
+        contentSize.height = values.height;
+    }
+    else {
+        sizePercent.y = values.height;
+    }
+    
+    
+    setContentSize(contentSize);
+    setSizePercent(sizePercent);
+}
+    
+void Widget::setSizeTypes(SizeType widthType, SizeType heightType) {
+    _widthSizeType = widthType;
+    _heigthSizeType = heightType;
+}
 
 void Widget::updateSizeAndPosition()
 {
@@ -346,17 +377,24 @@ void Widget::updateSizeAndPosition()
     
 void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
 {
-    switch (_sizeType)
+    float contentSizeWidth = 0.0f;
+    float contentSizeHeight = 0.0f;
+    float sizePercentWidth = 0.0f;
+    float sizePercentHeight = 0.0f;
+    
+    switch (_widthSizeType)
     {
         case SizeType::ABSOLUTE:
         {
             if (_ignoreSize)
             {
-                this->setContentSize(getVirtualRendererSize());
+                contentSizeWidth = getVirtualRendererSize().width;
+//                this->setContentSize(getVirtualRendererSize());
             }
             else
             {
-                this->setContentSize(_customSize);
+                contentSizeWidth = _customSize.width;
+//                this->setContentSize(_customSize);
             }
             float spx = 0.0f;
             float spy = 0.0f;
@@ -368,7 +406,8 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             {
                 spy = _customSize.height / parentSize.height;
             }
-            _sizePercent = Vec2(spx, spy);
+            sizePercentWidth = spx;
+//            _sizePercent = Vec2(spx, spy);
             break;
         }
         case SizeType::PERCENT:
@@ -376,18 +415,78 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             Size cSize = Size(parentSize.width * _sizePercent.x , parentSize.height * _sizePercent.y);
             if (_ignoreSize)
             {
-                this->setContentSize(getVirtualRendererSize());
+                contentSizeWidth = getVirtualRendererSize().width;
+//                this->setContentSize(getVirtualRendererSize());
             }
             else
             {
-                this->setContentSize(cSize);
+                contentSizeWidth = cSize.width;
+//                this->setContentSize(cSize);
             }
-            _customSize = cSize;
+            sizePercentWidth = _sizePercent.x;
+
+//            _customSize = cSize;
             break;
         }
         default:
             break;
     }
+    
+    switch (_heigthSizeType)
+    {
+        case SizeType::ABSOLUTE:
+        {
+            if (_ignoreSize)
+            {
+                contentSizeHeight = getVirtualRendererSize().height;
+                //                this->setContentSize(getVirtualRendererSize());
+            }
+            else
+            {
+                contentSizeHeight = _customSize.height;
+                //                this->setContentSize(_customSize);
+            }
+            float spx = 0.0f;
+            float spy = 0.0f;
+            if (parentSize.width > 0.0f)
+            {
+                spx = _customSize.width / parentSize.width;
+            }
+            if (parentSize.height > 0.0f)
+            {
+                spy = _customSize.height / parentSize.height;
+            }
+            sizePercentHeight = spy;
+            //            _sizePercent = Vec2(spx, spy);
+            break;
+        }
+        case SizeType::PERCENT:
+        {
+            Size cSize = Size(parentSize.width * _sizePercent.x , parentSize.height * _sizePercent.y);
+            if (_ignoreSize)
+            {
+                contentSizeHeight = getVirtualRendererSize().height;
+                //                this->setContentSize(getVirtualRendererSize());
+            }
+            else
+            {
+                contentSizeHeight = cSize.height;
+                //                this->setContentSize(cSize);
+            }
+            
+            sizePercentHeight = _sizePercent.y;
+            
+//            _customSize = cSize;
+            break;
+        }
+        default:
+            break;
+    }
+    
+    
+    _sizePercent = Vec2(sizePercentWidth, sizePercentHeight);
+    _customSize = Size(contentSizeWidth,contentSizeHeight);
+    this->setContentSize(Size(contentSizeWidth,contentSizeHeight));
     
     //update position & position percent
     Vec2 absPos = getPosition();
@@ -419,11 +518,23 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
 void Widget::setSizeType(SizeType type)
 {
     _sizeType = type;
+    _widthSizeType = type;
+    _heigthSizeType = type;
 }
 
 Widget::SizeType Widget::getSizeType() const
 {
     return _sizeType;
+}
+    
+Widget::SizeType Widget::getWidthSizeType() const
+{
+    return _widthSizeType;
+}
+    
+Widget::SizeType Widget::getHeightSizeType() const
+{
+    return _heigthSizeType;
 }
 
 void Widget::ignoreContentAdaptWithSize(bool ignore)
@@ -1104,6 +1215,8 @@ void Widget::copyProperties(Widget *widget)
     this->setContentSize(widget->_contentSize);
     _customSize = widget->_customSize;
     _sizeType = widget->getSizeType();
+    _widthSizeType = widget->getWidthSizeType();
+    _heigthSizeType = widget->getHeightSizeType();
     _sizePercent = widget->_sizePercent;
     _positionType = widget->_positionType;
     _positionPercent = widget->_positionPercent;

@@ -399,6 +399,40 @@ public:
      * @param type that is widget's size type
      */
     SizeType getSizeType() const;
+    
+    /**
+     * Changes the size type of widget.
+     *
+     * @see SizeType
+     *
+     * @param type that is widget's size type
+     */
+    void setSizeTypes(SizeType widthType, SizeType heightType);
+    
+    /**
+     * Changes the size that is widget's size
+     *
+     * @param size that is widget's size
+     */
+    void setSizeValues(const Size &values);
+    
+    /**
+     * Gets the size type of widget for the width dimension.
+     *
+     * @see SizeType
+     *
+     * @param type that is widget's size type
+     */
+    SizeType getWidthSizeType() const;
+    
+    /**
+     * Gets the size type of widget for the height dimension.
+     *
+     * @see SizeType
+     *
+     * @param type that is widget's size type
+     */
+    SizeType getHeightSizeType() const;
 
     /**
      * Returns size of widget
@@ -696,6 +730,8 @@ protected:
 
     BrightStyle _brightStyle;
     SizeType _sizeType;
+    SizeType _widthSizeType;
+    SizeType _heigthSizeType;
     PositionType _positionType;
 
     //used for search widget by action tag in UIHelper class

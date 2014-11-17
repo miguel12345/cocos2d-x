@@ -5,6 +5,21 @@
 -- @parent_module ccui
 
 --------------------------------
+-- Changes the size that is widget's size<br>
+-- param size that is widget's size
+-- @function [parent=#Widget] setSizeValues 
+-- @param self
+-- @param #size_table values
+        
+--------------------------------
+-- Gets the size type of widget for the width dimension.<br>
+-- see SizeType<br>
+-- param type that is widget's size type
+-- @function [parent=#Widget] getWidthSizeType 
+-- @param self
+-- @return int#int ret (return value: int)
+        
+--------------------------------
 -- Changes the percent that is widget's percent size<br>
 -- param percent that is widget's percent size
 -- @function [parent=#Widget] setSizePercent 
@@ -60,11 +75,12 @@
 -- @param #vec2_table percent
         
 --------------------------------
--- brief Specify widget to swallow touches or not<br>
--- since v3.3
--- @function [parent=#Widget] setSwallowTouches 
+-- Gets the size type of widget for the height dimension.<br>
+-- see SizeType<br>
+-- param type that is widget's size type
+-- @function [parent=#Widget] getHeightSizeType 
 -- @param self
--- @param #bool swallow
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- 
@@ -116,6 +132,13 @@
 -- @function [parent=#Widget] getLayoutParameter 
 -- @param self
 -- @return LayoutParameter#LayoutParameter ret (return value: ccui.LayoutParameter)
+        
+--------------------------------
+-- brief Specify widget to swallow touches or not<br>
+-- since v3.3
+-- @function [parent=#Widget] setSwallowTouches 
+-- @param self
+-- @param #bool swallow
         
 --------------------------------
 -- Checks a point if is in widget's space<br>
@@ -342,6 +365,15 @@
 -- @function [parent=#Widget] getSizeType 
 -- @param self
 -- @return int#int ret (return value: int)
+        
+--------------------------------
+-- Changes the size type of widget.<br>
+-- see SizeType<br>
+-- param type that is widget's size type
+-- @function [parent=#Widget] setSizeTypes 
+-- @param self
+-- @param #int widthType
+-- @param #int heightType
         
 --------------------------------
 -- 
