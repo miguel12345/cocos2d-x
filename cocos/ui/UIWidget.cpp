@@ -514,11 +514,9 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
         CCLOG("Size percent x %f y %f",sizePercentWidth,sizePercentHeight);
     }
     
-    _sizePercent = Vec2(sizePercentWidth, sizePercentHeight);
     _customSize = Size(contentSizeWidth,contentSizeHeight);
-    
-    ProtectedNode::setContentSize(_customSize);
-    onSizeChanged();
+    setContentSize(_customSize);
+    _sizePercent = Vec2(sizePercentWidth, sizePercentHeight);
     
     //update position & position percent
     Vec2 absPos = getPosition();
