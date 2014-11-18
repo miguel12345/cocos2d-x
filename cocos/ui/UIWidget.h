@@ -433,6 +433,27 @@ public:
      * @param type that is widget's size type
      */
     SizeType getHeightSizeType() const;
+    
+    
+    /**
+     *  Changes the maximum size of the widget
+     *  A negative value in one of the dimensions
+     *  means that there is no maximum value restriction
+     *
+     *  @param maxSize that is the widget maximum allowed size
+     */
+    void setMaxSize(const Size &maxSize);
+    
+    
+    /**
+     *  Changes the minimum size of the widget
+     *  A negative value in one of the dimensions
+     *  means that there is no minimum value restriction
+     *
+     *  @param maxSize that is the widget minimum allowed size
+     */
+    void setMinSize(const Size &minSize);
+    
 
     /**
      * Returns size of widget
@@ -741,6 +762,9 @@ protected:
 
     Vec2 _sizePercent;
     Vec2 _positionPercent;
+    
+    Size _maximumSize;
+    Size _minimumSize;
 
     bool _hitted;
     EventListenerTouchOneByOne* _touchListener;

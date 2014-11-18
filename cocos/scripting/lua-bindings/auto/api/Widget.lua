@@ -257,10 +257,13 @@
 -- @param #bool flippedY
         
 --------------------------------
--- 
--- @function [parent=#Widget] getWidgetParent 
+-- Changes the maximum size of the widget<br>
+-- A negative value in one of the dimensions<br>
+-- means that there is no maximum value restriction<br>
+-- param maxSize that is the widget maximum allowed size
+-- @function [parent=#Widget] setMaxSize 
 -- @param self
--- @return Widget#Widget ret (return value: ccui.Widget)
+-- @param #size_table maxSize
         
 --------------------------------
 -- Sets whether the widget is enabled<br>
@@ -339,6 +342,15 @@
 -- @function [parent=#Widget] getCurrentFocusedWidget 
 -- @param self
 -- @return Widget#Widget ret (return value: ccui.Widget)
+        
+--------------------------------
+-- Changes the minimum size of the widget<br>
+-- A negative value in one of the dimensions<br>
+-- means that there is no minimum value restriction<br>
+-- param maxSize that is the widget minimum allowed size
+-- @function [parent=#Widget] setMinSize 
+-- @param self
+-- @param #size_table minSize
         
 --------------------------------
 -- when a widget calls this method, it will get focus immediately.
@@ -437,6 +449,12 @@
 -- @function [parent=#Widget] setSizeType 
 -- @param self
 -- @param #int type
+        
+--------------------------------
+-- 
+-- @function [parent=#Widget] getWidgetParent 
+-- @param self
+-- @return Widget#Widget ret (return value: ccui.Widget)
         
 --------------------------------
 -- Sets whether the widget is bright<br>

@@ -164,7 +164,9 @@ _flippedY(false),
 _focused(false),
 _focusEnabled(true),
 _layoutParameterType(LayoutParameter::Type::NONE),
-_propagateTouchEvents(true)
+_propagateTouchEvents(true),
+_maximumSize(Size(-1., -1.)),
+_minimumSize(Size(-1., -1.))
 {
   
 }
@@ -358,14 +360,21 @@ void Widget::setSizeValues(const Size &values) {
         sizePercent.y = values.height;
     }
     
-    
-    setContentSize(contentSize);
-    setSizePercent(sizePercent);
+    _customSize = contentSize;
+    _sizePercent = sizePercent;
 }
     
 void Widget::setSizeTypes(SizeType widthType, SizeType heightType) {
     _widthSizeType = widthType;
     _heigthSizeType = heightType;
+}
+    
+void Widget::setMaxSize(const Size &maxSize) {
+    _maximumSize = maxSize;
+}
+    
+void Widget::setMinSize(const Size &minSize) {
+    _minimumSize = minSize;
 }
 
 void Widget::updateSizeAndPosition()
@@ -389,25 +398,22 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             if (_ignoreSize)
             {
                 contentSizeWidth = getVirtualRendererSize().width;
-//                this->setContentSize(getVirtualRendererSize());
+                
             }
             else
             {
                 contentSizeWidth = _customSize.width;
-//                this->setContentSize(_customSize);
+                
             }
+            
             float spx = 0.0f;
-            float spy = 0.0f;
             if (parentSize.width > 0.0f)
             {
-                spx = _customSize.width / parentSize.width;
+                spx = contentSizeWidth / parentSize.width;
             }
-            if (parentSize.height > 0.0f)
-            {
-                spy = _customSize.height / parentSize.height;
-            }
+            
             sizePercentWidth = spx;
-//            _sizePercent = Vec2(spx, spy);
+            
             break;
         }
         case SizeType::PERCENT:
@@ -416,16 +422,16 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             if (_ignoreSize)
             {
                 contentSizeWidth = getVirtualRendererSize().width;
-//                this->setContentSize(getVirtualRendererSize());
+                
             }
             else
             {
                 contentSizeWidth = cSize.width;
-//                this->setContentSize(cSize);
+                
             }
             sizePercentWidth = _sizePercent.x;
 
-//            _customSize = cSize;
+            
             break;
         }
         default:
@@ -439,12 +445,12 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             if (_ignoreSize)
             {
                 contentSizeHeight = getVirtualRendererSize().height;
-                //                this->setContentSize(getVirtualRendererSize());
+                
             }
             else
             {
                 contentSizeHeight = _customSize.height;
-                //                this->setContentSize(_customSize);
+                
             }
             float spx = 0.0f;
             float spy = 0.0f;
@@ -457,7 +463,7 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
                 spy = _customSize.height / parentSize.height;
             }
             sizePercentHeight = spy;
-            //            _sizePercent = Vec2(spx, spy);
+            
             break;
         }
         case SizeType::PERCENT:
@@ -466,27 +472,53 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
             if (_ignoreSize)
             {
                 contentSizeHeight = getVirtualRendererSize().height;
-                //                this->setContentSize(getVirtualRendererSize());
+                
             }
             else
             {
                 contentSizeHeight = cSize.height;
-                //                this->setContentSize(cSize);
+                
             }
             
             sizePercentHeight = _sizePercent.y;
             
-//            _customSize = cSize;
             break;
         }
         default:
             break;
     }
     
+    //restrict size - width
+    float maximumWidth =_maximumSize.width;
+    if (maximumWidth>0.0f) {
+        contentSizeWidth = std::min(maximumWidth,contentSizeWidth);
+    }
+    
+    float minimumWidth =_minimumSize.width;
+    if (minimumWidth>0.0f) {
+        contentSizeWidth = std::max(minimumWidth,contentSizeWidth);
+    }
+    
+    //restrict size - height
+    float maximumHeight =_maximumSize.height;
+    if (maximumHeight>0.0f) {
+        contentSizeHeight = std::min(maximumHeight,contentSizeHeight);
+    }
+    
+    float minimumHeight =_minimumSize.height;
+    if (minimumHeight>0.0f) {
+        contentSizeHeight = std::max(minimumHeight,contentSizeHeight);
+    }
+    
+    if (getName() == "cenas") {
+        CCLOG("Size percent x %f y %f",sizePercentWidth,sizePercentHeight);
+    }
     
     _sizePercent = Vec2(sizePercentWidth, sizePercentHeight);
     _customSize = Size(contentSizeWidth,contentSizeHeight);
-    this->setContentSize(Size(contentSizeWidth,contentSizeHeight));
+    
+    ProtectedNode::setContentSize(_customSize);
+    onSizeChanged();
     
     //update position & position percent
     Vec2 absPos = getPosition();
