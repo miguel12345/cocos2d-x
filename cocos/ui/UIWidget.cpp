@@ -509,11 +509,7 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
     if (minimumHeight>0.0f) {
         contentSizeHeight = std::max(minimumHeight,contentSizeHeight);
     }
-    
-    if (getName() == "cenas") {
-        CCLOG("Size percent x %f y %f",sizePercentWidth,sizePercentHeight);
-    }
-    
+
     _customSize = Size(contentSizeWidth,contentSizeHeight);
     setContentSize(_customSize);
     _sizePercent = Vec2(sizePercentWidth, sizePercentHeight);
