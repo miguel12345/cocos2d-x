@@ -90,6 +90,14 @@ LayoutParameter::Type LayoutParameter::getLayoutType() const
     return _layoutParameterType;
 }
     
+void LayoutParameter::setCollapsed(bool collapsed) {
+    _collapsed = collapsed;
+}
+
+bool LayoutParameter::isCollapsed() {
+    return _collapsed;
+}
+    
 LayoutParameter* LayoutParameter::clone()
 {
     LayoutParameter* clonedParameter = createCloneInstance();

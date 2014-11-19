@@ -6,6 +6,12 @@
 
 --------------------------------
 -- 
+-- @function [parent=#LayoutParameter] isCollapsed 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- 
 -- @function [parent=#LayoutParameter] clone 
 -- @param self
 -- @return LayoutParameter#LayoutParameter ret (return value: ccui.LayoutParameter)
@@ -17,6 +23,12 @@
 -- @function [parent=#LayoutParameter] getLayoutType 
 -- @param self
 -- @return int#int ret (return value: int)
+        
+--------------------------------
+-- 
+-- @function [parent=#LayoutParameter] setCollapsed 
+-- @param self
+-- @param #bool collapsed
         
 --------------------------------
 -- 

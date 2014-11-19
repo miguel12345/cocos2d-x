@@ -184,6 +184,12 @@
 -- @return Widget#Widget ret (return value: ccui.Widget)
         
 --------------------------------
+-- 
+-- @function [parent=#Widget] setVisibility 
+-- @param self
+-- @param #int 
+        
+--------------------------------
 -- Determines if the widget is enabled<br>
 -- return true if the widget is enabled, false if the widget is disabled.
 -- @function [parent=#Widget] isEnabled 
@@ -406,6 +412,12 @@
 -- @function [parent=#Widget] getPositionPercent 
 -- @param self
 -- @return vec2_table#vec2_table ret (return value: vec2_table)
+        
+--------------------------------
+-- 
+-- @function [parent=#Widget] getVisibility 
+-- @param self
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- Set a click event handler to the widget

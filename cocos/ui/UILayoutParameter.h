@@ -81,7 +81,7 @@ public:
     /**
      * Default constructor
      */
-    LayoutParameter() : _margin(Margin())
+    LayoutParameter() : _margin(Margin()),_collapsed(false)
     {
         _layoutParameterType = Type::NONE;
     };
@@ -124,12 +124,19 @@ public:
      */
     Type getLayoutType() const;
     
+    
+    void setCollapsed(bool collapsed);
+    
+    bool isCollapsed();
+    
     LayoutParameter* clone();
     virtual LayoutParameter* createCloneInstance();
     virtual void copyProperties(LayoutParameter* model);
+
 protected:
     Margin _margin;
     Type _layoutParameterType;
+    bool _collapsed;
 };
     
 class CC_GUI_DLL LayoutParameterProtocol

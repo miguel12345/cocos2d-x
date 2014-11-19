@@ -166,7 +166,8 @@ _focusEnabled(true),
 _layoutParameterType(LayoutParameter::Type::NONE),
 _propagateTouchEvents(true),
 _maximumSize(Size(-1., -1.)),
-_minimumSize(Size(-1., -1.))
+_minimumSize(Size(-1., -1.)),
+_visibility(Visibility::VISIBLE)
 {
   
 }
@@ -1176,6 +1177,9 @@ void Widget::setLayoutParameter(LayoutParameter *parameter)
     {
         return;
     }
+    
+    remedyLayoutParameter(parameter);
+    
     _layoutParameterDictionary.insert((int)parameter->getLayoutType(), parameter);
     _layoutParameterType = parameter->getLayoutType();
 }
@@ -1450,6 +1454,36 @@ void Widget::setUnifySizeEnabled(bool enable)
     _unifySize = enable;
 }
 
+void Widget::setVisibility(Visibility visibility) {
+    
+    _visibility = visibility;
+    
+    if (_visibility == Visibility::VISIBLE) {
+        setVisible(true);
+    }
+    else {
+        setVisible(false);
+    }
+    
+    LayoutParameter* llp = getLayoutParameter();
+    if (llp) {
+        remedyLayoutParameter(llp);
+    }
+}
 
+Widget::Visibility Widget::getVisibility() {
+    return _visibility;
+}
+    
+void Widget::remedyLayoutParameter(LayoutParameter* parameter) {
+    
+    if (_visibility == Visibility::COLLAPSED) {
+        parameter->setCollapsed(true);
+    }
+    else {
+        parameter->setCollapsed(false);
+    }
+}
+    
 }
 NS_CC_END

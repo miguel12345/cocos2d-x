@@ -105,6 +105,13 @@ public:
         NORMAL,
         HIGHLIGHT
     };
+    
+    enum class Visibility
+    {
+        VISIBLE = 0,
+        HIDDEN,
+        COLLAPSED
+    };
 
     
     typedef std::function<void(Ref*,Widget::TouchEventType)> ccWidgetTouchCallback;
@@ -659,6 +666,27 @@ public:
     void setUnifySizeEnabled(bool enable);
     
     Widget* getWidgetParent();
+    
+    /**
+     *  Changes widget visibility
+     *  - Hidden: will be considered in the layout process
+     *  but will not be renderered
+     *  - Collapsed: will not be considered in the layout
+     *  process nor rendered
+     *  - Visible: will be considered in the layout process
+     *  and will be renderered
+     *
+     *  @param Visibility the visibility of the widget
+     */
+    void setVisibility(Visibility);
+    
+    /**
+     *  Get widget visibility
+     *
+     *  @return the visibility of the widget
+     */
+    Visibility getVisibility();
+    
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -754,6 +782,7 @@ protected:
     SizeType _widthSizeType;
     SizeType _heigthSizeType;
     PositionType _positionType;
+    Visibility _visibility;
 
     //used for search widget by action tag in UIHelper class
     int _actionTag;
@@ -804,6 +833,7 @@ protected:
 private:
     class FocusNavigationController;
     static FocusNavigationController* _focusNavigationController;
+    void remedyLayoutParameter(LayoutParameter* parameter);
 };
 }
 

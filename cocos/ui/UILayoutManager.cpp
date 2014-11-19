@@ -53,7 +53,7 @@ void LinearHorizontalLayoutManager::doLayout(LayoutProtocol* layout)
         if (child)
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
-            if (layoutParameter)
+            if (layoutParameter && !layoutParameter->isCollapsed())
             {
                 LinearLayoutParameter::LinearGravity childGravity = layoutParameter->getGravity();
                 Vec2 ap = child->getAnchorPoint();
@@ -111,7 +111,7 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
         {
             LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
             
-            if (layoutParameter)
+            if (layoutParameter && !layoutParameter->isCollapsed())
             {
                 LinearLayoutParameter::LinearGravity childGravity = layoutParameter->getGravity();
                 Vec2 ap = subWidget->getAnchorPoint();
@@ -537,7 +537,7 @@ void RelativeLayoutManager::doLayout(LayoutProtocol *layout)
             
             if (layoutParameter)
             {
-                if (layoutParameter->_put)
+                if (layoutParameter->_put || layoutParameter->isCollapsed())
                 {
                     continue;
                 }
