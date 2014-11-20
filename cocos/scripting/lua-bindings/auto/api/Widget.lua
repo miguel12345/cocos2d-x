@@ -184,7 +184,14 @@
 -- @return Widget#Widget ret (return value: ccui.Widget)
         
 --------------------------------
--- 
+-- Changes widget visibility<br>
+-- - Hidden: will be considered in the layout process<br>
+-- but will not be renderered<br>
+-- - Collapsed: will not be considered in the layout<br>
+-- process nor rendered<br>
+-- - Visible: will be considered in the layout process<br>
+-- and will be renderered<br>
+-- param Visibility the visibility of the widget
 -- @function [parent=#Widget] setVisibility 
 -- @param self
 -- @param #int 
@@ -414,7 +421,8 @@
 -- @return vec2_table#vec2_table ret (return value: vec2_table)
         
 --------------------------------
--- 
+-- Get widget visibility<br>
+-- return the visibility of the widget
 -- @function [parent=#Widget] getVisibility 
 -- @param self
 -- @return int#int ret (return value: int)
