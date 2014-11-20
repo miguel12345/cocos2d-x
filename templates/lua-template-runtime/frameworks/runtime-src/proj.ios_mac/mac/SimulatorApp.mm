@@ -70,6 +70,7 @@ std::string getCurAppName(void)
 
 -(void) dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
     Director::getInstance()->end();
     [super dealloc];
 }
@@ -126,7 +127,15 @@ std::string getCurAppName(void)
     
     [window becomeFirstResponder];
     [window makeKeyAndOrderFront:self];
+    
+    [window setStyleMask:[window styleMask] | NSResizableWindowMask];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(windowDidResize) name:NSWindowDidResizeNotification object:window];
 }
+
+-(void) windowDidResize {
+    Director::getInstance()->applicationScreenSizeChanged(window.frame.size.width, window.frame.size.height);
+}
+
 
 void createSimulator(const char* viewName, float width, float height,bool isLandscape,float frameZoomFactor)
 {

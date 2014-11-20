@@ -734,11 +734,17 @@ public:
         if (ConfigParser::getInstance()->isLanscape())
         {
             imagebg->initWithImageData(__landscapePngData, sizeof(__landscapePngData));
-            Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designWidth, designHeight, ResolutionPolicy::EXACT_FIT);
+            
+            if(!ConfigParser::getInstance()->ignoreDesignResolutionSize()) {
+                Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designWidth, designHeight, ResolutionPolicy::EXACT_FIT);
+            }
         } else
         {
             imagebg->initWithImageData(__portraitPngData, sizeof(__portraitPngData));
-            Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designHeight, designWidth, ResolutionPolicy::EXACT_FIT);
+            
+            if(!ConfigParser::getInstance()->ignoreDesignResolutionSize()) {
+                Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designHeight, designWidth, ResolutionPolicy::EXACT_FIT);
+            }
         }
         Texture2D* texturebg = Director::getInstance()->getTextureCache()->addImage(imagebg, "play_background");
         auto background = Sprite::createWithTexture(texturebg);

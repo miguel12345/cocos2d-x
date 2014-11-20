@@ -39,6 +39,8 @@ public:
     int getUploadPort();
     bool isLanscape();
     bool isWindowTop();
+    bool isPortrait();
+    bool ignoreDesignResolutionSize();
     
 private:
     void readConfig();
@@ -49,9 +51,11 @@ private:
     string _viewName;
     string _entryfile;
     bool _isLandscape;
+    bool _isPortrait;
     bool _isWindowTop;
     int _consolePort;
     int _uploadPort;
+    bool _ignoreDesignResolutionSize;
     
     rapidjson::Document _docRootjson;
 };

@@ -61,6 +61,10 @@ void ConfigParser::readConfig()
             {
                 _isLandscape = objectInitView["isLandscape"].GetBool();
             }
+            if (objectInitView.HasMember("isPortrait") && objectInitView["isPortrait"].IsBool())
+            {
+                _isPortrait = objectInitView["isPortrait"].GetBool();
+            }
             if (objectInitView.HasMember("entry") && objectInitView["entry"].IsString())
             {
                 _entryfile = objectInitView["entry"].GetString();
@@ -80,6 +84,10 @@ void ConfigParser::readConfig()
             if (objectInitView.HasMember("isWindowTop") && objectInitView["isWindowTop"].IsBool())
             {
                 _isWindowTop= objectInitView["isWindowTop"].GetBool();
+            }
+            if (objectInitView.HasMember("ignoreDesignResolutionSize") && objectInitView["ignoreDesignResolutionSize"].IsBool())
+            {
+                _ignoreDesignResolutionSize= objectInitView["ignoreDesignResolutionSize"].GetBool();
             }
         }
     }
@@ -156,4 +164,12 @@ int ConfigParser::getScreenSizeCount(void)
 const SimulatorScreenSize ConfigParser::getScreenSize(int index)
 {
     return _screenSizeArray.at(index);
+}
+
+bool ConfigParser::isPortrait() {
+    return _isPortrait;
+}
+
+bool ConfigParser::ignoreDesignResolutionSize() {
+    return _ignoreDesignResolutionSize;
 }

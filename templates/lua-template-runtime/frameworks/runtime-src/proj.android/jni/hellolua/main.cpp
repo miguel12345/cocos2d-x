@@ -21,6 +21,11 @@ extern "C"
 	{
 		return ConfigParser::getInstance()->isLanscape();
 	}
+    
+    bool Java_org_cocos2dx_lua_AppActivity_nativeIsPortrait(JNIEnv *env, jobject thisz)
+    {
+        return ConfigParser::getInstance()->isPortrait();
+    }
 
 	bool Java_org_cocos2dx_lua_AppActivity_nativeIsDebug(JNIEnv *env, jobject thisz)
 	{
