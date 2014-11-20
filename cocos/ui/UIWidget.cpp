@@ -619,6 +619,12 @@ Node* Widget::getVirtualRenderer()
 
 void Widget::onSizeChanged()
 {
+    //if parent is layout request layout
+    Layout* parentLayout = dynamic_cast<Layout*>(getParent());
+    if (parentLayout) {
+        parentLayout->requestDoLayout();
+    }
+    
     for (auto& child : getChildren())
     {
         Widget* widgetChild = dynamic_cast<Widget*>(child);
