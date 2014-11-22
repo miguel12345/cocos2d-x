@@ -317,6 +317,16 @@ public:
      * @return return the index of widget in the layout
      */
     std::function<int(FocusDirection, Widget*)> onPassFocusToChild;
+    
+    /**
+     *  Sets whether or not to log layouts
+     *  This is useful for debug
+     *  when we want to check if no
+     *  unnecessary layouts are occurring
+     *
+     *  @param logLayout bool
+     */
+    void setLogLayout(bool logLayout);
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
@@ -527,6 +537,8 @@ protected:
     bool _passFocusToChild;
      //when finding the next focused widget, use this variable to pass focus between layout & widget
     bool _isFocusPassing;
+    
+    bool _logLayout;
 };
     
 }

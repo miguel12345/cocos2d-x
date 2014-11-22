@@ -91,7 +91,8 @@ _doLayoutDirty(true),
 _isInterceptTouch(false),
 _loopFocus(false),
 _passFocusToChild(true),
-_isFocusPassing(false)
+_isFocusPassing(false),
+_logLayout(false)
 {
     //no-op
 }
@@ -1006,6 +1007,10 @@ void Layout::doLayout()
         return;
     }
     
+    if (_logLayout) {
+        CCLOG("Layout [%s] is doing layout",getName().c_str());
+    }
+    
     sortAllChildren();
 
     LayoutManager* executant = this->createLayoutManager();
@@ -1892,6 +1897,10 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
     {
         return current;
     }
+}
+
+void Layout::setLogLayout(bool logLayout) {
+    _logLayout = logLayout;
 }
     
 }

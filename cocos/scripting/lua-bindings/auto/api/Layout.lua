@@ -146,6 +146,12 @@
 -- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
+-- 
+-- @function [parent=#Layout] setLogLayout 
+-- @param self
+-- @param #bool logLayout
+        
+--------------------------------
 -- Sets background opacity layout.<br>
 -- param opacity
 -- @function [parent=#Layout] setBackGroundColorOpacity 
