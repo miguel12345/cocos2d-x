@@ -1462,6 +1462,10 @@ void Widget::setUnifySizeEnabled(bool enable)
 
 void Widget::setVisibility(Visibility visibility) {
     
+    if (_visibility == visibility) {
+        return;
+    }
+    
     _visibility = visibility;
     
     if (_visibility == Visibility::VISIBLE) {
@@ -1474,6 +1478,12 @@ void Widget::setVisibility(Visibility visibility) {
     LayoutParameter* llp = getLayoutParameter();
     if (llp) {
         remedyLayoutParameter(llp);
+    }
+    
+    //if parent is layout request layout
+    Layout* parentLayout = dynamic_cast<Layout*>(getParent());
+    if (parentLayout) {
+        parentLayout->requestDoLayout();
     }
 }
 

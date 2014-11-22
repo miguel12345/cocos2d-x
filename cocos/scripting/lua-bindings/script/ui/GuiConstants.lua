@@ -178,3 +178,9 @@ ccui.TextType = {
     SYSTEM = 0,
     TTF    = 1,
 }
+
+ccui.Visibility = {
+    visible = 0,
+    hidden = 1,
+    collapsed= 2
+}
