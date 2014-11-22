@@ -218,7 +218,7 @@ protected:
     virtual void onPressStateChangedToNormal() override;
     virtual void onPressStateChangedToPressed() override;
     virtual void onPressStateChangedToDisabled() override;
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
   
     virtual void updateFlippedX() override;
     virtual void updateFlippedY() override;

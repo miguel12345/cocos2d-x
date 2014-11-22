@@ -208,7 +208,7 @@ protected:
     virtual void interceptTouchEvent(TouchEventType event, Widget* sender,Touch *touch) ;
     
     
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void copyClonedWidgetChildren(Widget* model) override;

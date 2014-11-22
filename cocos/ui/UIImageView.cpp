@@ -223,9 +223,9 @@ const Rect& ImageView::getCapInsets()const
     return _capInsets;
 }
 
-void ImageView::onSizeChanged()
+void ImageView::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _imageRendererAdaptDirty = true;
 }
     

@@ -205,7 +205,7 @@ protected:
     void detachWithIMEEvent();
     void insertTextEvent();
     void deleteBackwardEvent();
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
   
     void textfieldRendererScaleChangedWithSize();
     

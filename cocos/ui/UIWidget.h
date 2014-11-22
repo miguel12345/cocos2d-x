@@ -730,7 +730,7 @@ CC_CONSTRUCTOR_ACCESS:
     
 protected:
     //call back function called when size changed.
-    virtual void onSizeChanged();
+    virtual void onSizeChanged(const Size& oldSize);
 
     //initializes renderer of widget.
     virtual void initRenderer();

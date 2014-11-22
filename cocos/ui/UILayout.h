@@ -327,6 +327,8 @@ public:
      *  @param logLayout bool
      */
     void setLogLayout(bool logLayout);
+    
+    void onChildSizeChanged(Widget* child, const Size& oldSize);
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
@@ -334,7 +336,7 @@ CC_CONSTRUCTOR_ACCESS:
     
 protected:
     //override "onSizeChanged" method of widget.
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
     
     //init background image renderer.
     void addBackGroundImage();

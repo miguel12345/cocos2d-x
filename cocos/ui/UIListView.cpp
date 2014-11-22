@@ -527,9 +527,9 @@ ssize_t ListView::getCurSelectedIndex() const
     return _curSelectedIndex;
 }
 
-void ListView::onSizeChanged()
+void ListView::onSizeChanged(const Size& oldSize)
 {
-    ScrollView::onSizeChanged();
+    ScrollView::onSizeChanged(oldSize);
     _refreshViewDirty = true;
 }
 

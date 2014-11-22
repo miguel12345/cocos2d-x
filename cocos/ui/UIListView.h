@@ -199,7 +199,7 @@ protected:
     
     void updateInnerContainerSize();
     void remedyLayoutParameter(Widget* item);
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void copyClonedWidgetChildren(Widget* model) override;

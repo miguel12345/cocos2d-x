@@ -141,7 +141,7 @@ public:
     virtual std::string getDescription() const override;
 protected:
     virtual void initRenderer() override;
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
    
     void setScale9Scale();
     void barRendererScaleChangedWithSize();

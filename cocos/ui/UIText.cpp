@@ -281,9 +281,9 @@ void Text::updateFlippedY()
     }
 }
 
-void Text::onSizeChanged()
+void Text::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _labelRendererAdaptDirty = true;
 }
     

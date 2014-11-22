@@ -591,9 +591,9 @@ const Rect& Layout::getClippingRect()
     return _clippingRect;
 }
 
-void Layout::onSizeChanged()
+void Layout::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     setStencilClippingSize(_contentSize);
     _doLayoutDirty = true;
     _clippingRectDirty = true;
@@ -1901,6 +1901,10 @@ Widget* Layout::findNextFocusedWidget(FocusDirection direction, Widget* current)
 
 void Layout::setLogLayout(bool logLayout) {
     _logLayout = logLayout;
+}
+
+void Layout::onChildSizeChanged(Widget* child, const Size& oldSize) {
+    requestDoLayout();
 }
     
 }

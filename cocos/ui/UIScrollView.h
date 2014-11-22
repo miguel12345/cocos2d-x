@@ -326,7 +326,7 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     virtual void initRenderer() override;
     
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
     virtual void doLayout() override;
 
     virtual Widget* createCloneInstance() override;

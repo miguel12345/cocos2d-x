@@ -241,9 +241,9 @@ float LoadingBar::getPercent() const
     return _percent;
 }
 
-void LoadingBar::onSizeChanged()
+void LoadingBar::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _barRendererAdaptDirty = true;
 }
     

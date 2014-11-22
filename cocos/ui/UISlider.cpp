@@ -428,9 +428,9 @@ int Slider::getPercent()const
     return _percent;
 }
 
-void Slider::onSizeChanged()
+void Slider::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _barRendererAdaptDirty = true;
     _progressBarRendererDirty = true;
 }

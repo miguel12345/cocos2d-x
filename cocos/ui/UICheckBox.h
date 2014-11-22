@@ -214,7 +214,7 @@ protected:
     
     virtual void releaseUpEvent();
     
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
   
     virtual void updateFlippedX() override;
     virtual void updateFlippedY() override;

@@ -218,9 +218,9 @@ float PageView::getPositionXByIndex(ssize_t idx)const
     return (getContentSize().width * (idx-_curPageIdx));
 }
 
-void PageView::onSizeChanged()
+void PageView::onSizeChanged(const Size& oldSize)
 {
-    Layout::onSizeChanged();
+    Layout::onSizeChanged(oldSize);
     _rightBoundary = getContentSize().width;
     
     _doLayoutDirty = true;

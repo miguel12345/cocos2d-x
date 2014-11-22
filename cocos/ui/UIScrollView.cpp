@@ -130,9 +130,9 @@ void ScrollView::initRenderer()
     addProtectedChild(_innerContainer, 1, 1);
 }
 
-void ScrollView::onSizeChanged()
+void ScrollView::onSizeChanged(const Size& oldSize)
 {
-    Layout::onSizeChanged();
+    Layout::onSizeChanged(oldSize);
     _topBoundary = _contentSize.height;
     _rightBoundary = _contentSize.width;
     float bounceBoundaryParameterX = _contentSize.width / 3.0f;

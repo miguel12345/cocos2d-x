@@ -415,9 +415,9 @@ void CheckBox::updateFlippedY()
     _frontCrossDisabledRenderer->setFlippedY(_flippedY);
 }
 
-void CheckBox::onSizeChanged()
+void CheckBox::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _backGroundBoxRendererAdaptDirty = true;
     _backGroundSelectedBoxRendererAdaptDirty = true;
     _frontCrossRendererAdaptDirty = true;

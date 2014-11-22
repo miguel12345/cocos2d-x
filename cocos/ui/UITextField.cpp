@@ -717,9 +717,9 @@ void TextField::addEventListener(const ccTextFieldCallback& callback)
     _eventCallback = callback;
 }
 
-void TextField::onSizeChanged()
+void TextField::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _textFieldRendererAdaptDirty = true;
 }
     

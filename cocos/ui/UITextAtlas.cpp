@@ -120,9 +120,9 @@ ssize_t TextAtlas::getStringLength()const
     return _labelAtlasRenderer->getStringLength();
 }
 
-void TextAtlas::onSizeChanged()
+void TextAtlas::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _labelAtlasRendererAdaptDirty = true;
 }
     

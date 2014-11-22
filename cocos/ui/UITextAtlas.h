@@ -106,7 +106,7 @@ public:
     virtual void adaptRenderers() override;
 protected:
     virtual void initRenderer() override;
-    virtual void onSizeChanged() override;
+    virtual void onSizeChanged(const Size& oldSize) override;
   
     void labelAtlasScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;

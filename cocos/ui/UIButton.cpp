@@ -566,6 +566,7 @@ void Button::updateTitleLocation()
 
 void Button::updateContentSize()
 {
+    Size oldSize = _contentSize;
     if (_unifySize)
     {
         if (_scale9Enabled)
@@ -577,7 +578,7 @@ void Button::updateContentSize()
             Size s = getNormalSize();
             ProtectedNode::setContentSize(s);
         }
-        onSizeChanged();
+        onSizeChanged(oldSize);
         return;
     }
     if (_ignoreSize) {
@@ -585,9 +586,9 @@ void Button::updateContentSize()
     }
 }
 
-void Button::onSizeChanged()
+void Button::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     updateTitleLocation();
     _normalTextureAdaptDirty = true;
     _pressedTextureAdaptDirty = true;

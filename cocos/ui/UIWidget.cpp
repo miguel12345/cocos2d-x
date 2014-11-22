@@ -272,6 +272,8 @@ LayoutComponent* Widget::getOrCreateLayoutComponent()
    
 void Widget::setContentSize(const cocos2d::Size &contentSize)
 {
+    Size oldSize = _contentSize;
+    
     //Prevent unnecessary logic when the same remains the same
     if (_contentSize.equals(contentSize)) {
         return;
@@ -312,7 +314,7 @@ void Widget::setContentSize(const cocos2d::Size &contentSize)
         }
         _sizePercent = Vec2(spx, spy);
     }
-    onSizeChanged();
+    onSizeChanged(oldSize);
 }
 
 void Widget::setSize(const Size &size)
@@ -622,12 +624,12 @@ Node* Widget::getVirtualRenderer()
     return this;
 }
 
-void Widget::onSizeChanged()
+void Widget::onSizeChanged(const Size& oldSize)
 {
     //if parent is layout request layout
     Layout* parentLayout = dynamic_cast<Layout*>(getParent());
     if (parentLayout) {
-        parentLayout->requestDoLayout();
+        parentLayout->onChildSizeChanged(this,oldSize);
     }
     
     for (auto& child : getChildren())

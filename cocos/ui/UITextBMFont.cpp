@@ -114,9 +114,9 @@ ssize_t TextBMFont::getStringLength()const
     return _labelBMFontRenderer->getStringLength();
 }
 
-void TextBMFont::onSizeChanged()
+void TextBMFont::onSizeChanged(const Size& oldSize)
 {
-    Widget::onSizeChanged();
+    Widget::onSizeChanged(oldSize);
     _labelBMFontRendererAdaptDirty = true;
 }
     
