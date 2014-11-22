@@ -328,7 +328,29 @@ public:
      */
     void setLogLayout(bool logLayout);
     
+    /**
+     *  Notifies the layout that one of its child's size has changed
+     *
+     *  @param child   The child whose size has changed
+     *  @param oldSize The size the child had before the change
+     */
     void onChildSizeChanged(Widget* child, const Size& oldSize);
+    
+    /**
+     *  Changes layout wrap content variable
+     *  If wrapContent is true, layout size will equal the accumulated size of children combined
+     *  Otherwise it will follow the normal size rules
+     *
+     *  @param wrapContent whether or not to wrap content
+     */
+    void setWrapContent(bool wrapContent);
+    
+    /**
+     *  Returns wrap content variable
+     *
+     *  @return Wrap content variable
+     */
+    bool getWrapContent();
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
@@ -474,6 +496,12 @@ protected:
      */
     bool checkFocusEnabledChild()const;
     
+    /**
+     *  This method updates the layout it the accumulated size of all of its children
+     *  Don't call it manually. It is only called when _wrapsContent is true
+     */
+    void updateContentSizeToWrapContent();
+    
 protected:
     
     //background
@@ -541,6 +569,9 @@ protected:
     bool _isFocusPassing;
     
     bool _logLayout;
+    
+    //if wrapContent is true, layout will have the necessary size to hold all of its children
+    bool _wrapContent;
 };
     
 }

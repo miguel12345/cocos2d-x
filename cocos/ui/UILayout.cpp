@@ -92,7 +92,8 @@ _isInterceptTouch(false),
 _loopFocus(false),
 _passFocusToChild(true),
 _isFocusPassing(false),
-_logLayout(false)
+_logLayout(false),
+_wrapContent(false)
 {
     //no-op
 }
@@ -1011,6 +1012,10 @@ void Layout::doLayout()
         CCLOG("Layout [%s] is doing layout",getName().c_str());
     }
     
+    if (_wrapContent) {
+        updateContentSizeToWrapContent();
+    }
+    
     sortAllChildren();
 
     LayoutManager* executant = this->createLayoutManager();
@@ -1088,20 +1093,12 @@ Size Layout::getLayoutAccumulatedSize()const
     int widgetCount =0;
     for(const auto& widget : children)
     {
-        Layout *layout = dynamic_cast<Layout*>(widget);
-        if (nullptr != layout)
+        Widget *w = dynamic_cast<Widget*>(widget);
+        if (w)
         {
-            layoutSize = layoutSize + layout->getLayoutAccumulatedSize();
-        }
-        else
-        {
-            Widget *w = dynamic_cast<Widget*>(widget);
-            if (w)
-            {
-                widgetCount++;
-                Margin m = w->getLayoutParameter()->getMargin();
-                layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
-            }
+            widgetCount++;
+            Margin m = w->getLayoutParameter()->getMargin();
+            layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
         }
     }
     
@@ -1905,6 +1902,18 @@ void Layout::setLogLayout(bool logLayout) {
 
 void Layout::onChildSizeChanged(Widget* child, const Size& oldSize) {
     requestDoLayout();
+}
+
+void Layout::updateContentSizeToWrapContent() {
+    setContentSize(getLayoutAccumulatedSize());
+}
+
+void Layout::setWrapContent(bool wrapContent) {
+    _wrapContent = wrapContent;
+}
+
+bool Layout::getWrapContent() {
+    return _wrapContent;
 }
     
 }

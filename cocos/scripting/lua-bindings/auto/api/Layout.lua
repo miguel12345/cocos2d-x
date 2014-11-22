@@ -74,6 +74,15 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- Changes layout wrap content variable<br>
+-- If wrapContent is true, layout size will equal the accumulated size of children combined<br>
+-- Otherwise it will follow the normal size rules<br>
+-- param wrapContent whether or not to wrap content
+-- @function [parent=#Layout] setWrapContent 
+-- @param self
+-- @param #bool wrapContent
+        
+--------------------------------
 -- 
 -- @function [parent=#Layout] setBackGroundImageOpacity 
 -- @param self
@@ -146,7 +155,11 @@
 -- @return color3b_table#color3b_table ret (return value: color3b_table)
         
 --------------------------------
--- 
+-- Sets whether or not to log layouts<br>
+-- This is useful for debug<br>
+-- when we want to check if no<br>
+-- unnecessary layouts are occurring<br>
+-- param logLayout bool
 -- @function [parent=#Layout] setLogLayout 
 -- @param self
 -- @param #bool logLayout
@@ -171,11 +184,27 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- Returns wrap content variable<br>
+-- return Wrap content variable
+-- @function [parent=#Layout] getWrapContent 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- Sets a background image capinsets for layout, if the background image is a scale9 render.<br>
 -- param capinsets of background image.
 -- @function [parent=#Layout] setBackGroundImageCapInsets 
 -- @param self
 -- @param #rect_table capInsets
+        
+--------------------------------
+-- Notifies the layout that one of its child's size has changed<br>
+-- param child   The child whose size has changed<br>
+-- param oldSize The size the child had before the change
+-- @function [parent=#Layout] onChildSizeChanged 
+-- @param self
+-- @param #ccui.Widget child
+-- @param #size_table oldSize
         
 --------------------------------
 -- Gets background image texture size.<br>
