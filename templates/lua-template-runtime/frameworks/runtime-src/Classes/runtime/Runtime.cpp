@@ -157,6 +157,7 @@ bool reloadScript(const string& file)
     else
     {
         modulefile = ConfigParser::getInstance()->getEntryFile().c_str();
+        resetLuaModule(modulefile);
     }
     
     auto engine = LuaEngine::getInstance();
