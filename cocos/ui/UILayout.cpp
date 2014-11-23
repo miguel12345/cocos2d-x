@@ -1014,6 +1014,10 @@ void Layout::doLayout()
     
     if (_wrapContent) {
         updateContentSizeToWrapContent();
+        Layout* parentLayout = dynamic_cast<Layout*>(getWidgetParent());
+        if (parentLayout) {
+            parentLayout->forceDoLayout();
+        }
     }
     
     sortAllChildren();
