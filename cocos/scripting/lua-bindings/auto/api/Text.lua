@@ -17,6 +17,13 @@
 -- @return int#int ret (return value: int)
         
 --------------------------------
+-- Returns adaptLabelScaleWithContentSize variable<br>
+-- return adaptLabelScaleWithContentSize variable
+-- @function [parent=#Text] getAdaptLabelScaleWithContentSize 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- 
 -- @function [parent=#Text] getString 
 -- @param self
@@ -93,6 +100,14 @@
 -- @return long#long ret (return value: long)
         
 --------------------------------
+-- Sets if line breaks without space<br>
+-- param lineBreakWithoutSpace Variable to determine if line<br>
+-- breaks without space
+-- @function [parent=#Text] setLineBreakWithoutSpace 
+-- @param self
+-- @param #bool lineBreakWithoutSpace
+        
+--------------------------------
 -- Enable outline for the label<br>
 -- It only works on IOS and Android when you use System fonts
 -- @function [parent=#Text] enableOutline 
@@ -101,10 +116,25 @@
 -- @param #int outlineSize
         
 --------------------------------
+-- Sets if the text element should scale the label renderer<br>
+-- with its content size<br>
+-- param adaptLabelScaleWithContentSize Whether to scale label renderer
+-- @function [parent=#Text] setAdaptLabelScaleWithContentSize 
+-- @param self
+-- @param #bool adaptLabelScaleWithContentSize
+        
+--------------------------------
 -- 
 -- @function [parent=#Text] getType 
 -- @param self
 -- @return int#int ret (return value: int)
+        
+--------------------------------
+-- Returns line break variable<br>
+-- return line break variable
+-- @function [parent=#Text] getLineBreakWithoutSpace 
+-- @param self
+-- @return bool#bool ret (return value: bool)
         
 --------------------------------
 -- 

@@ -184,6 +184,37 @@ public:
     /** disable shadow/outline/glow rendering */
     void disableEffect();
     
+    /**
+     *  Sets if the text element should scale the label renderer
+     *  with its content size
+     *
+     *  @param adaptLabelScaleWithContentSize Whether to scale label renderer
+     */
+    void setAdaptLabelScaleWithContentSize(bool adaptLabelScaleWithContentSize);
+    
+    
+    /**
+     *  Returns adaptLabelScaleWithContentSize variable
+     *
+     *  @return adaptLabelScaleWithContentSize variable
+     */
+    bool getAdaptLabelScaleWithContentSize();
+    
+    /**
+     *  Sets if line breaks without space
+     *
+     *  @param lineBreakWithoutSpace Variable to determine if line
+     *          breaks without space
+     */
+    void setLineBreakWithoutSpace(bool lineBreakWithoutSpace);
+    
+    /**
+     *  Returns line break variable
+     *
+     *  @return line break variable
+     */
+    bool getLineBreakWithoutSpace();
+    
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     virtual bool init(const std::string& textContent,
@@ -213,6 +244,8 @@ protected:
     Label* _labelRenderer;
     bool _labelRendererAdaptDirty;
     Type _type;
+    bool _adaptLabelScaleWithContentSize;
+    bool _lineBreakWithoutSpace;
 };
 
 }

@@ -8599,6 +8599,50 @@ int lua_cocos2dx_ui_Text_getFontSize(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Text_getAdaptLabelScaleWithContentSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Text* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Text",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Text*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Text_getAdaptLabelScaleWithContentSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        bool ret = cobj->getAdaptLabelScaleWithContentSize();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Text:getAdaptLabelScaleWithContentSize",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Text_getAdaptLabelScaleWithContentSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Text_getString(lua_State* tolua_S)
 {
     int argc = 0;
@@ -9092,6 +9136,52 @@ int lua_cocos2dx_ui_Text_getStringLength(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Text_setLineBreakWithoutSpace(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Text* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Text",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Text*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Text_setLineBreakWithoutSpace'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccui.Text:setLineBreakWithoutSpace");
+        if(!ok)
+            return 0;
+        cobj->setLineBreakWithoutSpace(arg0);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Text:setLineBreakWithoutSpace",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Text_setLineBreakWithoutSpace'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Text_enableOutline(lua_State* tolua_S)
 {
     int argc = 0;
@@ -9151,6 +9241,52 @@ int lua_cocos2dx_ui_Text_enableOutline(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Text_setAdaptLabelScaleWithContentSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Text* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Text",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Text*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Text_setAdaptLabelScaleWithContentSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        bool arg0;
+
+        ok &= luaval_to_boolean(tolua_S, 2,&arg0, "ccui.Text:setAdaptLabelScaleWithContentSize");
+        if(!ok)
+            return 0;
+        cobj->setAdaptLabelScaleWithContentSize(arg0);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Text:setAdaptLabelScaleWithContentSize",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Text_setAdaptLabelScaleWithContentSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Text_getType(lua_State* tolua_S)
 {
     int argc = 0;
@@ -9191,6 +9327,50 @@ int lua_cocos2dx_ui_Text_getType(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Text_getType'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ui_Text_getLineBreakWithoutSpace(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Text* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Text",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Text*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Text_getLineBreakWithoutSpace'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        bool ret = cobj->getLineBreakWithoutSpace();
+        tolua_pushboolean(tolua_S,(bool)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Text:getLineBreakWithoutSpace",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Text_getLineBreakWithoutSpace'.",&tolua_err);
 #endif
 
     return 0;
@@ -9642,6 +9822,7 @@ int lua_register_cocos2dx_ui_Text(lua_State* tolua_S)
         tolua_function(tolua_S,"new",lua_cocos2dx_ui_Text_constructor);
         tolua_function(tolua_S,"enableShadow",lua_cocos2dx_ui_Text_enableShadow);
         tolua_function(tolua_S,"getFontSize",lua_cocos2dx_ui_Text_getFontSize);
+        tolua_function(tolua_S,"getAdaptLabelScaleWithContentSize",lua_cocos2dx_ui_Text_getAdaptLabelScaleWithContentSize);
         tolua_function(tolua_S,"getString",lua_cocos2dx_ui_Text_getString);
         tolua_function(tolua_S,"disableEffect",lua_cocos2dx_ui_Text_disableEffect);
         tolua_function(tolua_S,"getTextColor",lua_cocos2dx_ui_Text_getTextColor);
@@ -9653,8 +9834,11 @@ int lua_register_cocos2dx_ui_Text(lua_State* tolua_S)
         tolua_function(tolua_S,"getFontName",lua_cocos2dx_ui_Text_getFontName);
         tolua_function(tolua_S,"setTextAreaSize",lua_cocos2dx_ui_Text_setTextAreaSize);
         tolua_function(tolua_S,"getStringLength",lua_cocos2dx_ui_Text_getStringLength);
+        tolua_function(tolua_S,"setLineBreakWithoutSpace",lua_cocos2dx_ui_Text_setLineBreakWithoutSpace);
         tolua_function(tolua_S,"enableOutline",lua_cocos2dx_ui_Text_enableOutline);
+        tolua_function(tolua_S,"setAdaptLabelScaleWithContentSize",lua_cocos2dx_ui_Text_setAdaptLabelScaleWithContentSize);
         tolua_function(tolua_S,"getType",lua_cocos2dx_ui_Text_getType);
+        tolua_function(tolua_S,"getLineBreakWithoutSpace",lua_cocos2dx_ui_Text_getLineBreakWithoutSpace);
         tolua_function(tolua_S,"getTextHorizontalAlignment",lua_cocos2dx_ui_Text_getTextHorizontalAlignment);
         tolua_function(tolua_S,"setFontSize",lua_cocos2dx_ui_Text_setFontSize);
         tolua_function(tolua_S,"setTextColor",lua_cocos2dx_ui_Text_setTextColor);
