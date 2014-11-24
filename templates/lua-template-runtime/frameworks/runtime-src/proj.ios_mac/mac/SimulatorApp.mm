@@ -258,6 +258,11 @@ void createSimulator(const char* viewName, float width, float height,bool isLand
 - (void) updateView
 {
     auto policy = g_eglView->getResolutionPolicy();
+    
+    if (policy == ResolutionPolicy::UNKNOWN) {
+        return;
+    }
+    
     auto designSize = g_eglView->getDesignResolutionSize();
     
     if (g_landscape)
