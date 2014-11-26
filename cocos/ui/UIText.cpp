@@ -45,7 +45,9 @@ _labelRenderer(nullptr),
 _labelRendererAdaptDirty(true),
 _type(Type::SYSTEM),
 _adaptLabelScaleWithContentSize(true),
-_lineBreakWithoutSpace(false)
+_lineBreakWithoutSpace(false),
+_adaptFontSizeToFit(false),
+_invalidFontLetterSize(Size(-1,-1))
 {
 }
 
@@ -334,6 +336,16 @@ void Text::labelScaleChangedWithSize()
         _normalScaleValueY = scaleY;
         
     }
+    else if (_adaptFontSizeToFit)
+    {
+        Size singleLetterSize = getFontLetterSizeForFontSize40();
+        setFontSize(calculateFontSizeToFit(40,singleLetterSize,_labelRenderer->getString(),_contentSize));
+    }
+    else {
+        _labelRenderer->setScale(1.0f);
+        _normalScaleValueX = _normalScaleValueY = 1.0f;
+    }
+    
     _labelRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
 }
 
@@ -378,11 +390,17 @@ void Text::copySpecialProperties(Widget *widget)
         setTextHorizontalAlignment(label->_labelRenderer->getHorizontalAlignment());
         setTextVerticalAlignment(label->_labelRenderer->getVerticalAlignment());
         setTextAreaSize(label->_labelRenderer->getDimensions());
+        setAdaptFontSizeToFit(label->getAdaptFontSizeToFit());
+        setLineBreakWithoutSpace(label->getLineBreakWithoutSpace());
+        setAdaptLabelScaleWithContentSize(label->getAdaptLabelScaleWithContentSize());
     }
 }
     
 void Text::setAdaptLabelScaleWithContentSize(bool adaptLabelScaleWithContentSize) {
-    _adaptLabelScaleWithContentSize = adaptLabelScaleWithContentSize;
+    if (adaptLabelScaleWithContentSize != _adaptLabelScaleWithContentSize) {
+        _adaptLabelScaleWithContentSize = adaptLabelScaleWithContentSize;
+        _labelRendererAdaptDirty = true;
+    }
 }
 
 bool Text::getAdaptLabelScaleWithContentSize() {
@@ -390,12 +408,69 @@ bool Text::getAdaptLabelScaleWithContentSize() {
 }
 
 void Text::setLineBreakWithoutSpace(bool lineBreakWithoutSpace){
-    _lineBreakWithoutSpace = lineBreakWithoutSpace;
-    _labelRenderer->setLineBreakWithoutSpace(_lineBreakWithoutSpace);
+    if (lineBreakWithoutSpace != _lineBreakWithoutSpace) {
+        _labelRendererAdaptDirty = true;
+        _lineBreakWithoutSpace = lineBreakWithoutSpace;
+        _labelRenderer->setLineBreakWithoutSpace(_lineBreakWithoutSpace);
+    }
 }
 
 bool Text::getLineBreakWithoutSpace() {
     return _lineBreakWithoutSpace;
+}
+
+void Text::setAdaptFontSizeToFit(bool adaptFontSizeToFit) {
+    if (adaptFontSizeToFit != _adaptFontSizeToFit) {
+        _adaptFontSizeToFit = adaptFontSizeToFit;
+        _labelRendererAdaptDirty = true;
+    }
+}
+
+bool Text::getAdaptFontSizeToFit() {
+    return _adaptLabelScaleWithContentSize;
+}
+
+int Text::calculateFontSizeToFit(int referenceFontSize, const Size& referenceLetterSize,const std::string& stringToFit,const Size& areaSize) {
+    
+    ssize_t numLetters = stringToFit.length();
+    float letterMaximumWidth = areaSize.width / ((float) numLetters);
+    
+    int fontSizeToFitWidth = ceil((letterMaximumWidth * referenceFontSize) / referenceLetterSize.width);
+    
+    float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * referenceLetterSize.height;
+    
+    if (finalHeight < areaSize.height) {
+        return fontSizeToFitWidth;
+    }
+    
+    int fontSizeToFitHeight = ceil((areaSize.height * referenceFontSize) / referenceLetterSize.height);
+    
+    return fontSizeToFitHeight;
+}
+    
+    
+Size& Text::getFontLetterSizeForFontSize40() {
+    
+    auto search = _fontLetterSizeCache.find(_fontName);
+    if (search != _fontLetterSizeCache.end()) {
+        return search->second;
+    }
+    
+    std::string originalString = _labelRenderer->getString();
+    _labelRenderer->setScale(1.0f);
+    _normalScaleValueX = _normalScaleValueY = 1.0f;
+    setFontSize(40);
+    _labelRenderer->setString("T");
+    Size singleLetterSize = _labelRenderer->getContentSize();
+    _labelRenderer->setString(originalString);
+
+    auto insertionResult = _fontLetterSizeCache.insert(std::make_pair(_fontName, singleLetterSize));
+    
+    if (insertionResult.second) {
+        return insertionResult.first->second;
+
+    }
+    return _invalidFontLetterSize;
 }
     
 }

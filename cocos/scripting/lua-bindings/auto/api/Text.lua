@@ -35,6 +35,12 @@
 -- @param self
         
 --------------------------------
+-- Returns adaptFontSizeToFit variable
+-- @function [parent=#Text] getAdaptFontSizeToFit 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- 
 -- @function [parent=#Text] getTextColor 
 -- @param self
@@ -160,6 +166,13 @@
 -- @function [parent=#Text] enableGlow 
 -- @param self
 -- @param #color4b_table glowColor
+        
+--------------------------------
+-- Sets if the text should resize the font size automatically<br>
+-- to fit its size
+-- @function [parent=#Text] setAdaptFontSizeToFit 
+-- @param self
+-- @param #bool adaptFontSizeToFit
         
 --------------------------------
 -- 

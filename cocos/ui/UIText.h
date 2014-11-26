@@ -215,6 +215,18 @@ public:
      */
     bool getLineBreakWithoutSpace();
     
+    /**
+     *  Sets if the text should resize the font size automatically
+     *  to fit its size
+     */
+    void setAdaptFontSizeToFit(bool adaptFontSizeToFit);
+    
+    /**
+     *  Returns adaptFontSizeToFit variable
+     *
+     */
+    bool getAdaptFontSizeToFit();
+    
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     virtual bool init(const std::string& textContent,
@@ -234,6 +246,9 @@ protected:
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
+    int calculateFontSizeToFit(int referenceFontSize, const Size& referenceLetterSize,const std::string& stringToFit,const Size& areaSize);
+    Size& getFontLetterSizeForFontSize40();
+    
 protected:
     bool _touchScaleChangeEnabled;
     float _normalScaleValueX;
@@ -246,6 +261,9 @@ protected:
     Type _type;
     bool _adaptLabelScaleWithContentSize;
     bool _lineBreakWithoutSpace;
+    bool _adaptFontSizeToFit;
+    std::unordered_map<std::string, Size> _fontLetterSizeCache;
+    Size _invalidFontLetterSize;
 };
 
 }
