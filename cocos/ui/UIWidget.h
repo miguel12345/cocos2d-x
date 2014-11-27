@@ -34,6 +34,7 @@ THE SOFTWARE.
 NS_CC_BEGIN
 
 class EventListenerTouchOneByOne;
+class DrawNode;
 
 
 namespace ui {
@@ -687,6 +688,9 @@ public:
      */
     Visibility getVisibility();
     
+    void setDebugDraw(bool debugDraw);
+    
+    bool getDebugDraw();
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -727,6 +731,11 @@ CC_CONSTRUCTOR_ACCESS:
      *@return true represent the widget use Unify Size, false represent the widget couldn't use Unify Size
      */
     bool isUnifySizeEnabled()const;
+    
+    //the preprocessor condition is here because draw override is only for debug draw
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+    void draw(Renderer *renderer, const Mat4& transform, uint32_t flags) override;
+#endif
     
 protected:
     //call back function called when size changed.
@@ -830,6 +839,11 @@ protected:
     #endif
     ccWidgetTouchCallback _touchEventCallback;
     ccWidgetClickCallback _clickEventListener;
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+    bool _debugDraw;
+    DrawNode* _debugDrawNode;
+#endif
+
 private:
     class FocusNavigationController;
     static FocusNavigationController* _focusNavigationController;

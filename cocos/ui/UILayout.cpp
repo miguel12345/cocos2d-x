@@ -36,6 +36,7 @@ THE SOFTWARE.
 #include "2d/CCLayer.h"
 #include "2d/CCSprite.h"
 #include "base/CCEventFocus.h"
+#include "CCDrawNode.h"
 
 
 NS_CC_BEGIN

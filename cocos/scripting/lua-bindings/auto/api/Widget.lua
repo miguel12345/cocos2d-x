@@ -61,6 +61,12 @@
 -- @param #bool isPropagate
         
 --------------------------------
+-- 
+-- @function [parent=#Widget] setDebugDraw 
+-- @param self
+-- @param #bool debugDraw
+        
+--------------------------------
 -- Returns size percent of widget<br>
 -- return size percent
 -- @function [parent=#Widget] getSizePercent 
@@ -206,6 +212,12 @@
 --------------------------------
 -- return  whether the widget is focused or not
 -- @function [parent=#Widget] isFocused 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- 
+-- @function [parent=#Widget] getDebugDraw 
 -- @param self
 -- @return bool#bool ret (return value: bool)
         

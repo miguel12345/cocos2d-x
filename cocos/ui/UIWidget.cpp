@@ -31,6 +31,7 @@ THE SOFTWARE.
 #include "base/CCEventFocus.h"
 #include "base/CCEventDispatcher.h"
 #include "ui/UILayoutComponent.h"
+#include "CCDrawNode.h"
 
 NS_CC_BEGIN
 
@@ -167,7 +168,9 @@ _maximumSize(Size(-1., -1.)),
 _minimumSize(Size(-1., -1.)),
 _visibility(Visibility::VISIBLE),
 _touchEventListener(nullptr),
-_touchEventSelector(nullptr)
+_touchEventSelector(nullptr),
+_debugDraw(false),
+_debugDrawNode(nullptr)
 {
   
 }
@@ -1506,6 +1509,52 @@ void Widget::remedyLayoutParameter(LayoutParameter* parameter) {
         parameter->setCollapsed(false);
     }
 }
+void Widget::setDebugDraw(bool debugDraw) {
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+
+    if (_debugDraw != debugDraw) {
+        
+        _debugDraw = debugDraw;
+        
+        if (_debugDraw && _debugDrawNode == nullptr) {
+            _debugDrawNode = DrawNode::create();
+            addChild(_debugDrawNode);
+        }
+        
+        if (!_debugDraw && _debugDrawNode) {
+            _debugDrawNode->removeFromParentAndCleanup(true);
+            _debugDrawNode = nullptr;
+        }
+    }
+#endif
+
+}
+
+bool Widget::getDebugDraw() {
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+    return _debugDraw;
+#else
+    return false;
+#endif
+}
+
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+void Widget::draw(Renderer *renderer, const Mat4& transform, uint32_t flags) {
+    Node::draw(renderer, transform, flags);
+    if (_debugDraw && _debugDrawNode) {
+        _debugDrawNode->clear();
+        auto size = getContentSize();
+        Point vertices[4]=
+        {
+            Point::ZERO,
+            Point(size.width, 0),
+            Point(size.width, size.height),
+            Point(0, size.height)
+        };
+        _debugDrawNode->drawPoly(vertices, 4, true, Color4F(1.0, 1.0, 1.0, 1.0));
+    }
+}
+#endif
     
 }
 NS_CC_END

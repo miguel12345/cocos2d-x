@@ -301,5 +301,10 @@ To enable set it to a value different than 0. Disabled by default.
 #ifndef CC_CONSTRUCTOR_ACCESS
 #define CC_CONSTRUCTOR_ACCESS protected
 #endif
+
+
+#if COCOS2D_DEBUG
+#define MF_ALLOW_WIDGET_DEBUG_DRAW  1
+#endif
  
 #endif // __CCCONFIG_H__
