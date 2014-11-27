@@ -31,7 +31,7 @@ THE SOFTWARE.
 #include "base/CCEventFocus.h"
 #include "base/CCEventDispatcher.h"
 #include "ui/UILayoutComponent.h"
-#include "CCDrawNode.h"
+#include "2d/CCDrawNode.h"
 
 NS_CC_BEGIN
 
