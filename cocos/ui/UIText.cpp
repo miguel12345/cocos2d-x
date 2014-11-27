@@ -318,24 +318,6 @@ void Text::labelScaleChangedWithSize()
         _labelRenderer->setScale(1.0f);
         _normalScaleValueX = _normalScaleValueY = 1.0f;
     }
-    else if (_adaptLabelScaleWithContentSize)
-    {
-        _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
-        Size textureSize = _labelRenderer->getContentSize();
-        if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
-        {
-            _labelRenderer->setScale(1.0f);
-            return;
-        }
-        
-        float scaleX = _contentSize.width / textureSize.width;
-        float scaleY = _contentSize.height / textureSize.height;
-        _labelRenderer->setScaleX(scaleX);
-        _labelRenderer->setScaleY(scaleY);
-        _normalScaleValueX = scaleX;
-        _normalScaleValueY = scaleY;
-        
-    }
     else if (_adaptFontSizeToFit)
     {
         Size singleLetterSize = getFontLetterSizeForFontSize40();
@@ -343,7 +325,27 @@ void Text::labelScaleChangedWithSize()
     }
     else {
         _labelRenderer->setScale(1.0f);
+        _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
+        Size textureSize = _labelRenderer->getContentSize();
         _normalScaleValueX = _normalScaleValueY = 1.0f;
+        
+        if (_adaptLabelScaleWithContentSize) {
+            if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
+            {
+                _labelRenderer->setScale(1.0f);
+                return;
+            }
+            
+            float scaleX = _contentSize.width / textureSize.width;
+            float scaleY = _contentSize.height / textureSize.height;
+            _labelRenderer->setScaleX(scaleX);
+            _labelRenderer->setScaleY(scaleY);
+            _normalScaleValueX = scaleX;
+            _normalScaleValueY = scaleY;
+        }
+        else {
+            setContentSize(textureSize);
+        }
     }
     
     _labelRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
