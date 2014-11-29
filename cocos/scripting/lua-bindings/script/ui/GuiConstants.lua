@@ -184,3 +184,9 @@ ccui.Visibility = {
     hidden = 1,
     collapsed= 2
 }
+
+ccui.ImageView.ContentMode = {
+    scaleToFit = 0,
+    aspectFit = 1,
+    aspectFill = 2
+}

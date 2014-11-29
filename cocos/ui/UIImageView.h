@@ -42,6 +42,13 @@ class CC_GUI_DLL ImageView : public Widget
     DECLARE_CLASS_GUI_INFO
     
 public:
+    
+    enum class ContentMode {
+        ScaleToFit = 0,
+        AspectFit,
+        AspectFill
+    };
+    
     /**
      * Default constructor
      */
@@ -111,6 +118,41 @@ public:
     virtual Size getVirtualRendererSize() const override;
     virtual Node* getVirtualRenderer() override;
     
+    /**
+        Changes image view content mode.
+        Content mode will be used to determine how
+        should the underlying image renderer be scaled
+        according to the ImageView size.
+     
+        ScaleToFit - Image texture will scale to fit content size,
+        possibily breaking aspect ratio
+        AspectFit - Image texture will scale to fit content size, keeping
+        its aspect ratio
+        AspectFill - Image texture will scale to fill all available 
+        content size, possibily leaving parts of it outside of node bounds
+     
+        Note: This will be ignored if _ignoreSize or _9scale are enabled     
+        @param contentMode content mode variable
+     */
+    void setContentMode(ContentMode contentMode);
+    
+    /**
+        Returns the image view content mode.
+        The default value is ScaleToFit
+     */
+    ContentMode getContentMode();
+    
+    /**
+     Returns the current image file name. You can change the current image
+     by calling loadTexture.
+     
+     If no image has been assigned it this will return an empty string
+     
+     @see loadTexture
+     @return current image file name
+     */
+    const std::string& getImageFileName() const;
+    
 CC_CONSTRUCTOR_ACCESS:
     //initializes state of widget.
     virtual bool init() override;
@@ -128,6 +170,7 @@ protected:
     void imageTextureScaleChangedWithSize();
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
+    virtual void adaptRendererByContentMode();
 protected:
     bool _scale9Enabled;
     bool _prevIgnoreSize;
@@ -137,6 +180,7 @@ protected:
     TextureResType _imageTexType;
     Size _imageTextureSize;
     bool _imageRendererAdaptDirty;
+    ContentMode _contentMode;
 };
 
 }

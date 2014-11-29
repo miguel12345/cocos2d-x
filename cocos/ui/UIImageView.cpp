@@ -42,7 +42,8 @@ _imageRenderer(nullptr),
 _textureFile(""),
 _imageTexType(TextureResType::LOCAL),
 _imageTextureSize(_contentSize),
-_imageRendererAdaptDirty(true)
+_imageRendererAdaptDirty(true),
+_contentMode(ContentMode::ScaleToFit)
 {
 
 }
@@ -265,16 +266,7 @@ void ImageView::imageTextureScaleChangedWithSize()
         }
         else
         {
-            Size textureSize = _imageRenderer->getContentSize();
-            if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
-            {
-                _imageRenderer->setScale(1.0f);
-                return;
-            }
-            float scaleX = _contentSize.width / textureSize.width;
-            float scaleY = _contentSize.height / textureSize.height;
-            _imageRenderer->setScaleX(scaleX);
-            _imageRenderer->setScaleY(scaleY);
+            adaptRendererByContentMode();
         }
     }
     _imageRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
@@ -299,9 +291,67 @@ void ImageView::copySpecialProperties(Widget *widget)
         setScale9Enabled(imageView->_scale9Enabled);
         loadTexture(imageView->_textureFile, imageView->_imageTexType);
         setCapInsets(imageView->_capInsets);
+        setContentMode(imageView->getContentMode());
     }
 }
 
+void ImageView::setContentMode(ContentMode contentMode) {
+    if (_contentMode != contentMode) {
+        _contentMode = contentMode;
+        _imageRendererAdaptDirty = true;
+    }
+}
+
+ImageView::ContentMode ImageView::getContentMode() {
+    return _contentMode;
+}
+    
+void ImageView::adaptRendererByContentMode() {
+    
+    switch (_contentMode) {
+        case ContentMode::ScaleToFit: {
+            
+            Size textureSize = _imageRenderer->getContentSize();
+            if (textureSize.width <= 0.0f || textureSize.height <= 0.0f)
+            {
+                _imageRenderer->setScale(1.0f);
+                return;
+            }
+            float scaleX = _contentSize.width / textureSize.width;
+            float scaleY = _contentSize.height / textureSize.height;
+            _imageRenderer->setScaleX(scaleX);
+            _imageRenderer->setScaleY(scaleY);
+        }
+            break;
+        case ContentMode::AspectFit: {
+                _imageRenderer->setScale(1.0f);
+                Size textureSize = _imageRenderer->getContentSize();
+                float scale = _contentSize.height/textureSize.height;
+                if (scale*textureSize.width>_contentSize.width) {
+                    scale *= _contentSize.width/(scale*textureSize.width);
+                }
+                _imageRenderer->setScale(scale);
+            }
+            break;
+        case ContentMode::AspectFill: {
+            _imageRenderer->setScale(1.0f);
+            Size textureSize = _imageRenderer->getContentSize();
+            float scale = _contentSize.height/textureSize.height;
+            if (scale*textureSize.width<_contentSize.width) {
+                scale *= _contentSize.width/(scale*textureSize.width);
+            }
+            _imageRenderer->setScale(scale);
+        }
+            break;
+        default:
+            break;
+    }
+}
+
+const std::string& ImageView::getImageFileName() const {
+    return _textureFile;
+}
+    
 }
 
 NS_CC_END

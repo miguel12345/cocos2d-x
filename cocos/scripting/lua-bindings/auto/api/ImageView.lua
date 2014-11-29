@@ -5,6 +5,16 @@
 -- @parent_module ccui
 
 --------------------------------
+-- Returns the current image file name. You can change the current image<br>
+-- by calling loadTexture.<br>
+-- If no image has been assigned it this will return an empty string<br>
+-- see loadTexture<br>
+-- return current image file name
+-- @function [parent=#ImageView] getImageFileName 
+-- @param self
+-- @return string#string ret (return value: string)
+        
+--------------------------------
 -- Load texture for imageview.<br>
 -- param fileName   file name of texture.<br>
 -- param texType    @see TextureResType
@@ -12,6 +22,23 @@
 -- @param self
 -- @param #string fileName
 -- @param #int texType
+        
+--------------------------------
+-- Changes image view content mode.<br>
+-- Content mode will be used to determine how<br>
+-- should the underlying image renderer be scaled<br>
+-- according to the ImageView size.<br>
+-- ScaleToFit - Image texture will scale to fit content size,<br>
+-- possibily breaking aspect ratio<br>
+-- AspectFit - Image texture will scale to fit content size, keeping<br>
+-- its aspect ratio<br>
+-- AspectFill - Image texture will scale to fill all available <br>
+-- content size, possibily leaving parts of it outside of node bounds<br>
+-- Note: This will be ignored if _ignoreSize or _9scale are enabled     <br>
+-- param contentMode content mode variable
+-- @function [parent=#ImageView] setContentMode 
+-- @param self
+-- @param #int contentMode
         
 --------------------------------
 -- Sets if imageview is using scale9 renderer.<br>
@@ -45,6 +72,13 @@
 -- @function [parent=#ImageView] isScale9Enabled 
 -- @param self
 -- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- Returns the image view content mode.<br>
+-- The default value is ScaleToFit
+-- @function [parent=#ImageView] getContentMode 
+-- @param self
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- @overload self, string, int         
