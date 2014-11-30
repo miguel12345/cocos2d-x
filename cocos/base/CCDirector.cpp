@@ -251,12 +251,14 @@ void Director::drawScene()
     // calculate "global" dt
     calculateDeltaTime();
     
+#ifndef MF_ALLOW_DRAW_SCENE_WITH_DELTA_TIME_0
     // skip one flame when _deltaTime equal to zero.
     if(_deltaTime < FLT_EPSILON)
     {
         return;
     }
-
+#endif
+    
     if (_openGLView)
     {
         _openGLView->pollEvents();

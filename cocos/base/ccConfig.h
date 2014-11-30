@@ -304,7 +304,8 @@ To enable set it to a value different than 0. Disabled by default.
 
 
 #if COCOS2D_DEBUG
-#define MF_ALLOW_WIDGET_DEBUG_DRAW  1
+#define MF_ALLOW_WIDGET_DEBUG_DRAW              1
+#define MF_ALLOW_DRAW_SCENE_WITH_DELTA_TIME_0   1
 #endif
  
 #endif // __CCCONFIG_H__
