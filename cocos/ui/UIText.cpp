@@ -474,6 +474,16 @@ Size& Text::getFontLetterSizeForFontSize40() {
     }
     return _invalidFontLetterSize;
 }
+
+const Size& Text::getContentSize() const {
+    
+    if (_labelRendererAdaptDirty)
+    {
+        const_cast<Text*>(this)->adaptRenderers();
+    }
+    
+    return _contentSize;
+}
     
 }
 
