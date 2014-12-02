@@ -117,6 +117,17 @@
 -- @return rect_table#rect_table ret (return value: rect_table)
         
 --------------------------------
+-- Returns the UILayout content size.<br>
+-- The call to this method has the side effect of recalculating<br>
+-- the effective content size of the text element if there is the need<br>
+-- to do so.<br>
+-- This happens when wrap content is set to true, since it requires<br>
+-- to calculate the accumulated size of all children components
+-- @function [parent=#Layout] getContentSize 
+-- @param self
+-- @return size_table#size_table ret (return value: size_table)
+        
+--------------------------------
 -- 
 -- @function [parent=#Layout] getBackGroundColor 
 -- @param self

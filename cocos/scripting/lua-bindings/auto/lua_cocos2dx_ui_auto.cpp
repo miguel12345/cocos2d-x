@@ -4953,6 +4953,50 @@ int lua_cocos2dx_ui_Layout_getBackGroundImageCapInsets(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Layout_getContentSize(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Layout* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Layout",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Layout*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Layout_getContentSize'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        const cocos2d::Size& ret = cobj->getContentSize();
+        size_to_luaval(tolua_S, ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Layout:getContentSize",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Layout_getContentSize'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Layout_getBackGroundColor(lua_State* tolua_S)
 {
     int argc = 0;
@@ -5977,6 +6021,7 @@ int lua_register_cocos2dx_ui_Layout(lua_State* tolua_S)
         tolua_function(tolua_S,"setBackGroundColor",lua_cocos2dx_ui_Layout_setBackGroundColor);
         tolua_function(tolua_S,"requestDoLayout",lua_cocos2dx_ui_Layout_requestDoLayout);
         tolua_function(tolua_S,"getBackGroundImageCapInsets",lua_cocos2dx_ui_Layout_getBackGroundImageCapInsets);
+        tolua_function(tolua_S,"getContentSize",lua_cocos2dx_ui_Layout_getContentSize);
         tolua_function(tolua_S,"getBackGroundColor",lua_cocos2dx_ui_Layout_getBackGroundColor);
         tolua_function(tolua_S,"setClippingEnabled",lua_cocos2dx_ui_Layout_setClippingEnabled);
         tolua_function(tolua_S,"getBackGroundImageColor",lua_cocos2dx_ui_Layout_getBackGroundImageColor);

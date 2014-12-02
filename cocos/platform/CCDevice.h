@@ -67,6 +67,14 @@ public:
     static Data getTextureDataForText(const char * text, const FontDefinition& textDefinition, TextAlign align, int &width, int &height, bool& hasPremultipliedAlpha);
     
     static void setKeepScreenOn(bool value);
+    
+    /**
+        This method returns the screen size for the current device
+        in inches.
+        It only works on iOS and Android for now
+        @return The screen size in inches (e.g 7.0, 10.0, etc)
+     **/
+    static float getScreenSizeInches() ;
 
 private:
     CC_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);

@@ -227,6 +227,15 @@
 -- @return size_table#size_table ret (return value: size_table)
         
 --------------------------------
+-- Returns the UIText content size.<br>
+-- The call to this method has the side effect of recalculating<br>
+-- the effective content size of the text element if there is the need<br>
+-- to do so
+-- @function [parent=#Text] getContentSize 
+-- @param self
+-- @return size_table#size_table ret (return value: size_table)
+        
+--------------------------------
 -- Default constructor
 -- @function [parent=#Text] Text 
 -- @param self

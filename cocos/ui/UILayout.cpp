@@ -1013,14 +1013,6 @@ void Layout::doLayout()
         CCLOG("Layout [%s] is doing layout",getName().c_str());
     }
     
-    if (_wrapContent) {
-        updateContentSizeToWrapContent();
-        Layout* parentLayout = dynamic_cast<Layout*>(getWidgetParent());
-        if (parentLayout) {
-            parentLayout->forceDoLayout();
-        }
-    }
-    
     sortAllChildren();
 
     LayoutManager* executant = this->createLayoutManager();
@@ -1920,6 +1912,17 @@ void Layout::setWrapContent(bool wrapContent) {
 bool Layout::getWrapContent() {
     return _wrapContent;
 }
+
+const Size& Layout::getContentSize() const {
     
+    if (_doLayoutDirty && _wrapContent)
+    {
+        if (_wrapContent) {
+            const_cast<Layout*>(this)->updateContentSizeToWrapContent();
+        }
+    }
+    
+    return _contentSize;
+}
 }
 NS_CC_END

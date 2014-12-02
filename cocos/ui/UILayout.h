@@ -351,6 +351,17 @@ public:
      *  @return Wrap content variable
      */
     bool getWrapContent();
+    
+    /**
+     Returns the UILayout content size.
+     The call to this method has the side effect of recalculating
+     the effective content size of the text element if there is the need
+     to do so.
+     
+     This happens when wrap content is set to true, since it requires
+     to calculate the accumulated size of all children components
+     **/
+    const Size& getContentSize() const;
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.

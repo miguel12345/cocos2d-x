@@ -36,6 +36,11 @@ THE SOFTWARE.
 #include "jni/JniHelper.h"
 #include "platform/CCFileUtils.h"
 
+extern "C"
+{
+    float getDeviceScreenSizeInchesJNI();
+}
+
 NS_CC_BEGIN
 
 int Device::getDPI()
@@ -46,6 +51,16 @@ int Device::getDPI()
         dpi = (int)getDPIJNI();
     }
     return dpi;
+}
+
+float Device::getScreenSizeInches()
+{
+    static float screenSizeInches = -1.0f;
+    if (screenSizeInches == -1.0f)
+    {
+        screenSizeInches = getDeviceScreenSizeInchesJNI();
+    }
+    return screenSizeInches;
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled)
@@ -226,5 +241,16 @@ extern "C"
         bitmapDC._height = height;
         bitmapDC._data = (unsigned char*)malloc(sizeof(unsigned char) * size);
         env->GetByteArrayRegion(pixels, 0, size, (jbyte*)bitmapDC._data);
+    }
+    
+    float getDeviceScreenSizeInchesJNI()
+    {
+        cocos2d::JniMethodInfo t;
+        jfloat ret = -1.0f;
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, "org/cocos2dx/lib/Cocos2dxHelper", "getScreenSizeInches", "()F")) {
+            ret = t.env->CallStaticFloatMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
+        return ret;
     }
 };

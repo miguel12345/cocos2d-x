@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.preference.PreferenceManager.OnActivityResultListener;
@@ -338,6 +339,61 @@ public class Cocos2dxHelper {
             }
         }
         return -1;
+    }
+    
+    public static float getScreenSizeInches() {
+    	
+    	if (sActivity == null)
+        {
+    		return -1.0f;
+        }
+    	
+    	WindowManager windowManager = sActivity.getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        display.getMetrics(displayMetrics);
+
+
+        // since SDK_INT = 1;
+        int mWidthPixels = displayMetrics.widthPixels;
+        int mHeightPixels = displayMetrics.heightPixels;
+
+        // includes window decorations (statusbar bar/menu bar)
+        if (Build.VERSION.SDK_INT >= 14 && Build.VERSION.SDK_INT < 17)
+        {
+            try
+            {
+                mWidthPixels = (Integer) Display.class.getMethod("getRawWidth").invoke(display);
+                mHeightPixels = (Integer) Display.class.getMethod("getRawHeight").invoke(display);
+            }
+            catch (Exception ignored)
+            {
+            }
+        }
+
+        // includes window decorations (statusbar bar/menu bar)
+        if (Build.VERSION.SDK_INT >= 17)
+        {
+            try
+            {
+                Point realSize = new Point();
+                Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
+                mWidthPixels = realSize.x;
+                mHeightPixels = realSize.y;
+            }
+            catch (Exception ignored)
+            {
+            }
+        }
+        
+        DisplayMetrics dm = new DisplayMetrics();
+        windowManager.getDefaultDisplay().getMetrics(dm);
+        double x = Math.pow(mWidthPixels/dm.xdpi,2);
+        double y = Math.pow(mHeightPixels/dm.ydpi,2);
+        float screenInches = (float) Math.sqrt(x+y);
+        int aux = (int)(screenInches*100);
+        float result = aux/100f;
+        return result;
     }
     
     // ===========================================================

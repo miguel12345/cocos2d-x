@@ -489,6 +489,24 @@ void Device::setKeepScreenOn(bool value)
     [[UIApplication sharedApplication] setIdleTimerDisabled:(BOOL)value];
 }
 
+float Device::getScreenSizeInches(){
+    
+    //Taken from http://stackoverflow.com/questions/14517356/getting-the-physical-screen-size-in-inches-for-iphone
+    float scale = [[UIScreen mainScreen] scale];
+    
+    float ppi = scale * ((UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) ? 132 : 163);
+    
+    float horizontal = ([[UIScreen mainScreen] bounds].size.width * scale);
+    float vertical = ([[UIScreen mainScreen] bounds].size.height * scale);
+    
+    horizontal = horizontal / ppi;
+    vertical = vertical / ppi;
+    
+    float diagonal = sqrt(pow(horizontal, 2) + pow(vertical, 2));
+    
+    return diagonal;
+}
+
 NS_CC_END
 
 #endif // CC_PLATFORM_IOS

@@ -252,6 +252,25 @@ void Device::setKeepScreenOn(bool value)
 {
 }
 
+float Device::getScreenSizeInches(){
+    
+    //Adapted from http://stackoverflow.com/questions/12589198/how-to-read-the-physical-screen-size-of-osx
+    //Don't cache the result because the user might switch screens in run-time!
+    
+    static const float oneMillimeterInInches = 0.0393700787;
+    
+    NSScreen *screen = [NSScreen mainScreen];
+    NSDictionary *description = [screen deviceDescription];
+    CGSize displayPhysicalSize = CGDisplayScreenSize(
+                                                     [[description objectForKey:@"NSScreenNumber"] unsignedIntValue]);
+
+    float horizontal = displayPhysicalSize.width* oneMillimeterInInches , vertical = displayPhysicalSize.height * oneMillimeterInInches;
+    
+    float diagonal = sqrt(pow(horizontal, 2) + pow(vertical, 2));
+    
+    return diagonal;
+}
+
 NS_CC_END
 
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC
