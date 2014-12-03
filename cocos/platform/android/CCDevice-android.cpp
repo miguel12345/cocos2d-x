@@ -39,6 +39,9 @@ THE SOFTWARE.
 extern "C"
 {
     float getDeviceScreenSizeInchesJNI();
+    void lockDeviceOrientationLandscapeJNI();
+    void lockDeviceOrientationPortraitJNI();
+    void unlockDeviceOrientationJNI();
 }
 
 NS_CC_BEGIN
@@ -61,6 +64,33 @@ float Device::getScreenSizeInches()
         screenSizeInches = getDeviceScreenSizeInchesJNI();
     }
     return screenSizeInches;
+}
+
+static Device::Orientation s_orientation = Device::Orientation::UNSPECIFIED;
+
+void Device::lockDeviceOrientation(Orientation desiredOrientation) {
+    switch (desiredOrientation) {
+        case Orientation::LANDSCAPE:
+            s_orientation = Device::Orientation::LANDSCAPE;
+            lockDeviceOrientationLandscapeJNI();
+            break;
+        case Orientation::PORTRAIT:
+            lockDeviceOrientationPortraitJNI();
+            s_orientation = Device::Orientation::PORTRAIT;
+            break;
+        case Orientation::UNSPECIFIED:
+            unlockDeviceOrientation();
+            s_orientation = Device::Orientation::UNSPECIFIED;
+            break;
+    }
+}
+
+void Device::unlockDeviceOrientation() {
+    unlockDeviceOrientationJNI();
+}
+
+Device::Orientation Device::getDeviceLockedOrientation() {
+    return s_orientation;
 }
 
 void Device::setAccelerometerEnabled(bool isEnabled)
@@ -252,5 +282,29 @@ extern "C"
             t.env->DeleteLocalRef(t.classID);
         }
         return ret;
+    }
+    
+    void lockDeviceOrientationLandscapeJNI() {
+        cocos2d::JniMethodInfo t;
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, "org/cocos2dx/lib/Cocos2dxHelper", "lockDeviceOrientationLandscape", "()V")) {
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
+    }
+    
+    void lockDeviceOrientationPortraitJNI() {
+        cocos2d::JniMethodInfo t;
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, "org/cocos2dx/lib/Cocos2dxHelper", "lockDeviceOrientationPortrait", "()V")) {
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
+    }
+    
+    void unlockDeviceOrientationJNI() {
+        cocos2d::JniMethodInfo t;
+        if (cocos2d::JniHelper::getStaticMethodInfo(t, "org/cocos2dx/lib/Cocos2dxHelper", "unlockDeviceOrientation", "()V")) {
+            t.env->CallStaticVoidMethod(t.classID, t.methodID);
+            t.env->DeleteLocalRef(t.classID);
+        }
     }
 };

@@ -604,3 +604,9 @@ cc.LightFlag =
     LIGHT14 = math.pow(2,14),
     LIGHT15 = math.pow(2,15),
 }
+
+cc.Device.Orientation = {
+    UNKNOWN = 0,
+    PORTRAIT = 1,
+    LANDSCAPE = 2,
+}

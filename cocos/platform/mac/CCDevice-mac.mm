@@ -271,6 +271,18 @@ float Device::getScreenSizeInches(){
     return diagonal;
 }
 
+void Device::lockDeviceOrientation(Orientation desiredOrientation) {
+    
+}
+
+void Device::unlockDeviceOrientation() {
+    
+}
+
+Device::Orientation Device::getDeviceLockedOrientation() {
+    return Device::Orientation::UNSPECIFIED;
+}
+
 NS_CC_END
 
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_MAC

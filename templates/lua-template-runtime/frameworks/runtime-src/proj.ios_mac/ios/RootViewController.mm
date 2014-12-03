@@ -69,24 +69,25 @@
 - (NSUInteger) supportedInterfaceOrientations{
 #ifdef __IPHONE_6_0
     
-    if (ConfigParser::getInstance()->isLanscape() && ConfigParser::getInstance()->isPortrait()) {
-        return UIInterfaceOrientationMaskAll;
+    auto deviceOrientation = cocos2d::Device::getDeviceLockedOrientation();
+    
+    switch (deviceOrientation) {
+        case cocos2d::Device::Orientation::UNSPECIFIED:
+            return UIInterfaceOrientationMaskAll;
+            break;
+        case cocos2d::Device::Orientation::LANDSCAPE:
+            return UIInterfaceOrientationMaskLandscape;
+            break;
+        case cocos2d::Device::Orientation::PORTRAIT:
+            return UIInterfaceOrientationMaskPortrait;
+            break;
     }
     
-    if (ConfigParser::getInstance()->isLanscape()) {
-        return UIInterfaceOrientationMaskLandscape;
-    }else{
-        return UIInterfaceOrientationMaskPortraitUpsideDown;
-    }
 #endif
 }
 
 - (BOOL) shouldAutorotate {
-    if (ConfigParser::getInstance()->isLanscape()) {
-        return YES;
-    }else{
-        return NO;
-    }
+    return YES;
 }
 
 - (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation {

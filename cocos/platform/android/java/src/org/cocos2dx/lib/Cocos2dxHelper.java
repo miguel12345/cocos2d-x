@@ -34,6 +34,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.ApplicationInfo;
 import android.content.res.AssetManager;
 import android.graphics.Point;
@@ -394,6 +395,18 @@ public class Cocos2dxHelper {
         int aux = (int)(screenInches*100);
         float result = aux/100f;
         return result;
+    }
+    
+    public static void lockDeviceOrientationLandscape() {
+    	sActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+    }
+    
+    public static void lockDeviceOrientationPortrait() {
+    	sActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+    }
+    
+    public static void unlockDeviceOrientation() {
+    	sActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
     }
     
     // ===========================================================

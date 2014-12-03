@@ -507,6 +507,59 @@ float Device::getScreenSizeInches(){
     return diagonal;
 }
 
+static Device::Orientation s_orientation = Device::Orientation::UNSPECIFIED;
+
+void Device::lockDeviceOrientation(Orientation desiredOrientation) {
+    
+    UIInterfaceOrientation desiredInterfaceOrientation = UIInterfaceOrientationUnknown;
+    UIInterfaceOrientation currentInterfaceOrientation = (UIInterfaceOrientation)[[[UIDevice currentDevice] valueForKey:@"orientation"] intValue];
+
+    switch (desiredOrientation) {
+        case Orientation::LANDSCAPE:
+            //if current orientation is already landscape, leave it
+            if (currentInterfaceOrientation == UIInterfaceOrientationLandscapeLeft || currentInterfaceOrientation == UIInterfaceOrientationLandscapeRight) {
+                desiredInterfaceOrientation = currentInterfaceOrientation;
+            }
+            else {
+                desiredInterfaceOrientation = UIInterfaceOrientationLandscapeLeft;
+            }
+            break;
+        case Orientation::PORTRAIT:
+            if (currentInterfaceOrientation == UIInterfaceOrientationPortrait || currentInterfaceOrientation == UIInterfaceOrientationPortraitUpsideDown) {
+                desiredInterfaceOrientation = currentInterfaceOrientation;
+            }
+            else {
+                desiredInterfaceOrientation = UIInterfaceOrientationPortrait;
+            }
+            break;
+        case Orientation::UNSPECIFIED:
+            desiredInterfaceOrientation = UIInterfaceOrientationUnknown;
+            break;
+    }
+    
+    s_orientation = desiredOrientation;
+    
+    if (desiredInterfaceOrientation != currentInterfaceOrientation) {
+        [[UIDevice currentDevice] setValue:
+         [NSNumber numberWithInteger: desiredInterfaceOrientation]
+                                    forKey:@"orientation"];
+    }
+    
+}
+
+void Device::unlockDeviceOrientation() {
+    
+    s_orientation = Device::Orientation::UNSPECIFIED;
+
+    [[UIDevice currentDevice] setValue:
+     [NSNumber numberWithInteger: UIInterfaceOrientationUnknown]
+                                forKey:@"orientation"];
+}
+
+Device::Orientation Device::getDeviceLockedOrientation() {
+    return s_orientation;
+}
+
 NS_CC_END
 
 #endif // CC_PLATFORM_IOS
