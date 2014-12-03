@@ -44,9 +44,10 @@ class CC_GUI_DLL ImageView : public Widget
 public:
     
     enum class ContentMode {
-        ScaleToFit = 0,
-        AspectFit,
-        AspectFill
+        ScaleToFit = 0, /* Image texture will scale to fit content size, possibily breaking aspect ratio. This is the default value */
+        AspectFit,  /* Image texture will scale to fit content size, keeping its aspect ratio */
+        AspectFill, /* Image texture will scale to fill all available content size, possibily leaving parts of it outside of node bounds */
+        Repeating /* Image texture will repeat to fill node content size. Note: A texture with power of two is required */
     };
     
     /**
@@ -123,13 +124,6 @@ public:
         Content mode will be used to determine how
         should the underlying image renderer be scaled
         according to the ImageView size.
-     
-        ScaleToFit - Image texture will scale to fit content size,
-        possibily breaking aspect ratio
-        AspectFit - Image texture will scale to fit content size, keeping
-        its aspect ratio
-        AspectFill - Image texture will scale to fill all available 
-        content size, possibily leaving parts of it outside of node bounds
      
         Note: This will be ignored if _ignoreSize or _9scale are enabled     
         @param contentMode content mode variable

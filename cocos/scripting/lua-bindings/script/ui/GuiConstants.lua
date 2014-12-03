@@ -1,4 +1,5 @@
 
+
 ccui = ccui or {}
 
 ccui.BrightStyle =
@@ -188,5 +189,6 @@ ccui.Visibility = {
 ccui.ImageView.ContentMode = {
     scaleToFit = 0,
     aspectFit = 1,
-    aspectFill = 2
+    aspectFill = 2,
+    repeating = 3
 }

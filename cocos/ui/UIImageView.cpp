@@ -342,6 +342,20 @@ void ImageView::adaptRendererByContentMode() {
             }
             _imageRenderer->setScale(scale);
         }
+            
+        case ContentMode::Repeating: {
+            _imageRenderer->setScale(1.0f);
+            _imageRenderer->getSprite()->setTextureRect(Rect(0, 0, _contentSize.width, _contentSize.height));
+            
+            Texture2D::TexParams texParams;
+            
+            texParams.magFilter = GL_LINEAR;
+            texParams.minFilter = GL_LINEAR;
+            texParams.wrapS = GL_REPEAT;
+            texParams.wrapT = GL_REPEAT;
+            
+            _imageRenderer->getSprite()->getTexture()->setTexParameters(texParams);
+        }
             break;
         default:
             break;
