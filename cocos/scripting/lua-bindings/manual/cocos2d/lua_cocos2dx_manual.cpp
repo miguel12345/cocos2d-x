@@ -7133,6 +7133,21 @@ static void extendCSLoader(lua_State* tolua_S)
     lua_pop(tolua_S, 1);
 }
 
+int lua_cocos2dx_Cocos_getVersion(lua_State* tolua_S)
+{
+    std::string ret = cocos2dVersion();
+    tolua_pushcppstring(tolua_S,ret);
+    return 1;
+}
+
+static void extendCCVersion(lua_State* tolua_S)
+{
+    tolua_module(tolua_S,"cc",0);
+    tolua_beginmodule(tolua_S,"cc");
+    tolua_function(tolua_S, "getCocosVersion", lua_cocos2dx_Cocos_getVersion);
+    tolua_endmodule(tolua_S);
+}
+
 int register_all_cocos2dx_manual(lua_State* tolua_S)
 {
     if (NULL == tolua_S)
@@ -7190,6 +7205,8 @@ int register_all_cocos2dx_manual(lua_State* tolua_S)
     extendGLView(tolua_S);
     extendCamera(tolua_S);
     extendCSLoader(tolua_S);
+    extendCCVersion(tolua_S);
+    
     return 0;
 }
 
