@@ -168,9 +168,12 @@ _maximumSize(Size(-1., -1.)),
 _minimumSize(Size(-1., -1.)),
 _visibility(Visibility::VISIBLE),
 _touchEventListener(nullptr),
-_touchEventSelector(nullptr),
+_touchEventSelector(nullptr)
+#if MF_ALLOW_WIDGET_DEBUG_DRAW
+    ,
 _debugDraw(false),
 _debugDrawNode(nullptr)
+#endif
 {
   
 }
