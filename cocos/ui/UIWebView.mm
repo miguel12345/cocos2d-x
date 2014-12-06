@@ -29,4 +29,9 @@
 #include "UIWebViewImpl-ios.h"
 #include "UIWebView-inl.h"
 
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_MAC)
+
+#include "UIWebViewImpl-mac.h"
+#include "UIWebView-inl.h"
+
 #endif

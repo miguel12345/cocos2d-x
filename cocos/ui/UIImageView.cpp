@@ -342,7 +342,7 @@ void ImageView::adaptRendererByContentMode() {
             }
             _imageRenderer->setScale(scale);
         }
-            
+            break;
         case ContentMode::Repeating: {
             _imageRenderer->setScale(1.0f);
             _imageRenderer->getSprite()->setTextureRect(Rect(0, 0, _contentSize.width, _contentSize.height));

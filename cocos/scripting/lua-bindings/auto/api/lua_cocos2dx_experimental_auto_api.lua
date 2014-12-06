@@ -11,4 +11,9 @@
 -- @field [parent=#ccexp] TMXTiledMap#TMXTiledMap TMXTiledMap preloaded module
 
 
+--------------------------------------------------------
+-- the ccexp WebView
+-- @field [parent=#ccexp] WebView#WebView WebView preloaded module
+
+
 return nil

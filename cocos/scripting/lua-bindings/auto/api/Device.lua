@@ -14,7 +14,9 @@
         
 --------------------------------
 -- Locks the device to a given orientation.<br>
--- The orientation must be either landscape or portrait.<br>
+-- The orientation can be landscape, portrait or unknown.<br>
+-- Setting the orientation to uknown has the same effect of calling<br>
+-- unlockDeviceOrientation<br>
 -- This will only have effect on iOS and Android.<br>
 -- If you wish to unlock the device orientation, so that it changes<br>
 -- when the user rotates the device call unlockDeviceOrientation<br>
@@ -45,6 +47,19 @@
 -- Gets the DPI of device<br>
 -- return The DPI of device.
 -- @function [parent=#Device] getDPI 
+-- @param self
+-- @return int#int ret (return value: int)
+        
+--------------------------------
+-- Returns the current locked orientation.<br>
+-- This doesn't return the current device's orientation.<br>
+-- It simply returns the last orientation that was locked<br>
+-- by calling lockDeviceOrientation or unlockDeviceOrientation.<br>
+-- Since the default value for the orientation is unspecified,<br>
+-- this is the value that will be returned if there were no previous<br>
+-- calls to lockDeviceOrientation or unlockDeviceOrientation<br>
+-- see lockDeviceOrientation, unlockDeviceOrientation
+-- @function [parent=#Device] getDeviceLockedOrientation 
 -- @param self
 -- @return int#int ret (return value: int)
         
