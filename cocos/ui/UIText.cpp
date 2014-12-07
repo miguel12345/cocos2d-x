@@ -322,6 +322,20 @@ void Text::labelScaleChangedWithSize()
     {
         Size singleLetterSize = getFontLetterSizeForFontSize40();
         setFontSize(calculateFontSizeToFit(40,singleLetterSize,_labelRenderer->getString(),_contentSize));
+        
+        /*  At this point we have to check if we have an unspecified (<0) content size dimension.
+            If so, we must adapt our content size to wrap the label renderer's content.
+            After setContentSize, we force _labelRendererAdaptDirty to false because we known that we don't
+            need to adapt the renderer again due to this change of the content size */
+        
+        if (_contentSize.height<0) {
+            setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
+            _labelRendererAdaptDirty = false;
+        }
+        else if(_contentSize.width<0) {
+            setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
+            _labelRendererAdaptDirty = false;
+        }
     }
     else {
         _labelRenderer->setScale(1.0f);
@@ -434,15 +448,19 @@ bool Text::getAdaptFontSizeToFit() {
 
 int Text::calculateFontSizeToFit(int referenceFontSize, const Size& referenceLetterSize,const std::string& stringToFit,const Size& areaSize) {
     
-    ssize_t numLetters = stringToFit.length();
-    float letterMaximumWidth = areaSize.width / ((float) numLetters);
+    CCASSERT(areaSize.width>=0 || areaSize.height>=0, "At least one of the constraint area dimensions must be positive");
     
-    int fontSizeToFitWidth = ceil((letterMaximumWidth * referenceFontSize) / referenceLetterSize.width);
-    
-    float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * referenceLetterSize.height;
-    
-    if (finalHeight < areaSize.height) {
-        return fontSizeToFitWidth;
+    if (areaSize.width>=0) {
+        ssize_t numLetters = stringToFit.length();
+        float letterMaximumWidth = areaSize.width / ((float) numLetters);
+        
+        int fontSizeToFitWidth = ceil((letterMaximumWidth * referenceFontSize) / referenceLetterSize.width);
+        
+        float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * referenceLetterSize.height;
+        
+        if (areaSize.height<0 || finalHeight < areaSize.height) {
+            return fontSizeToFitWidth;
+        }
     }
     
     int fontSizeToFitHeight = ceil((areaSize.height * referenceFontSize) / referenceLetterSize.height);
