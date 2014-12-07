@@ -320,8 +320,7 @@ void Text::labelScaleChangedWithSize()
     }
     else if (_adaptFontSizeToFit)
     {
-        Size singleLetterSize = getFontLetterSizeForFontSize40();
-        setFontSize(calculateFontSizeToFit(40,singleLetterSize,_labelRenderer->getString(),_contentSize));
+        setFontSize(calculateFontSizeToFit(_contentSize));
         
         /*  At this point we have to check if we have an unspecified (<0) content size dimension.
             If so, we must adapt our content size to wrap the label renderer's content.
@@ -446,51 +445,36 @@ bool Text::getAdaptFontSizeToFit() {
     return _adaptLabelScaleWithContentSize;
 }
 
-int Text::calculateFontSizeToFit(int referenceFontSize, const Size& referenceLetterSize,const std::string& stringToFit,const Size& areaSize) {
+int Text::calculateFontSizeToFit(const Size& areaSize) {
     
-    CCASSERT(areaSize.width>=0 || areaSize.height>=0, "At least one of the constraint area dimensions must be positive");
+    float areaSizeWidth = areaSize.width;
+    float areaSizeHeight = areaSize.height;
+    TTFConfig config = _labelRenderer->getTTFConfig();
     
+    CCASSERT(areaSizeWidth>=0 || areaSizeHeight>=0, "At least one of the constraint area dimensions must be positive");
+    CCASSERT(config.fontSize>0, "The renderer must have a valid font size at this point");
+
+    //We use the current ttf config as the reference size
+    int referenceFontSize = config.fontSize;
+    
+    //Now we calculate the resulting renderer content size for that font size
+    Size rendererContentSize = _labelRenderer->Node::getContentSize();
+    
+    //Then we have all the information to calculate the best font size
+    //for the string to fit perfectly inside the constraint area
     if (areaSize.width>=0) {
-        ssize_t numLetters = stringToFit.length();
-        float letterMaximumWidth = areaSize.width / ((float) numLetters);
+        int fontSizeToFitWidth = floor((areaSizeWidth * referenceFontSize) / rendererContentSize.width);
         
-        int fontSizeToFitWidth = ceil((letterMaximumWidth * referenceFontSize) / referenceLetterSize.width);
-        
-        float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * referenceLetterSize.height;
+        float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * rendererContentSize.height;
         
         if (areaSize.height<0 || finalHeight < areaSize.height) {
             return fontSizeToFitWidth;
         }
     }
     
-    int fontSizeToFitHeight = ceil((areaSize.height * referenceFontSize) / referenceLetterSize.height);
+    int fontSizeToFitHeight = floor((areaSize.height * referenceFontSize) / rendererContentSize.height);
     
     return fontSizeToFitHeight;
-}
-    
-    
-Size& Text::getFontLetterSizeForFontSize40() {
-    
-    auto search = _fontLetterSizeCache.find(_fontName);
-    if (search != _fontLetterSizeCache.end()) {
-        return search->second;
-    }
-    
-    std::string originalString = _labelRenderer->getString();
-    _labelRenderer->setScale(1.0f);
-    _normalScaleValueX = _normalScaleValueY = 1.0f;
-    setFontSize(40);
-    _labelRenderer->setString("T");
-    Size singleLetterSize = _labelRenderer->getContentSize();
-    _labelRenderer->setString(originalString);
-
-    auto insertionResult = _fontLetterSizeCache.insert(std::make_pair(_fontName, singleLetterSize));
-    
-    if (insertionResult.second) {
-        return insertionResult.first->second;
-
-    }
-    return _invalidFontLetterSize;
 }
 
 const Size& Text::getContentSize() const {

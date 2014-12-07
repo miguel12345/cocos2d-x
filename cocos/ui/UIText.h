@@ -255,20 +255,25 @@ protected:
     virtual Widget* createCloneInstance() override;
     virtual void copySpecialProperties(Widget* model) override;
     virtual void adaptRenderers() override;
+    
     /**
      *  This method calucates and returns the perfect font size for a string with
         a given font to fit inside the given area.
+     
+        This method expects that the renderer already has a ttf config with valid size.
+    
+        It also expects that the renderer already has the string that will be displayed
+     
         Note that the constraint area might be partially unspecified
         by having a dimension with a negative value.
-        For example, if areaSize.height<0 then the height will not be
-        taken into account when calculating the constraint. This means
+        For example, if areaSize.height < 0 then the height will not be
+        taken into account when calculating the font size constraint. This means
         that the caller should take this into consideration by, for example,
         changing it's content size to match the rendererer's
      *
-     *  @return An integer representing the font size that
+     *  @return An integer representing the font size
      */
-    int calculateFontSizeToFit(int referenceFontSize, const Size& referenceLetterSize,const std::string& stringToFit,const Size& areaSize);
-    Size& getFontLetterSizeForFontSize40();
+    int calculateFontSizeToFit(const Size& constraintAreaSize);
     
 protected:
     bool _touchScaleChangeEnabled;
