@@ -505,6 +505,15 @@ public:
      * @param type  Relative or Linear
      */
     void setLayoutParameter(LayoutParameter* parameter);
+    
+    /**
+     *  This method must be called when this widget's layout parameter
+        is changed by an outside entity.
+     
+        Its purpose is for the widget to make sure the widget goes 
+        to a dirty state.
+     */
+    void layoutParameterChanged();
 
     /**
      * Gets LayoutParameter of widget.

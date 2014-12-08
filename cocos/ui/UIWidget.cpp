@@ -1201,6 +1201,15 @@ void Widget::setLayoutParameter(LayoutParameter *parameter)
     _layoutParameterDictionary.insert((int)parameter->getLayoutType(), parameter);
     _layoutParameterType = parameter->getLayoutType();
 }
+    
+void Widget::layoutParameterChanged() {
+    
+    //if parent is layout request layout
+    Layout* parentLayout = dynamic_cast<Layout*>(getParent());
+    if (parentLayout) {
+        parentLayout->requestDoLayout();
+    }
+}
 
 LayoutParameter* Widget::getLayoutParameter()const
 {

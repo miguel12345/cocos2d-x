@@ -235,6 +235,14 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- This method must be called when this widget's layout parameter<br>
+-- is changed by an outside entity.<br>
+-- Its purpose is for the widget to make sure the widget goes <br>
+-- to a dirty state.
+-- @function [parent=#Widget] layoutParameterChanged 
+-- @param self
+        
+--------------------------------
 -- 
 -- @function [parent=#Widget] getActionTag 
 -- @param self
