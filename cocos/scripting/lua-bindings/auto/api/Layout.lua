@@ -218,6 +218,13 @@
 -- @param #size_table oldSize
         
 --------------------------------
+-- Does the layout IF the layout is currently in a dirty state<br>
+-- This is useful if you want to synchronously layout the layout<br>
+-- but don't know if it is necessary or not
+-- @function [parent=#Layout] doLayoutIfNeeded 
+-- @param self
+        
+--------------------------------
 -- Gets background image texture size.<br>
 -- return background image texture size.
 -- @function [parent=#Layout] getBackGroundImageTextureSize 

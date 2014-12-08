@@ -273,6 +273,13 @@ public:
     void forceDoLayout();
     
     /**
+     *  Does the layout IF the layout is currently in a dirty state
+        This is useful if you want to synchronously layout the layout
+        but don't know if it is necessary or not
+     */
+    void doLayoutIfNeeded();
+    
+    /**
      * request to refresh widget layout
      */
     void requestDoLayout();

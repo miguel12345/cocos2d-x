@@ -964,6 +964,11 @@ void Layout::forceDoLayout()
     this->requestDoLayout();
     this->doLayout();
 }
+ 
+void Layout::doLayoutIfNeeded()
+{
+    this->doLayout();
+}
     
 void Layout::requestDoLayout()
 {
