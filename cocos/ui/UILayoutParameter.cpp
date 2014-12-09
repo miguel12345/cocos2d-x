@@ -224,7 +224,7 @@ bool RelativeLayoutParameter::equals(LayoutParameter* otherLayoutParameter) {
     if (LayoutParameter::equals(otherLayoutParameter)) {
         RelativeLayoutParameter* otherRelativeLayoutParameter = dynamic_cast<RelativeLayoutParameter*>(otherLayoutParameter);
         return _relativeAlign == otherRelativeLayoutParameter->_relativeAlign &&
-                _relativeLayoutName == otherRelativeLayoutParameter->_relativeWidgetName &&
+                _relativeWidgetName == otherRelativeLayoutParameter->_relativeWidgetName &&
         _relativeLayoutName == otherRelativeLayoutParameter->_relativeLayoutName;
     }
     return false;
