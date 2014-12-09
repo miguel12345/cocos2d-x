@@ -168,7 +168,8 @@ _maximumSize(Size(-1., -1.)),
 _minimumSize(Size(-1., -1.)),
 _visibility(Visibility::VISIBLE),
 _touchEventListener(nullptr),
-_touchEventSelector(nullptr)
+_touchEventSelector(nullptr),
+_ignoreLayout(false)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -196,7 +197,6 @@ void Widget::cleanupWidget()
         CC_SAFE_DELETE(_focusNavigationController);
         _focusedWidget = nullptr;
     }
-
 }
 
 Widget* Widget::create()
@@ -1196,10 +1196,18 @@ void Widget::setLayoutParameter(LayoutParameter *parameter)
         return;
     }
     
+    LayoutParameter* currentLayoutParameter = getLayoutParameter();
+    assert(currentLayoutParameter!=parameter);
+    if (parameter == currentLayoutParameter) {
+        return;
+    }
+    
     remedyLayoutParameter(parameter);
     
     _layoutParameterDictionary.insert((int)parameter->getLayoutType(), parameter);
     _layoutParameterType = parameter->getLayoutType();
+    
+    layoutParameterChanged();
 }
     
 void Widget::layoutParameterChanged() {
@@ -1514,7 +1522,7 @@ Widget::Visibility Widget::getVisibility() {
     
 void Widget::remedyLayoutParameter(LayoutParameter* parameter) {
     
-    if (_visibility == Visibility::COLLAPSED) {
+    if (_visibility == Visibility::COLLAPSED || _ignoreLayout == true) {
         parameter->setCollapsed(true);
     }
     else {
@@ -1567,6 +1575,22 @@ void Widget::draw(Renderer *renderer, const Mat4& transform, uint32_t flags) {
     }
 }
 #endif
+
+void Widget::setIgnoreLayout(bool ignoreLayout) {
+    
+    if (ignoreLayout != _ignoreLayout) {
+        _ignoreLayout = ignoreLayout;
+        LayoutParameter* llp = getLayoutParameter();
+        if (llp) {
+            remedyLayoutParameter(llp);
+        }
+
+    }
+}
+    
+bool Widget::getIgnoreLayout() const {
+    return _ignoreLayout;
+}
     
 }
 NS_CC_END

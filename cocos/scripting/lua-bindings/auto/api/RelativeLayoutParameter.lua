@@ -68,6 +68,13 @@
 -- @param #ccui.LayoutParameter model
         
 --------------------------------
+-- 
+-- @function [parent=#RelativeLayoutParameter] equals 
+-- @param self
+-- @param #ccui.LayoutParameter otherLayoutParameter
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- Default constructor
 -- @function [parent=#RelativeLayoutParameter] RelativeLayoutParameter 
 -- @param self

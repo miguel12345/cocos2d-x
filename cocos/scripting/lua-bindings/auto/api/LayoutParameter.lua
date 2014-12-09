@@ -25,6 +25,16 @@
 -- @return int#int ret (return value: int)
         
 --------------------------------
+-- Checks if this layout parameter is equal (e.g. all attributes are equal)<br>
+-- to another layout parameter<br>
+-- param otherLayoutParameter LayoutParameter<br>
+-- return bool
+-- @function [parent=#LayoutParameter] equals 
+-- @param self
+-- @param #ccui.LayoutParameter otherLayoutParameter
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- 
 -- @function [parent=#LayoutParameter] setCollapsed 
 -- @param self

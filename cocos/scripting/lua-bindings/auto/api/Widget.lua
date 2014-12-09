@@ -12,6 +12,17 @@
 -- @param #size_table values
         
 --------------------------------
+-- Sets if the widget will ignore layout. This<br>
+-- is a sign to the layout manager that this widget<br>
+-- should not be taken into account in the layout process.<br>
+-- Note The call to this method does not request the parent<br>
+-- to do a layout.<br>
+-- param ignoreLayout Bool
+-- @function [parent=#Widget] setIgnoreLayout 
+-- @param self
+-- @param #bool ignoreLayout
+        
+--------------------------------
 -- Gets the size type of widget for the width dimension.<br>
 -- see SizeType<br>
 -- param type that is widget's size type
@@ -235,10 +246,12 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
--- This method must be called when this widget's layout parameter<br>
--- is changed by an outside entity.<br>
--- Its purpose is for the widget to make sure the widget goes <br>
--- to a dirty state.
+-- If an outside entity retrieves the layout parameter with getLayoutParameter<br>
+-- and then applies some changes to it, it MUST call this method<br>
+-- in order to ensure proper behavior.<br>
+-- Please make sure that the layout parameter has indeed changed to prevent<br>
+-- CPU waste (since this method will provoke a layout of the parent<br>
+-- element)
 -- @function [parent=#Widget] layoutParameterChanged 
 -- @param self
         
@@ -419,6 +432,14 @@
 -- @param self
 -- @param #int widthType
 -- @param #int heightType
+        
+--------------------------------
+-- Gets IngoreLayout attribute. This<br>
+-- is a sign to the layout manager that this widget<br>
+-- should not be taken into account in the layout process
+-- @function [parent=#Widget] getIgnoreLayout 
+-- @param self
+-- @return bool#bool ret (return value: bool)
         
 --------------------------------
 -- 

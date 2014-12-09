@@ -40,6 +40,13 @@
 -- @param #ccui.LayoutParameter model
         
 --------------------------------
+-- 
+-- @function [parent=#LinearLayoutParameter] equals 
+-- @param self
+-- @param #ccui.LayoutParameter otherLayoutParameter
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- Default constructor
 -- @function [parent=#LinearLayoutParameter] LinearLayoutParameter 
 -- @param self

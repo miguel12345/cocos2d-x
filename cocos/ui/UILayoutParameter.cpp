@@ -114,6 +114,10 @@ void LayoutParameter::copyProperties(LayoutParameter *model)
 {
     _margin = model->_margin;
 }
+    
+bool LayoutParameter::equals(LayoutParameter* otherLayoutParameter) {
+    return _margin.equals(otherLayoutParameter->_margin) && _layoutParameterType == otherLayoutParameter->_layoutParameterType && _collapsed == otherLayoutParameter->_collapsed;
+}
 
 LinearLayoutParameter* LinearLayoutParameter::create()
 {
@@ -150,6 +154,11 @@ void LinearLayoutParameter::copyProperties(LayoutParameter *model)
     {
         setGravity(parameter->_linearGravity);
     }
+}
+    
+bool LinearLayoutParameter::equals(LayoutParameter* otherLayoutParameter) {
+    return LayoutParameter::equals(otherLayoutParameter) &&
+    (dynamic_cast<LinearLayoutParameter*>(otherLayoutParameter)->_linearGravity == _linearGravity);
 }
 
 RelativeLayoutParameter* RelativeLayoutParameter::create()
@@ -209,6 +218,16 @@ void RelativeLayoutParameter::copyProperties(LayoutParameter *model)
         setRelativeName(parameter->_relativeLayoutName);
         setRelativeToWidgetName(parameter->_relativeWidgetName);
     }
+}
+    
+bool RelativeLayoutParameter::equals(LayoutParameter* otherLayoutParameter) {
+    if (LayoutParameter::equals(otherLayoutParameter)) {
+        RelativeLayoutParameter* otherRelativeLayoutParameter = dynamic_cast<RelativeLayoutParameter*>(otherLayoutParameter);
+        return _relativeAlign == otherRelativeLayoutParameter->_relativeAlign &&
+                _relativeLayoutName == otherRelativeLayoutParameter->_relativeWidgetName &&
+        _relativeLayoutName == otherRelativeLayoutParameter->_relativeLayoutName;
+    }
+    return false;
 }
 
 }

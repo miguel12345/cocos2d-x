@@ -505,15 +505,6 @@ public:
      * @param type  Relative or Linear
      */
     void setLayoutParameter(LayoutParameter* parameter);
-    
-    /**
-     *  This method must be called when this widget's layout parameter
-        is changed by an outside entity.
-     
-        Its purpose is for the widget to make sure the widget goes 
-        to a dirty state.
-     */
-    void layoutParameterChanged();
 
     /**
      * Gets LayoutParameter of widget.
@@ -526,7 +517,6 @@ public:
      */
     LayoutParameter* getLayoutParameter()const override;
     CC_DEPRECATED_ATTRIBUTE LayoutParameter* getLayoutParameter(LayoutParameter::Type type);
-
 
     /**
      *
@@ -697,9 +687,39 @@ public:
      */
     Visibility getVisibility();
     
+    /**
+     *  Sets if the widget will ignore layout. This
+     *  is a sign to the layout manager that this widget
+     *  should not be taken into account in the layout process.
+     *
+     *  Note The call to this method does not request the parent
+     *  to do a layout.
+     *
+     *  @param ignoreLayout Bool
+     */
+    void setIgnoreLayout(bool ignoreLayout);
+    
+    /**
+     *  Gets IngoreLayout attribute. This
+     *  is a sign to the layout manager that this widget
+     *  should not be taken into account in the layout process
+     */
+    bool getIgnoreLayout() const;
+    
     void setDebugDraw(bool debugDraw);
     
     bool getDebugDraw();
+    
+    /**
+     *  If an outside entity retrieves the layout parameter with getLayoutParameter
+     and then applies some changes to it, it MUST call this method
+     in order to ensure proper behavior.
+     
+     Please make sure that the layout parameter has indeed changed to prevent
+     CPU waste (since this method will provoke a layout of the parent
+     element)
+     */
+    void layoutParameterChanged();
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -852,6 +872,7 @@ protected:
     bool _debugDraw;
     DrawNode* _debugDrawNode;
 #endif
+    bool _ignoreLayout;
 
 private:
     class FocusNavigationController;

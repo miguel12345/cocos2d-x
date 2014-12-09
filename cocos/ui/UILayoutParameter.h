@@ -132,6 +132,16 @@ public:
     LayoutParameter* clone();
     virtual LayoutParameter* createCloneInstance();
     virtual void copyProperties(LayoutParameter* model);
+    
+    /**
+     *  Checks if this layout parameter is equal (e.g. all attributes are equal)
+     *  to another layout parameter
+     *
+     *  @param otherLayoutParameter LayoutParameter
+     *
+     *  @return bool
+     */
+    virtual bool equals(LayoutParameter* otherLayoutParameter);
 
 protected:
     Margin _margin;
@@ -203,6 +213,9 @@ public:
     LinearGravity getGravity() const;
     virtual LayoutParameter* createCloneInstance() override;
     virtual void copyProperties(LayoutParameter* model) override;
+    
+    bool equals(LayoutParameter* otherLayoutParameter) override;
+
 protected:
     LinearGravity _linearGravity;
 };
@@ -316,6 +329,9 @@ public:
     
     virtual LayoutParameter* createCloneInstance() override;
     virtual void copyProperties(LayoutParameter* model) override;
+    
+    bool equals(LayoutParameter* otherLayoutParameter) override;
+
 protected:
     RelativeAlign _relativeAlign;
     std::string _relativeWidgetName;
