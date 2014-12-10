@@ -999,6 +999,9 @@ LayoutManager* Layout::createLayoutManager()
         case Type::RELATIVE:
             exe = RelativeLayoutManager::create();
             break;
+        case Type::GRID:
+            exe = GridLayoutManager::create();
+            break;
         default:
             break;
     }

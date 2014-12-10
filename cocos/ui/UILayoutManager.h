@@ -69,6 +69,17 @@ private:
     
     friend class Layout;
 };
+    
+class CC_GUI_DLL GridLayoutManager : public LayoutManager
+{
+private:
+    GridLayoutManager(){};
+    virtual ~GridLayoutManager(){};
+    static GridLayoutManager* create();
+    virtual void doLayout(LayoutProtocol *layout) override;
+    
+    friend class Layout;
+};
 
 class CC_GUI_DLL RelativeLayoutManager : public LayoutManager
 {

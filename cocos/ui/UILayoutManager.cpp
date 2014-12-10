@@ -142,6 +142,70 @@ void LinearVerticalLayoutManager::doLayout(LayoutProtocol* layout)
     }
 }
     
+//GridLayoutManager
+GridLayoutManager* GridLayoutManager::create()
+{
+    GridLayoutManager* exe = new (std::nothrow) GridLayoutManager();
+    if (exe)
+    {
+        exe->autorelease();
+        return exe;
+    }
+    CC_SAFE_DELETE(exe);
+    return nullptr;
+}
+
+
+void GridLayoutManager::doLayout(LayoutProtocol* layout)
+{
+    Size layoutSize = layout->getLayoutContentSize();
+    Vector<Node*> container = layout->getLayoutElements();
+    float leftBoundary = 0.0f;
+    float topBoundary = layoutSize.height;
+    Vec2 ap;
+    Size cs;
+    float finalPosX;
+    float finalPosY;
+    Margin mg;
+    float totalHeight;
+    float currentLineHighestHeight = 0.0f;
+    
+    for (const auto& subWidget : container)
+    {
+        Widget* child = dynamic_cast<Widget*>(subWidget);
+        if (child)
+        {
+            LinearLayoutParameter* layoutParameter = dynamic_cast<LinearLayoutParameter*>(child->getLayoutParameter());
+            if (layoutParameter && !layoutParameter->isCollapsed())
+            {
+                ap = child->getAnchorPoint();
+                cs = child->getContentSize();
+                mg = layoutParameter->getMargin();
+                
+                totalHeight = mg.top + mg.bottom + cs.height;
+                if (totalHeight>currentLineHighestHeight) {
+                    currentLineHighestHeight = totalHeight;
+                }
+                //Do we need to go to the next line?
+                if ((leftBoundary + cs.width + mg.left) >= layoutSize.width) {
+                    topBoundary -= currentLineHighestHeight;
+                    currentLineHighestHeight = 0.0f;
+                    leftBoundary = 0.0f;
+                }
+                
+                finalPosX = leftBoundary + (ap.x * cs.width);
+                finalPosX += mg.left;
+                
+                finalPosY = topBoundary - ((1.0f-ap.y) * cs.height);
+                finalPosY -= mg.top;
+                child->setPosition(Vec2(finalPosX, finalPosY));
+                leftBoundary = child->getRightBoundary() + mg.right;
+            }
+        }
+    }
+}
+    
+    
 //RelativeLayoutManager
 
 RelativeLayoutManager* RelativeLayoutManager::create()

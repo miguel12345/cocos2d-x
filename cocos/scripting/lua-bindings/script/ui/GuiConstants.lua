@@ -61,6 +61,7 @@ ccui.LayoutType =
     VERTICAL = 1,
     HORIZONTAL = 2,
     RELATIVE = 3,
+    GRID = 4
 }
 
 ccui.LayoutParameterType =
