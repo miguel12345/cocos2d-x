@@ -169,7 +169,8 @@ _minimumSize(Size(-1., -1.)),
 _visibility(Visibility::VISIBLE),
 _touchEventListener(nullptr),
 _touchEventSelector(nullptr),
-_ignoreLayout(false)
+_ignoreLayout(false),
+_sizePercentDimension(SizePercentSourceDimension::SAME_DIMENSION)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -335,14 +336,13 @@ void Widget::setSizePercent(const Vec2 &percent)
     if (_running)
     {
         Widget* widgetParent = getWidgetParent();
-        if (widgetParent)
-        {
-            cSize = Size(widgetParent->getContentSize().width * percent.x , widgetParent->getContentSize().height * percent.y);
-        }
-        else
-        {
-            cSize = Size(_parent->getContentSize().width * percent.x , _parent->getContentSize().height * percent.y);
-        }
+        Size parentSize = (widgetParent!=nullptr)?widgetParent->getContentSize():_parent->getContentSize();
+        
+        float widthPercentParentDimensionToUse = _sizePercentDimension==SizePercentSourceDimension::HEIGHT?parentSize.height:parentSize.width;
+        float heigthPercentParentDimensionToUse = _sizePercentDimension==SizePercentSourceDimension::WIDTH?parentSize.width:parentSize.height;
+        
+        cSize = Size(widthPercentParentDimensionToUse* percent.x , heigthPercentParentDimensionToUse * percent.y);
+
     }
     if (_ignoreSize)
     {
@@ -405,6 +405,9 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
     float sizePercentWidth = 0.0f;
     float sizePercentHeight = 0.0f;
     
+    float widthPercentParentDimensionToUse = _sizePercentDimension==SizePercentSourceDimension::HEIGHT?parentSize.height:parentSize.width;
+    float heigthPercentParentDimensionToUse = _sizePercentDimension==SizePercentSourceDimension::WIDTH?parentSize.width:parentSize.height;
+    
     switch (_widthSizeType)
     {
         case SizeType::ABSOLUTE:
@@ -432,7 +435,8 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
         }
         case SizeType::PERCENT:
         {
-            Size cSize = Size(parentSize.width * _sizePercent.x , parentSize.height * _sizePercent.y);
+            
+            Size cSize = Size(widthPercentParentDimensionToUse * _sizePercent.x , heigthPercentParentDimensionToUse * _sizePercent.y);
             if (_ignoreSize)
             {
                 contentSizeWidth = getVirtualRendererSize().width;
@@ -482,7 +486,7 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
         }
         case SizeType::PERCENT:
         {
-            Size cSize = Size(parentSize.width * _sizePercent.x , parentSize.height * _sizePercent.y);
+            Size cSize = Size(widthPercentParentDimensionToUse * _sizePercent.x , heigthPercentParentDimensionToUse * _sizePercent.y);
             if (_ignoreSize)
             {
                 contentSizeHeight = getVirtualRendererSize().height;
@@ -1590,6 +1594,14 @@ void Widget::setIgnoreLayout(bool ignoreLayout) {
     
 bool Widget::getIgnoreLayout() const {
     return _ignoreLayout;
+}
+
+void Widget::setSizePercentSourceDimension(SizePercentSourceDimension sizePercentDimension) {
+    _sizePercentDimension = sizePercentDimension;
+}
+
+const Widget::SizePercentSourceDimension& Widget::getSizePercentSourceDimension() {
+    return _sizePercentDimension;
 }
     
 }

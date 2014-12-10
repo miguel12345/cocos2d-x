@@ -1719,6 +1719,52 @@ int lua_cocos2dx_ui_Widget_isIgnoreContentAdaptWithSize(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Widget_setSizePercentSourceDimension(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Widget_setSizePercentSourceDimension'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::ui::Widget::SizePercentSourceDimension arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccui.Widget:setSizePercentSourceDimension");
+        if(!ok)
+            return 0;
+        cobj->setSizePercentSourceDimension(arg0);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Widget:setSizePercentSourceDimension",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Widget_setSizePercentSourceDimension'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Widget_getVirtualRendererSize(lua_State* tolua_S)
 {
     int argc = 0;
@@ -3979,6 +4025,50 @@ int lua_cocos2dx_ui_Widget_isClippingParentContainsPoint(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_Widget_getSizePercentSourceDimension(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::Widget* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.Widget",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::Widget*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_Widget_getSizePercentSourceDimension'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        int ret = (int)cobj->getSizePercentSourceDimension();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "ccui.Widget:getSizePercentSourceDimension",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_Widget_getSizePercentSourceDimension'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_Widget_setSizeType(lua_State* tolua_S)
 {
     int argc = 0;
@@ -4286,6 +4376,7 @@ int lua_register_cocos2dx_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"setHighlighted",lua_cocos2dx_ui_Widget_setHighlighted);
         tolua_function(tolua_S,"setPositionType",lua_cocos2dx_ui_Widget_setPositionType);
         tolua_function(tolua_S,"isIgnoreContentAdaptWithSize",lua_cocos2dx_ui_Widget_isIgnoreContentAdaptWithSize);
+        tolua_function(tolua_S,"setSizePercentSourceDimension",lua_cocos2dx_ui_Widget_setSizePercentSourceDimension);
         tolua_function(tolua_S,"getVirtualRendererSize",lua_cocos2dx_ui_Widget_getVirtualRendererSize);
         tolua_function(tolua_S,"isHighlighted",lua_cocos2dx_ui_Widget_isHighlighted);
         tolua_function(tolua_S,"getLayoutParameter",lua_cocos2dx_ui_Widget_getLayoutParameter);
@@ -4336,6 +4427,7 @@ int lua_register_cocos2dx_ui_Widget(lua_State* tolua_S)
         tolua_function(tolua_S,"isFlippedX",lua_cocos2dx_ui_Widget_isFlippedX);
         tolua_function(tolua_S,"isFlippedY",lua_cocos2dx_ui_Widget_isFlippedY);
         tolua_function(tolua_S,"isClippingParentContainsPoint",lua_cocos2dx_ui_Widget_isClippingParentContainsPoint);
+        tolua_function(tolua_S,"getSizePercentSourceDimension",lua_cocos2dx_ui_Widget_getSizePercentSourceDimension);
         tolua_function(tolua_S,"setSizeType",lua_cocos2dx_ui_Widget_setSizeType);
         tolua_function(tolua_S,"getWidgetParent",lua_cocos2dx_ui_Widget_getWidgetParent);
         tolua_function(tolua_S,"setBright",lua_cocos2dx_ui_Widget_setBright);

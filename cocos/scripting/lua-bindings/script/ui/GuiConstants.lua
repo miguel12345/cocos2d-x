@@ -193,3 +193,9 @@ ccui.ImageView.ContentMode = {
     aspectFill = 2,
     repeating = 3
 }
+
+ccui.Widget.SizePercentSourceDimension = {
+    sameDimension = 0,
+    width = 1,
+    height = 2
+}

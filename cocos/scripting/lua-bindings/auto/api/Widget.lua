@@ -129,6 +129,14 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- Changes the current size percent dimension enum that affects<br>
+-- how are the percentage values transformed into absolute values.<br>
+-- param sizePercentDimension SizePercentSourceDimension
+-- @function [parent=#Widget] setSizePercentSourceDimension 
+-- @param self
+-- @param #int sizePercentDimension
+        
+--------------------------------
 -- 
 -- @function [parent=#Widget] getVirtualRendererSize 
 -- @param self
@@ -502,6 +510,13 @@
 -- @param self
 -- @param #vec2_table pt
 -- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- Gets the current SizePercentSourceDimension<br>
+-- return SizePercentSourceDimension
+-- @function [parent=#Widget] getSizePercentSourceDimension 
+-- @param self
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- Changes the size type of widget.<br>

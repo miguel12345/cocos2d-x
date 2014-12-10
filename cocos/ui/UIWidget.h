@@ -113,6 +113,18 @@ public:
         HIDDEN,
         COLLAPSED
     };
+    
+    /**
+     This enum represents what dimension (width or height) of the parent should the size
+     percent calculation take into consideration when the absolute content size is
+     being evaluated from the percentage values
+     */
+    enum class SizePercentSourceDimension
+    {
+        SAME_DIMENSION, //This is the default value, if the width/height of this element is set to 50%, it will use 50% of the width/height of the parent
+        WIDTH, //The width and heigth percentages of this element will ALWAYS use the width of the parent as the base value
+        HEIGHT //The width and heigth percentages of this element will ALWAYS use the height of the parent as the base value
+    };
 
     
     typedef std::function<void(Ref*,Widget::TouchEventType)> ccWidgetTouchCallback;
@@ -720,6 +732,21 @@ public:
      element)
      */
     void layoutParameterChanged();
+    
+    /**
+     *  Changes the current size percent dimension enum that affects
+     *  how are the percentage values transformed into absolute values.
+     *
+     *  @param sizePercentDimension SizePercentSourceDimension
+     */
+    void setSizePercentSourceDimension(SizePercentSourceDimension sizePercentDimension);
+    
+    /**
+     *  Gets the current SizePercentSourceDimension
+     *
+     *  @return SizePercentSourceDimension
+     */
+    const SizePercentSourceDimension& getSizePercentSourceDimension();
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -821,6 +848,7 @@ protected:
     SizeType _heigthSizeType;
     PositionType _positionType;
     Visibility _visibility;
+    SizePercentSourceDimension _sizePercentDimension;
 
     //used for search widget by action tag in UIHelper class
     int _actionTag;
