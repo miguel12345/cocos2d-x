@@ -332,7 +332,7 @@ void Text::labelScaleChangedWithSize()
             _labelRendererAdaptDirty = false;
         }
         else if(_contentSize.width<0) {
-            setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
+            setContentSize(Size(_labelRenderer->getContentSize().width,_contentSize.height));
             _labelRendererAdaptDirty = false;
         }
     }
