@@ -52,6 +52,16 @@
 -- @return string#string ret (return value: string)
         
 --------------------------------
+-- Simulates a tap in this glview<br>
+-- A tap is considered a touchbegin followed by a touchend<br>
+-- param x float The x position from the bottom-left corner<br>
+-- param y float The y position from the bottom-left corner
+-- @function [parent=#GLView] simulateTap 
+-- @param self
+-- @param #float x
+-- @param #float y
+        
+--------------------------------
 --  Get whether opengl render system is ready, subclass must implement this method. 
 -- @function [parent=#GLView] isOpenGLReady 
 -- @param self
@@ -119,7 +129,11 @@
 -- @param self
         
 --------------------------------
--- 
+-- Warns the glview that the application screen size has changed<br>
+-- Note: Don't call this method directly. This method should only be<br>
+-- called by the Director<br>
+-- param newWidth  int<br>
+-- param newHeight int
 -- @function [parent=#GLView] applicationScreenSizeChanged 
 -- @param self
 -- @param #int newWidth

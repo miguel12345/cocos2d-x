@@ -747,6 +747,26 @@ public:
      *  @return SizePercentSourceDimension
      */
     const SizePercentSourceDimension& getSizePercentSourceDimension();
+    
+    /**
+     *  Changes the current propagate to children attribute.
+     *  If it is set to true, all touch events callbacks are propagated to its
+     *  widget children. 
+     *
+     *  This DOES NOT propagate touch interceptions. This only affect the methods
+     *  pushDownEvent()/moveEvent()/releaseUpEvent()/cancelUpEvent() and calls 
+     *  the same method on all of its children.
+     *
+     *  @param isPropagate bool
+     */
+    void setPropagateTouchEventsToChildren(bool isPropagate);
+    
+    /**
+     *  Returns the current _propagateTouchEventsToChildren attribute
+     *
+     *  @return bool
+     */
+    bool isPropagateTouchEventsToChildren()const;
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -841,6 +861,7 @@ protected:
     bool _affectByClipping;
     bool _ignoreSize;
     bool _propagateTouchEvents;
+    bool _propagateTouchEventsToChildren;
 
     BrightStyle _brightStyle;
     SizeType _sizeType;

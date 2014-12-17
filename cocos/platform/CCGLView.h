@@ -251,7 +251,26 @@ public:
     virtual id getCocoaWindow() = 0;
 #endif /* (CC_TARGET_PLATFORM == CC_PLATFORM_MAC) */
     
+    //LGK extensions
+    
+    /**
+     *  Warns the glview that the application screen size has changed
+     *  Note: Don't call this method directly. This method should only be
+     *  called by the Director
+     *
+     *  @param newWidth  int
+     *  @param newHeight int
+     */
     virtual void applicationScreenSizeChanged(int newWidth, int newHeight);
+    
+    /**
+     *  Simulates a tap in this glview
+     *  A tap is considered a touchbegin followed by a touchend
+     *
+     *  @param x float The x position from the bottom-left corner
+     *  @param y float The y position from the bottom-left corner
+     */
+    void simulateTap(float x,float y);
     
 protected:
     void updateDesignResolutionSize();

@@ -464,4 +464,12 @@ void GLView::applicationScreenSizeChanged(int newWidth, int newHeight) {
     }
 }
 
+void GLView::simulateTap(float x,float y) {
+    intptr_t touchId;
+    srand ((unsigned)time(nullptr));
+    touchId = rand();
+    handleTouchesBegin(1, &touchId, &x, &y);
+    handleTouchesEnd(1, &touchId, &x, &y);
+}
+
 NS_CC_END

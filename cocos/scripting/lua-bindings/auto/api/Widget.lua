@@ -329,6 +329,13 @@
 -- @param #bool enabled
         
 --------------------------------
+-- Returns the current _propagateTouchEventsToChildren attribute<br>
+-- return bool
+-- @function [parent=#Widget] isPropagateTouchEventsToChildren 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- 
 -- @function [parent=#Widget] getRightBoundary 
 -- @param self
@@ -525,6 +532,18 @@
 -- @function [parent=#Widget] setSizeType 
 -- @param self
 -- @param #int type
+        
+--------------------------------
+-- Changes the current propagate to children attribute.<br>
+-- If it is set to true, all touch events callbacks are propagated to its<br>
+-- widget children. <br>
+-- This DOES NOT propagate touch interceptions. This only affect the methods<br>
+-- pushDownEvent()/moveEvent()/releaseUpEvent()/cancelUpEvent() and calls <br>
+-- the same method on all of its children.<br>
+-- param isPropagate bool
+-- @function [parent=#Widget] setPropagateTouchEventsToChildren 
+-- @param self
+-- @param #bool isPropagate
         
 --------------------------------
 -- 

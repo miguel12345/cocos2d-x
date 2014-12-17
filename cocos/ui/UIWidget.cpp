@@ -170,7 +170,8 @@ _visibility(Visibility::VISIBLE),
 _touchEventListener(nullptr),
 _touchEventSelector(nullptr),
 _ignoreLayout(false),
-_sizePercentDimension(SizePercentSourceDimension::SAME_DIMENSION)
+_sizePercentDimension(SizePercentSourceDimension::SAME_DIMENSION),
+_propagateTouchEventsToChildren(false)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -966,6 +967,17 @@ void Widget::pushDownEvent()
     {
         (_touchEventListener->*_touchEventSelector)(this,TOUCH_EVENT_BEGAN);
     }
+    
+    //propagate to children
+    if (_propagateTouchEventsToChildren) {
+        for (const auto& child : getChildren()) {
+            Widget* childWidget = dynamic_cast<Widget*>(child);
+            if (childWidget) {
+                childWidget->pushDownEvent();
+            }
+        }
+    }
+    
     this->release();
 }
 
@@ -1000,6 +1012,17 @@ void Widget::releaseUpEvent()
     if (_clickEventListener) {
         _clickEventListener(this);
     }
+    
+    //propagate to children
+    if (_propagateTouchEventsToChildren) {
+        for (const auto& child : getChildren()) {
+            Widget* childWidget = dynamic_cast<Widget*>(child);
+            if (childWidget) {
+                childWidget->releaseUpEvent();
+            }
+        }
+    }
+    
     this->release();
 }
 
@@ -1015,6 +1038,17 @@ void Widget::cancelUpEvent()
     {
         (_touchEventListener->*_touchEventSelector)(this,TOUCH_EVENT_CANCELED);
     }
+    
+    //propagate to children
+    if (_propagateTouchEventsToChildren) {
+        for (const auto& child : getChildren()) {
+            Widget* childWidget = dynamic_cast<Widget*>(child);
+            if (childWidget) {
+                childWidget->cancelUpEvent();
+            }
+        }
+    }
+    
     this->release();
 }
 
@@ -1307,6 +1341,7 @@ void Widget::copyProperties(Widget *widget)
     _focused = widget->_focused;
     _focusEnabled = widget->_focusEnabled;
     _propagateTouchEvents = widget->_propagateTouchEvents;
+    _propagateTouchEventsToChildren = widget->_propagateTouchEventsToChildren;
     
     copySpecialProperties(widget);
 
@@ -1603,6 +1638,15 @@ void Widget::setSizePercentSourceDimension(SizePercentSourceDimension sizePercen
 const Widget::SizePercentSourceDimension& Widget::getSizePercentSourceDimension() {
     return _sizePercentDimension;
 }
-    
+
+void Widget::setPropagateTouchEventsToChildren(bool isPropagate)
+{
+    _propagateTouchEventsToChildren = isPropagate;
+}
+
+bool Widget::isPropagateTouchEventsToChildren()const
+{
+    return _propagateTouchEvents;
+}
 }
 NS_CC_END
