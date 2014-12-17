@@ -111,6 +111,17 @@
 -- @return float#float ret (return value: float)
         
 --------------------------------
+-- Simulates a press down in this glview at the desired<br>
+-- position.<br>
+-- Note : Make sure to call simulate pressUp() after this<br>
+-- param x float The x position from the bottom-left corner<br>
+-- param y float The y position from the bottom-left corne
+-- @function [parent=#GLView] simulatePressDown 
+-- @param self
+-- @param #float x
+-- @param #float y
+        
+--------------------------------
 --  Get design resolution size.<br>
 -- Default resolution size is the same as 'getFrameSize'.
 -- @function [parent=#GLView] getDesignResolutionSize 
@@ -213,6 +224,12 @@
 --------------------------------
 -- 
 -- @function [parent=#GLView] pollEvents 
+-- @param self
+        
+--------------------------------
+-- Simulates the release of the previous press<br>
+-- Note : Make sure to call simulate simulatePressDown() before this
+-- @function [parent=#GLView] simulatePressUp 
 -- @param self
         
 --------------------------------

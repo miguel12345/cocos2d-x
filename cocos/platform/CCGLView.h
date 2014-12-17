@@ -272,6 +272,24 @@ public:
      */
     void simulateTap(float x,float y);
     
+    /**
+     *  Simulates a press down in this glview at the desired
+     *  position.
+     *
+     *  Note : Make sure to call simulatePressUp() after this
+     *
+     *  @param x float The x position from the bottom-left corner
+     *  @param y float The y position from the bottom-left corne
+     */
+    void simulatePressDown(float x,float y);
+    
+    /**
+     *  Simulates the release of the previous press
+     *
+     *  Note : Make sure to call simulate simulatePressDown() before this
+     */
+    void simulatePressUp();
+    
 protected:
     void updateDesignResolutionSize();
     

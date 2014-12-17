@@ -465,11 +465,36 @@ void GLView::applicationScreenSizeChanged(int newWidth, int newHeight) {
 }
 
 void GLView::simulateTap(float x,float y) {
+    CCASSERT(x>0.0f && y>0.0f,"x and y must be positive values");
     intptr_t touchId;
     srand ((unsigned)time(nullptr));
     touchId = rand();
     handleTouchesBegin(1, &touchId, &x, &y);
     handleTouchesEnd(1, &touchId, &x, &y);
+}
+
+static intptr_t pressDowntouchId;
+static float pressDownX = -1.0f;
+static float pressDownY = -1.0f;
+
+void GLView::simulatePressDown(float x,float y) {
+    
+    CCASSERT(pressDownX==-1.0f && pressDownY==-1.0f,"simulatePressDown was called twice without a call to simulatePressUp");
+    CCASSERT(x>0.0f && y>0.0f,"x and y must be positive values");
+    
+    pressDownX = x;
+    pressDownY = y;
+    srand ((unsigned)time(nullptr));
+    pressDowntouchId = rand();
+    handleTouchesBegin(1, &pressDowntouchId, &x, &y);
+}
+
+void GLView::simulatePressUp() {
+    
+    CCASSERT(pressDownX>=0.0f && pressDownY>=0.0f,"simulatePressUp was called without a previous call to simulatePressDown");
+    handleTouchesEnd(1, &pressDowntouchId, &pressDownX, &pressDownY);
+    pressDownX = -1.0f;
+    pressDownY = -1.0f;
 }
 
 NS_CC_END
