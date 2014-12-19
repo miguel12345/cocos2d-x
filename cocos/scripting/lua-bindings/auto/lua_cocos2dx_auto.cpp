@@ -40353,6 +40353,199 @@ int lua_register_cocos2dx_TransitionSlideInL(lua_State* tolua_S)
     return 1;
 }
 
+int lua_cocos2dx_LGKCustomTransition_easeActionWithAction(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LGKCustomTransition* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LGKCustomTransition",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LGKCustomTransition*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LGKCustomTransition_easeActionWithAction'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::ActionInterval* arg0;
+
+        ok &= luaval_to_object<cocos2d::ActionInterval>(tolua_S, 2, "cc.ActionInterval",&arg0);
+        if(!ok)
+            return 0;
+        cocos2d::ActionInterval* ret = cobj->easeActionWithAction(arg0);
+        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.LGKCustomTransition:easeActionWithAction",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LGKCustomTransition_easeActionWithAction'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LGKCustomTransition_outAction(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LGKCustomTransition* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LGKCustomTransition",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LGKCustomTransition*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LGKCustomTransition_outAction'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        cocos2d::ActionInterval* ret = cobj->outAction();
+        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.LGKCustomTransition:outAction",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LGKCustomTransition_outAction'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LGKCustomTransition_inAction(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::LGKCustomTransition* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.LGKCustomTransition",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::LGKCustomTransition*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_LGKCustomTransition_inAction'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        cocos2d::ActionInterval* ret = cobj->inAction();
+        object_to_luaval<cocos2d::ActionInterval>(tolua_S, "cc.ActionInterval",(cocos2d::ActionInterval*)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.LGKCustomTransition:inAction",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LGKCustomTransition_inAction'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_LGKCustomTransition_create(lua_State* tolua_S)
+{
+    int argc = 0;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertable(tolua_S,1,"cc.LGKCustomTransition",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    argc = lua_gettop(tolua_S) - 1;
+
+    if (argc == 2)
+    {
+        double arg0;
+        cocos2d::Scene* arg1;
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.LGKCustomTransition:create");
+        ok &= luaval_to_object<cocos2d::Scene>(tolua_S, 3, "cc.Scene",&arg1);
+        if(!ok)
+            return 0;
+        cocos2d::LGKCustomTransition* ret = cocos2d::LGKCustomTransition::create(arg0, arg1);
+        object_to_luaval<cocos2d::LGKCustomTransition>(tolua_S, "cc.LGKCustomTransition",(cocos2d::LGKCustomTransition*)ret);
+        return 1;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d\n ", "cc.LGKCustomTransition:create",argc, 2);
+    return 0;
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_LGKCustomTransition_create'.",&tolua_err);
+#endif
+    return 0;
+}
+static int lua_cocos2dx_LGKCustomTransition_finalize(lua_State* tolua_S)
+{
+    printf("luabindings: finalizing LUA object (LGKCustomTransition)");
+    return 0;
+}
+
+int lua_register_cocos2dx_LGKCustomTransition(lua_State* tolua_S)
+{
+    tolua_usertype(tolua_S,"cc.LGKCustomTransition");
+    tolua_cclass(tolua_S,"LGKCustomTransition","cc.LGKCustomTransition","cc.TransitionScene",nullptr);
+
+    tolua_beginmodule(tolua_S,"LGKCustomTransition");
+        tolua_function(tolua_S,"easeActionWithAction",lua_cocos2dx_LGKCustomTransition_easeActionWithAction);
+        tolua_function(tolua_S,"outAction",lua_cocos2dx_LGKCustomTransition_outAction);
+        tolua_function(tolua_S,"inAction",lua_cocos2dx_LGKCustomTransition_inAction);
+        tolua_function(tolua_S,"create", lua_cocos2dx_LGKCustomTransition_create);
+    tolua_endmodule(tolua_S);
+    std::string typeName = typeid(cocos2d::LGKCustomTransition).name();
+    g_luaType[typeName] = "cc.LGKCustomTransition";
+    g_typeCast["LGKCustomTransition"] = "cc.LGKCustomTransition";
+    return 1;
+}
+
 int lua_cocos2dx_TransitionSlideInR_action(lua_State* tolua_S)
 {
     int argc = 0;
@@ -68718,6 +68911,7 @@ TOLUA_API int register_all_cocos2dx(lua_State* tolua_S)
 	lua_register_cocos2dx_MenuItemSprite(tolua_S);
 	lua_register_cocos2dx_MenuItemImage(tolua_S);
 	lua_register_cocos2dx_ParticleFire(tolua_S);
+	lua_register_cocos2dx_LGKCustomTransition(tolua_S);
 	lua_register_cocos2dx_TransitionZoomFlipAngular(tolua_S);
 	lua_register_cocos2dx_EaseRateAction(tolua_S);
 	lua_register_cocos2dx_EaseIn(tolua_S);

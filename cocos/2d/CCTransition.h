@@ -301,6 +301,38 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInL);
 };
 
+//LGK Transition scene
+
+class CC_DLL LGKCustomTransition : public TransitionScene, public TransitionEaseScene
+{
+public:
+    static LGKCustomTransition* create(float t, Scene* scene);
+    
+    virtual ActionInterval* easeActionWithAction(ActionInterval * action);
+    
+    /** returns the action that will be performed by the incoming and outgoing scene */
+    ActionInterval* inAction(void);
+    ActionInterval* outAction(void);
+    
+    //
+    // Overrides
+    //
+    virtual void onEnter() override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    LGKCustomTransition();
+    virtual ~LGKCustomTransition();
+    
+protected:
+    /** initializes the scenes */
+    virtual void initScenes(void);
+    
+    virtual void sceneOrder() override;
+    
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(LGKCustomTransition);
+};
+
 /** @brief TransitionSlideInR:
 Slide in the incoming scene from the right border.
 */

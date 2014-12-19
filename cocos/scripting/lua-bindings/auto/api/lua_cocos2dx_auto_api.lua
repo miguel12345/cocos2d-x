@@ -832,6 +832,11 @@
 
 
 --------------------------------------------------------
+-- the cc LGKCustomTransition
+-- @field [parent=#cc] LGKCustomTransition#LGKCustomTransition LGKCustomTransition preloaded module
+
+
+--------------------------------------------------------
 -- the cc TransitionSlideInR
 -- @field [parent=#cc] TransitionSlideInR#TransitionSlideInR TransitionSlideInR preloaded module
 

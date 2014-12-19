@@ -113,7 +113,7 @@
 --------------------------------
 -- Simulates a press down in this glview at the desired<br>
 -- position.<br>
--- Note : Make sure to call simulate pressUp() after this<br>
+-- Note : Make sure to call simulatePressUp() after this<br>
 -- param x float The x position from the bottom-left corner<br>
 -- param y float The y position from the bottom-left corne
 -- @function [parent=#GLView] simulatePressDown 
