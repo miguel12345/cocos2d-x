@@ -479,7 +479,11 @@ static float pressDownY = -1.0f;
 
 void GLView::simulatePressDown(float x,float y) {
     
-    CCASSERT(pressDownX==-1.0f && pressDownY==-1.0f,"simulatePressDown was called twice without a call to simulatePressUp");
+    if(pressDownX!=-1.0f || pressDownY!=-1.0f){
+        CCLOG("simulatePressDown was called twice without a call to simulatePressUp");
+        simulatePressUp();
+    }
+
     CCASSERT(x>0.0f && y>0.0f,"x and y must be positive values");
     
     pressDownX = x;
