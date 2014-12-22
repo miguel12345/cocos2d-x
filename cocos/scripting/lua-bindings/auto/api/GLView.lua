@@ -37,6 +37,11 @@
 -- @param #bool open
         
 --------------------------------
+-- 
+-- @function [parent=#GLView] simulateSecondFingerPressUp 
+-- @param self
+        
+--------------------------------
 -- Set Scissor rectangle with points.
 -- @function [parent=#GLView] setScissorInPoints 
 -- @param self
@@ -175,6 +180,13 @@
 -- @function [parent=#GLView] isRetinaDisplay 
 -- @param self
 -- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- 
+-- @function [parent=#GLView] simulateSecondFingerPressDown 
+-- @param self
+-- @param #float x
+-- @param #float y
         
 --------------------------------
 -- Set opengl view port rectangle with points.

@@ -290,6 +290,10 @@ public:
      */
     void simulatePressUp();
     
+    void simulateSecondFingerPressDown(float x,float y);
+    
+    void simulateSecondFingerPressUp();
+    
 protected:
     void updateDesignResolutionSize();
     

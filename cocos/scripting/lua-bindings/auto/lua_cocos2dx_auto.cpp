@@ -9473,6 +9473,49 @@ int lua_cocos2dx_GLView_setIMEKeyboardState(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_GLView_simulateSecondFingerPressUp(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::GLView* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.GLView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::GLView*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_GLView_simulateSecondFingerPressUp'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+            return 0;
+        cobj->simulateSecondFingerPressUp();
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.GLView:simulateSecondFingerPressUp",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_GLView_simulateSecondFingerPressUp'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_GLView_setScissorInPoints(lua_State* tolua_S)
 {
     int argc = 0;
@@ -10343,6 +10386,55 @@ int lua_cocos2dx_GLView_isRetinaDisplay(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_GLView_simulateSecondFingerPressDown(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::GLView* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"cc.GLView",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::GLView*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_GLView_simulateSecondFingerPressDown'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 2) 
+    {
+        double arg0;
+        double arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "cc.GLView:simulateSecondFingerPressDown");
+
+        ok &= luaval_to_number(tolua_S, 3,&arg1, "cc.GLView:simulateSecondFingerPressDown");
+        if(!ok)
+            return 0;
+        cobj->simulateSecondFingerPressDown(arg0, arg1);
+        return 0;
+    }
+    CCLOG("%s has wrong number of arguments: %d, was expecting %d \n", "cc.GLView:simulateSecondFingerPressDown",argc, 2);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_GLView_simulateSecondFingerPressDown'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_GLView_setViewPortInPoints(lua_State* tolua_S)
 {
     int argc = 0;
@@ -10831,6 +10923,7 @@ int lua_register_cocos2dx_GLView(lua_State* tolua_S)
         tolua_function(tolua_S,"setContentScaleFactor",lua_cocos2dx_GLView_setContentScaleFactor);
         tolua_function(tolua_S,"getContentScaleFactor",lua_cocos2dx_GLView_getContentScaleFactor);
         tolua_function(tolua_S,"setIMEKeyboardState",lua_cocos2dx_GLView_setIMEKeyboardState);
+        tolua_function(tolua_S,"simulateSecondFingerPressUp",lua_cocos2dx_GLView_simulateSecondFingerPressUp);
         tolua_function(tolua_S,"setScissorInPoints",lua_cocos2dx_GLView_setScissorInPoints);
         tolua_function(tolua_S,"getViewName",lua_cocos2dx_GLView_getViewName);
         tolua_function(tolua_S,"simulateTap",lua_cocos2dx_GLView_simulateTap);
@@ -10850,6 +10943,7 @@ int lua_register_cocos2dx_GLView(lua_State* tolua_S)
         tolua_function(tolua_S,"setDesignResolutionSize",lua_cocos2dx_GLView_setDesignResolutionSize);
         tolua_function(tolua_S,"getResolutionPolicy",lua_cocos2dx_GLView_getResolutionPolicy);
         tolua_function(tolua_S,"isRetinaDisplay",lua_cocos2dx_GLView_isRetinaDisplay);
+        tolua_function(tolua_S,"simulateSecondFingerPressDown",lua_cocos2dx_GLView_simulateSecondFingerPressDown);
         tolua_function(tolua_S,"setViewPortInPoints",lua_cocos2dx_GLView_setViewPortInPoints);
         tolua_function(tolua_S,"getScissorRect",lua_cocos2dx_GLView_getScissorRect);
         tolua_function(tolua_S,"getRetinaFactor",lua_cocos2dx_GLView_getRetinaFactor);

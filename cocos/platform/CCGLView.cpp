@@ -477,6 +477,11 @@ static intptr_t pressDowntouchId;
 static float pressDownX = -1.0f;
 static float pressDownY = -1.0f;
 
+//second finger
+static intptr_t secondFingerPressDowntouchId;
+static float secondFingerPressDownX = -1.0f;
+static float secondFingerPressDownY = -1.0f;
+
 void GLView::simulatePressDown(float x,float y) {
     
     if(pressDownX!=-1.0f || pressDownY!=-1.0f){
@@ -499,6 +504,29 @@ void GLView::simulatePressUp() {
     handleTouchesEnd(1, &pressDowntouchId, &pressDownX, &pressDownY);
     pressDownX = -1.0f;
     pressDownY = -1.0f;
+}
+
+void GLView::simulateSecondFingerPressDown(float x,float y) {
+    if(secondFingerPressDownX!=-1.0f || secondFingerPressDownY!=-1.0f){
+        CCLOG("simulatePressDown was called twice without a call to simulatePressUp");
+        simulateSecondFingerPressUp();
+    }
+    
+    CCASSERT(x>0.0f && y>0.0f,"x and y must be positive values");
+    
+    secondFingerPressDownX = x;
+    secondFingerPressDownY = y;
+    srand ((unsigned)time(nullptr));
+    secondFingerPressDowntouchId = rand();
+    handleTouchesBegin(1, &secondFingerPressDowntouchId, &x, &y);
+}
+
+void GLView::simulateSecondFingerPressUp() {
+    CCASSERT(secondFingerPressDownX>=0.0f && secondFingerPressDownY>=0.0f,"simulatePressUp was called without a previous call to simulatePressDown");
+    handleTouchesEnd(1, &secondFingerPressDowntouchId, &secondFingerPressDownX, &secondFingerPressDownY);
+    secondFingerPressDownX = -1.0f;
+    secondFingerPressDownY = -1.0f;
+
 }
 
 NS_CC_END
