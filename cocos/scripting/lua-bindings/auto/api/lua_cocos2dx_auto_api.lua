@@ -827,13 +827,13 @@
 
 
 --------------------------------------------------------
--- the cc TransitionSlideInL
--- @field [parent=#cc] TransitionSlideInL#TransitionSlideInL TransitionSlideInL preloaded module
+-- the cc TransitionMoveOutR
+-- @field [parent=#cc] TransitionMoveOutR#TransitionMoveOutR TransitionMoveOutR preloaded module
 
 
 --------------------------------------------------------
--- the cc LGKCustomTransition
--- @field [parent=#cc] LGKCustomTransition#LGKCustomTransition LGKCustomTransition preloaded module
+-- the cc TransitionSlideInL
+-- @field [parent=#cc] TransitionSlideInL#TransitionSlideInL TransitionSlideInL preloaded module
 
 
 --------------------------------------------------------

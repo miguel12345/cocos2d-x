@@ -479,6 +479,67 @@ void TransitionMoveInB::initScenes()
     _inScene->setPosition(0,-s.height);
 }
 
+// TransitionMoveOutR
+
+TransitionMoveOutR::TransitionMoveOutR()
+{
+}
+
+TransitionMoveOutR::~TransitionMoveOutR()
+{
+}
+
+TransitionMoveOutR* TransitionMoveOutR::create(float t, Scene* scene)
+{
+    TransitionMoveOutR* newScene = new (std::nothrow) TransitionMoveOutR();
+    if(newScene && newScene->initWithDuration(t, scene))
+    {
+        newScene->autorelease();
+        return newScene;
+    }
+    CC_SAFE_DELETE(newScene);
+    return nullptr;
+}
+
+void TransitionMoveOutR::onEnter()
+{
+    TransitionScene::onEnter();
+    this->initScenes();
+    
+    ActionInterval *a = this->action();
+    
+    _outScene->runAction
+    (
+     Sequence::create
+     (
+      this->easeActionWithAction(a),
+      CallFunc::create(CC_CALLBACK_0(TransitionScene::finish,this)),
+      nullptr
+      )
+     );
+}
+
+ActionInterval* TransitionMoveOutR::action()
+{
+    Size s = Director::getInstance()->getWinSize();
+    return MoveTo::create(_duration, Vec2(s.width,0));
+}
+
+ActionInterval* TransitionMoveOutR::easeActionWithAction(ActionInterval* action)
+{
+    return EaseIn::create(action, 2.0f);
+    //    return [EaseElasticOut actionWithAction:action period:0.4f];
+}
+
+void TransitionMoveOutR::initScenes()
+{
+    
+}
+
+void TransitionMoveOutR::sceneOrder() {
+    _isInSceneOnTop = false;
+}
+
 
 //
 // SlideInL
@@ -549,77 +610,6 @@ TransitionSlideInL* TransitionSlideInL::create(float t, Scene* scene)
     CC_SAFE_DELETE(newScene);
     return nullptr;
 }
-
-// LGK custom transition - begin
-
-LGKCustomTransition::LGKCustomTransition()
-{
-}
-
-LGKCustomTransition::~LGKCustomTransition()
-{
-}
-
-void LGKCustomTransition::onEnter()
-{
-    TransitionScene::onEnter();
-    this->initScenes();
-    
-    ActionInterval *in = this->inAction();
-    ActionInterval *out = this->outAction();
-    
-    ActionInterval* inAction = easeActionWithAction(in);
-    ActionInterval* outAction = (ActionInterval*)Sequence::create
-    (
-     easeActionWithAction(out),
-     CallFunc::create(CC_CALLBACK_0(TransitionScene::finish,this)),
-     nullptr
-     );
-    _inScene->runAction(inAction);
-    _outScene->runAction(outAction);
-}
-
-void LGKCustomTransition::sceneOrder()
-{
-    _isInSceneOnTop = true;
-}
-
-void LGKCustomTransition:: initScenes()
-{
-    Size s = Director::getInstance()->getWinSize();
-    _inScene->setPosition(s.width-ADJUST_FACTOR,0);
-}
-
-ActionInterval* LGKCustomTransition::inAction()
-{
-    Size s = Director::getInstance()->getWinSize();
-    return MoveBy::create(_duration, Vec2(-(s.width+ADJUST_FACTOR),0));
-}
-
-ActionInterval* LGKCustomTransition::outAction()
-{
-    return ScaleBy::create(_duration, 0.5f);
-}
-
-ActionInterval* LGKCustomTransition::easeActionWithAction(ActionInterval* action)
-{
-    return EaseOut::create(action, 2.0f);
-}
-
-LGKCustomTransition* LGKCustomTransition::create(float t, Scene* scene)
-{
-    LGKCustomTransition* newScene = new (std::nothrow) LGKCustomTransition();
-    if(newScene && newScene->initWithDuration(t, scene))
-    {
-        newScene->autorelease();
-        return newScene;
-    }
-    CC_SAFE_DELETE(newScene);
-    return nullptr;
-}
-
-// LGK custom transition - end
-
 
 //
 // SlideInR

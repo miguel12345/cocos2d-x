@@ -269,6 +269,38 @@ private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveInB);
 };
 
+
+/** @brief TransitionMoveOutR:
+ Moves the current scene out to the right
+ */
+class CC_DLL TransitionMoveOutR : public TransitionScene, public TransitionEaseScene
+{
+public:
+    static TransitionMoveOutR* create(float t, Scene* scene);
+    
+    /** returns the action that will be performed */
+    virtual ActionInterval* action(void);
+    
+    virtual ActionInterval* easeActionWithAction(ActionInterval * action);
+    
+    //
+    // Overrides
+    //
+    virtual void onEnter() override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    TransitionMoveOutR();
+    virtual ~TransitionMoveOutR();
+    
+protected:
+    /** initializes the scenes */
+    virtual void initScenes();
+    virtual void sceneOrder() override;
+    
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(TransitionMoveOutR);
+};
+
 /** @brief TransitionSlideInL:
 Slide in the incoming scene from the left border.
 */
@@ -299,38 +331,6 @@ protected:
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(TransitionSlideInL);
-};
-
-//LGK Transition scene
-
-class CC_DLL LGKCustomTransition : public TransitionScene, public TransitionEaseScene
-{
-public:
-    static LGKCustomTransition* create(float t, Scene* scene);
-    
-    virtual ActionInterval* easeActionWithAction(ActionInterval * action);
-    
-    /** returns the action that will be performed by the incoming and outgoing scene */
-    ActionInterval* inAction(void);
-    ActionInterval* outAction(void);
-    
-    //
-    // Overrides
-    //
-    virtual void onEnter() override;
-    
-CC_CONSTRUCTOR_ACCESS:
-    LGKCustomTransition();
-    virtual ~LGKCustomTransition();
-    
-protected:
-    /** initializes the scenes */
-    virtual void initScenes(void);
-    
-    virtual void sceneOrder() override;
-    
-private:
-    CC_DISALLOW_COPY_AND_ASSIGN(LGKCustomTransition);
 };
 
 /** @brief TransitionSlideInR:
