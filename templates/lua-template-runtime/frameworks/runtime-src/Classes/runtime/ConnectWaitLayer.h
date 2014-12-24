@@ -32,14 +32,8 @@ class ConnectWaitLayer: public cocos2d::Layer
 public:
     ConnectWaitLayer();
 	~ConnectWaitLayer();
-    void update(float fDelta);
     
 private:
-	cocos2d::Image* _imagebg;
-	cocos2d::Image* _imageplay;
-	cocos2d::Image* _imageShine;
-
-    cocos2d::Label* _labelUploadFile;
 };
 
 #endif // _CONNECT_WAIT_LAYER__H_

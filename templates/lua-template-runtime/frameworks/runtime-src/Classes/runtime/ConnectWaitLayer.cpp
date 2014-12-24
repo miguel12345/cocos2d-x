@@ -35,52 +35,18 @@ ConnectWaitLayer::ConnectWaitLayer()
 {
     int designWidth = 1280;
     int designHeight = 800;
-    _imagebg = new Image();
     
     if (ConfigParser::getInstance()->isLanscape())
     {
-        _imagebg->initWithImageData(__landscapePngData, sizeof(__landscapePngData));
          if(!ConfigParser::getInstance()->ignoreDesignResolutionSize()) {
              Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designWidth, designHeight, ResolutionPolicy::EXACT_FIT);
          }
     } else
     {
-        _imagebg->initWithImageData(__portraitPngData, sizeof(__portraitPngData));
          if(!ConfigParser::getInstance()->ignoreDesignResolutionSize()) {
              Director::getInstance()->getOpenGLView()->setDesignResolutionSize(designHeight, designWidth, ResolutionPolicy::FIXED_HEIGHT);
          }
     }
-    Texture2D* texturebg = Director::getInstance()->getTextureCache()->addImage(_imagebg, "play_background");
-    auto background = Sprite::createWithTexture(texturebg);
-    background->setAnchorPoint(Vec2(0.5, 0.5));
-    background->setPosition(VisibleRect::center());
-    addChild(background, 9000);
-
-    // variable of below is"play" button position.
-    int portraitX = 400;
-    int portraitY = 500;
-    int lanscaptX = 902;
-    int lanscaptY = 400;
-    _imageplay = new Image();
-    _imageplay->initWithImageData(__playEnablePngData, sizeof(__playEnablePngData));
-    Texture2D* textureplay = Director::getInstance()->getTextureCache()->addImage(_imageplay, "play_enable");
-    auto playSprite = Sprite::createWithTexture(textureplay);
-    addChild(playSprite, 9999);
-
-    _imageShine = new Image();
-    _imageShine->initWithImageData(__shinePngData, sizeof(__shinePngData));
-    Texture2D* textureShine = Director::getInstance()->getTextureCache()->addImage(_imageShine, "shine");
-    auto shineSprite = Sprite::createWithTexture(textureShine);
-    shineSprite->setOpacity(0);
-    Vector<FiniteTimeAction*> arrayOfActions;
-    arrayOfActions.pushBack(DelayTime::create(0.4f));
-    arrayOfActions.pushBack(FadeTo::create(0.8f, 200));
-    arrayOfActions.pushBack(FadeTo::create(0.8f, 255));
-    arrayOfActions.pushBack(FadeTo::create(0.8f, 200));
-    arrayOfActions.pushBack(FadeTo::create(0.8f, 0));
-    arrayOfActions.pushBack(DelayTime::create(0.4f));
-    shineSprite->runAction(RepeatForever::create(Sequence::create(arrayOfActions)));
-    addChild(shineSprite, 9998);
 
     std::string strip = getIPAddress();
     char szIPAddress[64] = {0};
@@ -92,6 +58,13 @@ ConnectWaitLayer::ConnectWaitLayer()
     IPlabel->setPosition(Point(VisibleRect::leftTop().x + spaceSizex, VisibleRect::top().y - spaceSizey));
     addChild(IPlabel, 9001);
 
+    
+    auto runLabel = Label::createWithSystemFont("RUN", "", 72);
+    runLabel->setAnchorPoint(Vec2(0.5, 0.5));
+    runLabel->setPosition(Point(VisibleRect::center().x, VisibleRect::center().y));
+    addChild(runLabel, 9002);
+
+    
     std::string transferTip = "waiting for file transfer ...";
     if (CC_PLATFORM_WIN32 == CC_TARGET_PLATFORM || CC_PLATFORM_MAC == CC_TARGET_PLATFORM)
     {
@@ -105,23 +78,7 @@ ConnectWaitLayer::ConnectWaitLayer()
     int width = verLable->getBoundingBox().size.width;
     verLable->setPosition(Point(VisibleRect::right().x - width, VisibleRect::rightBottom().y));
     verLable->setAlignment(TextHAlignment::LEFT);
-    addChild(verLable, 9002);
-    _labelUploadFile = Label::createWithSystemFont(transferTip, "", 36);
-    _labelUploadFile->setAnchorPoint(Vec2(0, 0));
-    _labelUploadFile->setPosition(Point(VisibleRect::leftTop().x + spaceSizex, IPlabel->getPositionY()- spaceSizex));
-    _labelUploadFile->setAlignment(TextHAlignment::LEFT);
-    addChild(_labelUploadFile, 9003);
-
-    if (ConfigParser::getInstance()->isLanscape())
-    {
-        playSprite->setPosition(lanscaptX, lanscaptY);
-        shineSprite->setPosition(lanscaptX, lanscaptY);
-    }
-    else
-    {
-        playSprite->setPosition(portraitX, portraitY);
-        shineSprite->setPosition(portraitX, portraitY);
-    }
+    addChild(verLable, 9003);
 
     auto listener = EventListenerTouchOneByOne::create();
     listener->onTouchBegan = [](Touch* touch, Event  *event)->bool{
@@ -140,24 +97,9 @@ ConnectWaitLayer::ConnectWaitLayer()
         if (!rect.containsPoint(point)) return;
         startScript("");
     };
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, playSprite);
-
-    this->scheduleUpdate();
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, runLabel);
 }
 
 ConnectWaitLayer::~ConnectWaitLayer()
 {
-	CC_SAFE_DELETE(_imagebg);
-	CC_SAFE_DELETE(_imageplay);
-	CC_SAFE_DELETE(_imageShine);
-}
-
-// clean up: ignore stdin, stdout and stderr
-void ConnectWaitLayer::update(float fDelta)
-{
-    std::string transferTip = FileServer::getShareInstance()->getTransingFileName();
-    if (transferTip.empty()){
-        return;
-    }
-    _labelUploadFile->setString(transferTip);
 }
