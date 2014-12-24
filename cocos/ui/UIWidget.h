@@ -129,6 +129,7 @@ public:
     
     typedef std::function<void(Ref*,Widget::TouchEventType)> ccWidgetTouchCallback;
     typedef std::function<void(Ref*)> ccWidgetClickCallback;
+    typedef std::function<void(Ref*, int)> ccWidgetEventCallback;
     /**
      * Default constructor
      */
@@ -261,6 +262,11 @@ public:
      * Set a click event handler to the widget
      */
     void addClickEventListener(const ccWidgetClickCallback& callback);
+    /**
+     * Set a event handler to the widget in order to use cocostudio editor and framework
+     */
+    virtual void addCCSEventListener(const ccWidgetEventCallback& callback);
+    /**/
 
     /**
      * Changes the position (x,y) of the widget in OpenGL coordinates
@@ -353,6 +359,17 @@ public:
     /** @deprecated Use setFlippedY() instead */
     CC_DEPRECATED_ATTRIBUTE void setFlipY(bool flipY) { setFlippedY(flipY); };
 
+    //override the setScale function of Node
+    virtual void setScaleX(float scaleX) override;
+    virtual void setScaleY(float scaleY) override;
+    virtual void setScale(float scale) override;
+    virtual void setScale(float scalex, float scaley) override;
+    using Node::setScaleZ;
+    virtual float getScaleX() const override;
+    virtual float getScaleY() const override;
+    virtual float getScale() const override;
+    using Node::getScaleZ;
+    
     /*
      * Checks a point if in parent's area.
      *
@@ -767,6 +784,21 @@ public:
      *  @return bool
      */
     bool isPropagateTouchEventsToChildren()const;
+    /**
+    *@return true represent the widget use Unify Size, false represent the widget couldn't use Unify Size
+    */
+    bool isUnifySizeEnabled()const;
+    /**
+     * callbackName getter and setter.
+     */
+    void setCallbackName(const std::string& callbackName) { _callbackName = callbackName; }
+    const std::string& getCallbackName() const{ return _callbackName; }
+    
+    /**
+     * callbackType getter and setter.
+     */
+    void setCallbackType(const std::string& callbackType) { _callbackType = callbackType; }
+    const std::string& getCallbackType() const{ return _callbackType; }
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -803,10 +835,6 @@ CC_CONSTRUCTOR_ACCESS:
      *@return void
      */
     void  dispatchFocusEvent(Widget* widgetLoseFocus, Widget* widgetGetFocus);
-    /**
-     *@return true represent the widget use Unify Size, false represent the widget couldn't use Unify Size
-     */
-    bool isUnifySizeEnabled()const;
     
     //the preprocessor condition is here because draw override is only for debug draw
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
@@ -833,8 +861,7 @@ protected:
     virtual void releaseUpEvent();
     virtual void cancelUpEvent();
 
-    virtual void updateFlippedX(){};
-    virtual void updateFlippedY(){};
+    
     virtual void adaptRenderers(){};
     void updateChildrenDisplayedRGBA();
     
@@ -922,7 +949,11 @@ protected:
     DrawNode* _debugDrawNode;
 #endif
     bool _ignoreLayout;
-
+    ccWidgetEventCallback _ccEventCallback;
+    
+    std::string _callbackType;
+    std::string _callbackName;
+    
 private:
     class FocusNavigationController;
     static FocusNavigationController* _focusNavigationController;

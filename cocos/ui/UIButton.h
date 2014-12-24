@@ -220,9 +220,6 @@ protected:
     virtual void onPressStateChangedToDisabled() override;
     virtual void onSizeChanged(const Size& oldSize) override;
   
-    virtual void updateFlippedX() override;
-    virtual void updateFlippedY() override;
-        
     void normalTextureScaleChangedWithSize();
     void pressedTextureScaleChangedWithSize();
     void disabledTextureScaleChangedWithSize();

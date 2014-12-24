@@ -155,9 +155,6 @@ CC_CONSTRUCTOR_ACCESS:
 protected:
     virtual void initRenderer() override;
     virtual void onSizeChanged(const Size& oldSize) override;
-  
-    virtual void updateFlippedX() override;
-    virtual void updateFlippedY() override;
     
     virtual void adaptRenderers() override;
     

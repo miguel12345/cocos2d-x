@@ -475,7 +475,7 @@
 -- return The number of actions that are running plus the ones that are schedule to run
 -- @function [parent=#Node] getNumberOfRunningActions 
 -- @param self
--- @return long#long ret (return value: long)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- Calls children's updateTransform() method recursively.<br>
@@ -498,7 +498,7 @@
 -- return The amount of children.
 -- @function [parent=#Node] getChildrenCount 
 -- @param self
--- @return long#long ret (return value: long)
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- Converts a Vec2 to node (local) space coordinates. The result is in Points.<br>

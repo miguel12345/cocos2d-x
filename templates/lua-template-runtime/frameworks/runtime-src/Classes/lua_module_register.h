@@ -24,9 +24,7 @@ int lua_module_register(lua_State* L)
     register_extension_module(L);
     register_spine_module(L);
     register_cocos3d_module(L);
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS
     register_audioengine_module(L);
-#endif
     register_experimental_moudle(L);
     return 1;
 }
