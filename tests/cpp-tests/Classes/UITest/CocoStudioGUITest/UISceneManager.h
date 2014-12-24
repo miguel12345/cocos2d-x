@@ -60,9 +60,10 @@ enum
     kUITextAtlasTest,
     kUITextTest,
     kUITextTest_LineWrap,
-    
     kUILabelTest_Effect,
     kUITextTest_TTF,
+    kUITextTest_IgnoreConentSize,
+    
     kUITextBMFontTest,
     kUITextFieldTest,
     kUITextFieldTest_MaxLength,
@@ -79,6 +80,8 @@ enum
     kUILayoutTest_Layout_Linear_Horizontal,
     kUILayoutTest_Layout_Relative_Align_Parent,
     kUILayoutTest_Layout_Relative_Location,
+    kUILayoutComponent_Berth_Test,
+    kUILayoutComponent_Berth_Stretch_Test,
     kUIScrollViewTest_Vertical,
     kUIScrollViewTest_Horizontal,
     kUIScrollViewTest_Both,

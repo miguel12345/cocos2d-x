@@ -38,7 +38,8 @@ Controller g_aTestNames[] = {
 	{ "Actions - Basic", [](){ return new ActionsTestScene(); } },
 	{ "Actions - Ease", [](){return new ActionsEaseTestScene();} },
 	{ "Actions - Progress", [](){return new ProgressActionsTestScene(); } },
-	{ "Audio - CocosDenshion", []() { return new CocosDenshionTestScene(); } },
+    { "Allocator - Basic", [](){return new AllocatorTestNS::AllocatorTestScene(); } },
+    { "Audio - CocosDenshion", []() { return new CocosDenshionTestScene(); } },
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_MAC || CC_TARGET_PLATFORM == CC_PLATFORM_WIN32)
     { "Audio - NewAudioEngine", []() { return new AudioEngineTestScene(); } },
 #endif
@@ -84,7 +85,7 @@ Controller g_aTestNames[] = {
 	{ "Node: Text Input", [](){return new TextInputTestScene(); } },
     { "Node: UI", [](){  return new UITestScene(); }},
     { "Mouse", []() { return new MouseTestScene(); } },
-	{ "MutiTouch", []() { return new MutiTouchTestScene(); } },
+	{ "MultiTouch", []() { return new MutiTouchTestScene(); } },
 	{ "Performance tests", []() { return new PerformanceTestScene(); } },
     { "Renderer", []() { return new NewRendererTestScene(); } },
     { "ReleasePool", [](){ return new ReleasePoolTestScene(); } },

@@ -112,8 +112,10 @@ bool CheckBox::init(const std::string& backGround,
                     TextureResType texType)
 {
     bool ret = true;
-    do {
-        if (!Widget::init()) {
+    do
+    {
+        if (!Widget::init())
+        {
             ret = false;
             break;
         }
@@ -165,7 +167,7 @@ void CheckBox::loadTextures(const std::string& backGround,
 
 void CheckBox::loadTextureBackGround(const std::string& backGround,TextureResType texType)
 {
-    if (backGround.empty())
+    if (backGround.empty() || (_backGroundFileName == backGround && _backGroundTexType == texType))
     {
         return;
     }
@@ -191,10 +193,12 @@ void CheckBox::loadTextureBackGround(const std::string& backGround,TextureResTyp
 
 void CheckBox::loadTextureBackGroundSelected(const std::string& backGroundSelected,TextureResType texType)
 {
-    if (backGroundSelected.empty())
+    if (backGroundSelected.empty() ||
+        (_backGroundSelectedFileName == backGroundSelected && _backGroundSelectedTexType == texType))
     {
         return;
     }
+    
     _backGroundSelectedFileName = backGroundSelected;
     _backGroundSelectedTexType = texType;
     switch (_backGroundSelectedTexType)
@@ -216,7 +220,7 @@ void CheckBox::loadTextureBackGroundSelected(const std::string& backGroundSelect
 
 void CheckBox::loadTextureFrontCross(const std::string& cross,TextureResType texType)
 {
-    if (cross.empty())
+    if (cross.empty() || (_frontCrossFileName == cross && _frontCrossTexType == texType))
     {
         return;
     }
@@ -241,7 +245,8 @@ void CheckBox::loadTextureFrontCross(const std::string& cross,TextureResType tex
 
 void CheckBox::loadTextureBackGroundDisabled(const std::string& backGroundDisabled,TextureResType texType)
 {
-    if (backGroundDisabled.empty())
+    if (backGroundDisabled.empty() ||
+        (_backGroundDisabledFileName == backGroundDisabled && _backGroundDisabledTexType == texType))
     {
         return;
     }
@@ -266,7 +271,8 @@ void CheckBox::loadTextureBackGroundDisabled(const std::string& backGroundDisabl
 
 void CheckBox::loadTextureFrontCrossDisabled(const std::string& frontCrossDisabled,TextureResType texType)
 {
-    if (frontCrossDisabled.empty())
+    if (frontCrossDisabled.empty() ||
+        (_frontCrossDisabledFileName == frontCrossDisabled && _frontCrossDisabledTexType == texType))
     {
         return;
     }
@@ -294,7 +300,8 @@ void CheckBox::releaseUpEvent()
 {
     Widget::releaseUpEvent();
     
-    if (_isSelected){
+    if (_isSelected)
+    {
         setSelected(false);
         unSelectedEvent();
     }
@@ -312,6 +319,7 @@ void CheckBox::onPressStateChangedToNormal()
     _backGroundSelectedBoxRenderer->setVisible(false);
     _backGroundBoxDisabledRenderer->setVisible(false);
     _frontCrossDisabledRenderer->setVisible(false);
+    
     if (_isSelected)
     {
         _frontCrossRenderer->setVisible(true);
@@ -360,6 +368,10 @@ void CheckBox::selectedEvent()
     {
         _checkBoxEventCallback(this, EventType::SELECTED);
     }
+    if (_ccEventCallback)
+    {
+        _ccEventCallback(this, static_cast<int>(EventType::SELECTED));
+    }
     
     if (_checkBoxEventListener && _checkBoxEventSelector)
     {
@@ -371,8 +383,13 @@ void CheckBox::selectedEvent()
 void CheckBox::unSelectedEvent()
 {
     this->retain();
-    if (_checkBoxEventCallback) {
+    if (_checkBoxEventCallback)
+    {
         _checkBoxEventCallback(this, EventType::UNSELECTED);
+    }
+    if (_ccEventCallback)
+    {
+        _ccEventCallback(this, static_cast<int>(EventType::UNSELECTED));
     }
     if (_checkBoxEventListener && _checkBoxEventSelector)
     {
@@ -575,6 +592,7 @@ void CheckBox::copySpecialProperties(Widget *widget)
         _checkBoxEventListener = checkBox->_checkBoxEventListener;
         _checkBoxEventSelector = checkBox->_checkBoxEventSelector;
         _checkBoxEventCallback = checkBox->_checkBoxEventCallback;
+        _ccEventCallback = checkBox->_ccEventCallback;
     }
 }
 
