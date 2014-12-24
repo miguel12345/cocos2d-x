@@ -454,13 +454,13 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
         float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * rendererContentSize.height;
         
         if (areaSize.height<0 || finalHeight < areaSize.height) {
-            return fontSizeToFitWidth;
+            return std::min(fontSizeToFitWidth,200);
         }
     }
     
     int fontSizeToFitHeight = floor((areaSize.height * referenceFontSize) / rendererContentSize.height);
     
-    return fontSizeToFitHeight;
+    return std::min(fontSizeToFitHeight,200);
 }
 
 const Size& Text::getContentSize() const {
