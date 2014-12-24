@@ -232,7 +232,7 @@ bool luaval_to_object(lua_State* L, int lo, const char* type, T** ret)
     return true;
 }
 
-extern bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, cocos2d::MeshVertexAttrib* ret, const char* funcName = "");
+//extern bool luaval_to_mesh_vertex_attrib(lua_State* L, int lo, cocos2d::MeshVertexAttrib* ret, const char* funcName = "");
 extern bool luaval_to_std_vector_float(lua_State* L, int lo, std::vector<float>* ret, const char* funcName = "");
 extern bool luaval_to_std_vector_ushort(lua_State* L, int lo, std::vector<unsigned short>* ret, const char* funcName = "");
 extern bool luaval_to_quaternion(lua_State* L,int lo,cocos2d::Quaternion* outValue, const char* funcName = "");
@@ -382,7 +382,7 @@ void object_to_luaval(lua_State* L,const char* type, T* ret)
     }
 }
 
-void mesh_vertex_attrib_to_luaval(lua_State* L, const cocos2d::MeshVertexAttrib& inValue);
+//void mesh_vertex_attrib_to_luaval(lua_State* L, const cocos2d::MeshVertexAttrib& inValue);
 void ccvector_std_string_to_luaval(lua_State* L, const std::vector<std::string>& inValue);
 void ccvector_int_to_luaval(lua_State* L, const std::vector<int>& inValue);
 void ccvector_float_to_luaval(lua_State* L, const std::vector<float>& inValue);

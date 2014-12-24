@@ -58,8 +58,8 @@ LOCAL_SRC_FILES := ../manual/CCLuaBridge.cpp \
           ../manual/audioengine/lua_cocos2dx_audioengine_manual.cpp
 
 #3d
-LOCAL_SRC_FILES += ../manual/3d/lua_cocos2dx_3d_manual.cpp \
-                   ../auto/lua_cocos2dx_3d_auto.cpp
+#LOCAL_SRC_FILES += ../manual/3d/lua_cocos2dx_3d_manual.cpp \
+#                   ../auto/lua_cocos2dx_3d_auto.cpp
 
 #cocosdenshion
 LOCAL_SRC_FILES += ../manual/cocosdenshion/lua_cocos2dx_cocosdenshion_manual.cpp \
@@ -88,21 +88,21 @@ LOCAL_SRC_FILES += ../manual/network/lua_cocos2dx_network_manual.cpp \
                    ../../../../external/lua/luasocket/usocket.c
 
 #cocosbuilder
-LOCAL_SRC_FILES += ../manual/cocosbuilder/lua_cocos2dx_cocosbuilder_manual.cpp \
-                   ../manual/cocosbuilder/CCBProxy.cpp \
-                   ../auto/lua_cocos2dx_cocosbuilder_auto.cpp
+#LOCAL_SRC_FILES += ../manual/cocosbuilder/lua_cocos2dx_cocosbuilder_manual.cpp \
+#                   ../manual/cocosbuilder/CCBProxy.cpp \
+#                   ../auto/lua_cocos2dx_cocosbuilder_auto.cpp
 
 #cocostudio
-LOCAL_SRC_FILES += ../manual/cocostudio/lua_cocos2dx_coco_studio_manual.cpp \
-                   ../manual/cocostudio/CustomGUIReader.cpp \
-                   ../manual/cocostudio/lua_cocos2dx_csloader_manual.cpp \
-                   ../auto/lua_cocos2dx_csloader_auto.cpp \
-                   ../auto/lua_cocos2dx_studio_auto.cpp
+#LOCAL_SRC_FILES += ../manual/cocostudio/lua_cocos2dx_coco_studio_manual.cpp \
+#                   ../manual/cocostudio/CustomGUIReader.cpp \
+#                   ../manual/cocostudio/lua_cocos2dx_csloader_manual.cpp \
+#                   ../auto/lua_cocos2dx_csloader_auto.cpp \
+#                   ../auto/lua_cocos2dx_studio_auto.cpp
 
 #spine
-LOCAL_SRC_FILES += ../manual/spine/lua_cocos2dx_spine_manual.cpp \
-                   ../manual/spine/LuaSkeletonAnimation.cpp \
-                   ../auto/lua_cocos2dx_spine_auto.cpp
+#LOCAL_SRC_FILES += ../manual/spine/lua_cocos2dx_spine_manual.cpp \
+#                   ../manual/spine/LuaSkeletonAnimation.cpp \
+#                   ../auto/lua_cocos2dx_spine_auto.cpp
 
 #ui
 LOCAL_SRC_FILES += ../manual/ui/lua_cocos2dx_experimental_video_manual.cpp \
@@ -111,11 +111,11 @@ LOCAL_SRC_FILES += ../manual/ui/lua_cocos2dx_experimental_video_manual.cpp \
                    ../auto/lua_cocos2dx_ui_auto.cpp
 
 #quick
-LOCAL_SRC_FILES += ../../../../external/lua/quick/lua_cocos2dx_quick_manual.cpp \
-                   ../../../../external/lua/quick/LuaEventNode.cpp \
-                   ../../../../external/lua/quick/LuaNodeManager.cpp \
-                   ../../../../external/lua/quick/LuaTouchEventManager.cpp \
-                   ../../../../external/lua/quick/LuaTouchTargetNode.cpp
+#LOCAL_SRC_FILES += ../../../../external/lua/quick/lua_cocos2dx_quick_manual.cpp \
+#                   ../../../../external/lua/quick/LuaEventNode.cpp \
+#                   ../../../../external/lua/quick/LuaNodeManager.cpp \
+#                   ../../../../external/lua/quick/LuaTouchEventManager.cpp \
+#                   ../../../../external/lua/quick/LuaTouchTargetNode.cpp
 
 #extension
 LOCAL_SRC_FILES += ../manual/extension/lua_cocos2dx_extension_manual.cpp \

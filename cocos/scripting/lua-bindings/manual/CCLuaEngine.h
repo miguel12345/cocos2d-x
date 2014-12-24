@@ -149,7 +149,7 @@ private:
     int handleAssetsManagerEvent(ScriptHandlerMgr::HandlerType type,void* data);
     int handleTableViewEvent(ScriptHandlerMgr::HandlerType type,void* data);
     int handleTableViewEvent(ScriptHandlerMgr::HandlerType type,void* data, int numResults, const std::function<void(lua_State*,int)>& func);
-    int handleArmatureWrapper(ScriptHandlerMgr::HandlerType type,void* data);
+//    int handleArmatureWrapper(ScriptHandlerMgr::HandlerType type,void* data);
     int handleEventAcc(void* data);
     int handleEventKeyboard(ScriptHandlerMgr::HandlerType type,void* data);
     int handleEventTouch(ScriptHandlerMgr::HandlerType type, void* data);
