@@ -10,13 +10,13 @@ require "cocos.cocos2d.Opengl"
 require "cocos.cocos2d.OpenglConstants"
 
 -- cocosbuilder
---require "cocos.cocosbuilder.CCBReaderLoad"
+require "cocos.cocosbuilder.CCBReaderLoad"
 
 -- cocosdenshion
 require "cocos.cocosdenshion.AudioEngine"
 
 -- cocosstudio
---require "cocos.cocostudio.CocoStudio"
+require "cocos.cocostudio.CocoStudio"
 
 -- ui
 require "cocos.ui.GuiConstants"
@@ -29,7 +29,7 @@ require "cocos.extension.ExtensionConstants"
 require "cocos.network.NetworkConstants"
 
 -- Spine
---require "cocos.spine.SpineConstants"
+require "cocos.spine.SpineConstants"
 
 if CC_USE_DEPRECATED_API then
     -- CCLuaEngine
