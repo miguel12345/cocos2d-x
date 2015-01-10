@@ -322,6 +322,16 @@ void Text::labelScaleChangedWithSize()
             _labelRendererAdaptDirty = false;
         }
     }
+    else if (_contentSize.height<0) {
+        _labelRenderer->setDimensions(_contentSize.width,0);
+        setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
+        _labelRendererAdaptDirty = false;
+    }
+    else if(_contentSize.width<0) {
+        _labelRenderer->setDimensions(0,_contentSize.height);
+        setContentSize(Size(_labelRenderer->getContentSize().width,0));
+        _labelRendererAdaptDirty = false;
+    }
     else {
         _labelRenderer->setScale(1.0f);
         _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
