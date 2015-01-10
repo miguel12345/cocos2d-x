@@ -237,6 +237,10 @@ void Manifest::genResumeAssetsList(Downloader::DownloadUnits *units) const
 
 void Manifest::prependSearchPaths()
 {
+    if (_manifestRoot.size() == 0) {
+        return;
+    }
+    
     std::vector<std::string> searchPaths = FileUtils::getInstance()->getSearchPaths();
     std::vector<std::string>::iterator iter = searchPaths.begin();
     searchPaths.insert(iter, _manifestRoot);
