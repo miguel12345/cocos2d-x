@@ -51,6 +51,17 @@
 -- @return int#int ret (return value: int)
         
 --------------------------------
+-- Returns the logical density of the display. This is a scaling factor <br>
+-- for the Density Independent Pixel unit, where one DIP is one pixel on<br>
+-- an approximately 160 dpi screen(for example a 240x320, 1.5"x2" screen),<br>
+-- providing the baseline of the system's display. Thus on a 160dpi screen<br>
+-- this density value will be 1; on a 120 dpi screen it would be .75; etc.<br>
+-- return float DIP scaling factor
+-- @function [parent=#Device] getDIPScalingFactor 
+-- @param self
+-- @return float#float ret (return value: float)
+        
+--------------------------------
 -- Returns the current locked orientation.<br>
 -- This doesn't return the current device's orientation.<br>
 -- It simply returns the last orientation that was locked<br>

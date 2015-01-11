@@ -117,6 +117,17 @@ public:
         @see lockDeviceOrientation, unlockDeviceOrientation
      **/
     static Orientation getDeviceLockedOrientation();
+    
+    /**
+     *  Returns the logical density of the display. This is a scaling factor 
+        for the Density Independent Pixel unit, where one DIP is one pixel on
+        an approximately 160 dpi screen(for example a 240x320, 1.5"x2" screen),
+        providing the baseline of the system's display. Thus on a 160dpi screen
+        this density value will be 1; on a 120 dpi screen it would be .75; etc.
+     *
+     *  @return float DIP scaling factor
+     */
+    static float getDIPScalingFactor() { return (Device::getDPI() / 160.0f);}
 
 private:
     CC_DISALLOW_IMPLICIT_CONSTRUCTORS(Device);
