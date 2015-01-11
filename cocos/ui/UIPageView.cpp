@@ -46,7 +46,8 @@ _usingCustomScrollThreshold(false),
 _childFocusCancelOffset(5.0f),
 _pageViewEventListener(nullptr),
 _pageViewEventSelector(nullptr),
-_eventCallback(nullptr)
+_eventCallback(nullptr),
+_autoManageChildrenVisible(true)
 {
     this->setTouchEnabled(true);
 }
@@ -82,7 +83,17 @@ void PageView::onEnter()
     Layout::onEnter();
     scheduleUpdate();
 }
-
+    
+void PageView::onEnterTransitionDidFinish()
+{
+    
+    if(_autoManageChildrenVisible && _pages.size()>1) {
+        _pages.at(1)->setVisible(true);
+    }
+    
+    Layout::onEnterTransitionDidFinish();
+}
+    
 bool PageView::init()
 {
     if (Layout::init())
@@ -135,7 +146,9 @@ void PageView::addPage(Layout* page)
         return;
     }
 
-    
+    if (_autoManageChildrenVisible && _pages.size()>0) {
+        page->setVisible(false);
+    }
     addChild(page);
     _pages.pushBack(page);
     
@@ -268,6 +281,13 @@ void PageView::scrollToPage(ssize_t idx)
     }
     _curPageIdx = idx;
     Layout* curPage = _pages.at(idx);
+    ssize_t nextPageIndex = idx +1;
+    
+    if (_autoManageChildrenVisible && nextPageIndex < this->getPageCount()) {
+        Layout* nextPage = _pages.at(nextPageIndex);
+        nextPage->setVisible(true);
+    }
+    
     _autoScrollDistance = -(curPage->getPosition().x);
     _autoScrollSpeed = fabs(_autoScrollDistance)/0.2f;
     _autoScrollDirection = _autoScrollDistance > 0 ? AutoScrollDirection::RIGHT : AutoScrollDirection::LEFT;
@@ -644,6 +664,10 @@ void PageView::copySpecialProperties(Widget *widget)
     }
 }
 
+void PageView::setAutoManageChildrenVisibility(bool autoManageChildrenVisibility) {
+    _autoManageChildrenVisible = autoManageChildrenVisibility;
+}
+    
 }
 
 NS_CC_END

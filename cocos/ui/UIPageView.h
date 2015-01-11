@@ -168,6 +168,8 @@ public:
     virtual std::string getDescription() const override;
 
     virtual void onEnter() override;
+    virtual void onEnterTransitionDidFinish() override;
+
     /**
      * @brief If you don't specify the value, the pageView will scroll when half pageview width reached
      */
@@ -185,6 +187,16 @@ public:
      *@brief Query whether we are using user defined scroll page threshold or not
      */
     bool isUsingCustomScrollThreshold()const;
+
+    /**
+     *  Sets whether to automatically manage its children visibility.
+     *  If this is set to true, the page view will automatically show/hide
+     *  its children in order to improve performance.
+     *
+     *  By default this value is set to true
+     *  @param autoManageChildrenVisibility bool
+     */
+    void setAutoManageChildrenVisibility(bool autoManageChildrenVisibility);
 
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
@@ -255,6 +267,7 @@ protected:
 #pragma warning (pop)
 #endif
     ccPageViewCallback _eventCallback;
+    bool _autoManageChildrenVisible;
 };
 
 }
