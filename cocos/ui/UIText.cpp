@@ -120,7 +120,6 @@ void Text::setString(const std::string &text)
         return;
     }
     _labelRenderer->setString(text);
-    updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
     
@@ -147,7 +146,6 @@ void Text::setFontSize(int size)
         _labelRenderer->setTTFConfig(config);
     }
     _fontSize = size;
-    updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
     
@@ -176,7 +174,6 @@ void Text::setFontName(const std::string& name)
         _type = Type::SYSTEM;
     }
     _fontName = name;
-    updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
     
@@ -454,7 +451,7 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
     int referenceFontSize = config.fontSize;
     
     //Now we calculate the resulting renderer content size for that font size
-    Size rendererContentSize = _labelRenderer->Node::getContentSize();
+    Size rendererContentSize = _labelRenderer->getContentSize();
     
     //Then we have all the information to calculate the best font size
     //for the string to fit perfectly inside the constraint area
