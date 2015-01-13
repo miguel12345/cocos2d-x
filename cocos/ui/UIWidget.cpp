@@ -649,7 +649,7 @@ void Widget::onSizeChanged(const Size& oldSize)
     for (auto& child : getChildren())
     {
         Widget* widgetChild = dynamic_cast<Widget*>(child);
-        if (widgetChild)
+        if (widgetChild && widgetChild->isRunning())
         {
             widgetChild->updateSizeAndPosition();
         }
