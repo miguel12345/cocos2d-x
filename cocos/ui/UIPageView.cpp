@@ -43,7 +43,7 @@ _leftBoundary(0.0f),
 _rightBoundary(0.0f),
 _customScrollThreshold(0.0),
 _usingCustomScrollThreshold(false),
-_childFocusCancelOffset(5.0f),
+_childFocusCancelOffset(10.0f),
 _pageViewEventListener(nullptr),
 _pageViewEventSelector(nullptr),
 _eventCallback(nullptr),
@@ -564,8 +564,12 @@ void PageView::interceptTouchEvent(TouchEventType event, Widget *sender, Touch *
             _touchMovePosition = touch->getLocation();
             if (offset > _childFocusCancelOffset)
             {
-                sender->setHighlighted(false);
-                handleMoveLogic(touch);
+                float offsetY = fabs(sender->getTouchBeganPosition().y - touchPoint.y);
+                if (offset > offsetY) {
+                    sender->setIgnoreFollowingTouchMoved(true);
+                    sender->setHighlighted(false);
+                    handleMoveLogic(touch);
+                }
             }
         }
             break;

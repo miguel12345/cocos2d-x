@@ -174,7 +174,8 @@ _sizePercentDimension(SizePercentSourceDimension::SAME_DIMENSION),
 _propagateTouchEventsToChildren(false),
 _ccEventCallback(nullptr),
 _callbackType(""),
-_callbackName("")
+_callbackName(""),
+_ignoringTouchMoved(false)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -887,6 +888,7 @@ bool Widget::onTouchBegan(Touch *touch, Event *unusedEvent)
     {
         return false;
     }
+    _ignoringTouchMoved = false;
     setHighlighted(true);
     
     /*
@@ -930,6 +932,7 @@ void Widget::onTouchMoved(Touch *touch, Event *unusedEvent)
 void Widget::onTouchEnded(Touch *touch, Event *unusedEvent)
 {
     _touchEndPosition = touch->getLocation();
+    _ignoringTouchMoved = false;
     
     /*
      * Propagate touch events to its parents
@@ -954,6 +957,7 @@ void Widget::onTouchEnded(Touch *touch, Event *unusedEvent)
 
 void Widget::onTouchCancelled(Touch *touch, Event *unusedEvent)
 {
+    _ignoringTouchMoved = false;
     setHighlighted(false);
     cancelUpEvent();
 }
@@ -1716,5 +1720,10 @@ bool Widget::isPropagateTouchEventsToChildren()const
 {
     return _propagateTouchEvents;
 }
+    
+void Widget::setIgnoreFollowingTouchMoved(bool ignoreFollowingTouchMoved){
+    _ignoringTouchMoved = ignoreFollowingTouchMoved;
+}
+    
 }
 NS_CC_END

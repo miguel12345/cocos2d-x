@@ -799,6 +799,8 @@ public:
      */
     void setCallbackType(const std::string& callbackType) { _callbackType = callbackType; }
     const std::string& getCallbackType() const{ return _callbackType; }
+    
+    void setIgnoreFollowingTouchMoved(bool ignoreFollowingTouchMoved);
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -953,6 +955,7 @@ protected:
     
     std::string _callbackType;
     std::string _callbackName;
+    bool _ignoringTouchMoved;
     
 private:
     class FocusNavigationController;

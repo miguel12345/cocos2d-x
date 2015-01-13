@@ -28,7 +28,7 @@ NS_CC_BEGIN
 
 namespace ui {
 
-static const float AUTOSCROLLMAXSPEED = 1000.0f;
+static const float AUTOSCROLLMAXSPEED = 2000.0f;
 
 const Vec2 SCROLLDIR_UP = Vec2(0.0f, 1.0f);
 const Vec2 SCROLLDIR_DOWN = Vec2(0.0f, -1.0f);
@@ -1480,11 +1480,21 @@ void ScrollView::handleMoveLogic(Touch *touch)
         case Direction::VERTICAL: // vertical
         {
             scrollChildren(0.0f, delta.y);
+            
+            if (delta.y!=0.0f) {
+                _propagateTouchEvents = false;
+            }
+            
             break;
         }
         case Direction::HORIZONTAL: // horizontal
         {
             scrollChildren(delta.x, 0.0f);
+            
+            if (delta.x!=0.0f) {
+                _propagateTouchEvents = false;
+            }
+            
             break;
         }
         case Direction::BOTH: // both
@@ -1519,7 +1529,7 @@ bool ScrollView::onTouchBegan(Touch *touch, Event *unusedEvent)
 void ScrollView::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
     Layout::onTouchMoved(touch, unusedEvent);
-    if (!_isInterceptTouch)
+    if (!_isInterceptTouch && !_ignoringTouchMoved)
     {
         handleMoveLogic(touch);
     }
@@ -1533,6 +1543,7 @@ void ScrollView::onTouchEnded(Touch *touch, Event *unusedEvent)
         handleReleaseLogic(touch);
     }
     _isInterceptTouch = false;
+    _propagateTouchEvents = true;
 }
 
 void ScrollView::onTouchCancelled(Touch *touch, Event *unusedEvent)
@@ -1543,6 +1554,7 @@ void ScrollView::onTouchCancelled(Touch *touch, Event *unusedEvent)
         handleReleaseLogic(touch);
     }
     _isInterceptTouch = false;
+    _propagateTouchEvents = true;
 }
 
 void ScrollView::update(float dt)
@@ -1866,6 +1878,7 @@ Widget* ScrollView::findNextFocusedWidget(cocos2d::ui::Widget::FocusDirection di
         return Widget::findNextFocusedWidget(direction, current);
     }
 }
+    
 }
 
 NS_CC_END
