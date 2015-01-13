@@ -93,8 +93,7 @@ _isInterceptTouch(false),
 _loopFocus(false),
 _passFocusToChild(true),
 _isFocusPassing(false),
-_logLayout(false),
-_wrapContent(false)
+_logLayout(false)
 {
     //no-op
 }
@@ -1103,7 +1102,7 @@ Size Layout::getLayoutAccumulatedSize()const
         {
             widgetCount++;
             Margin m = w->getLayoutParameter()->getMargin();
-            layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom) * 0.5;
+            layoutSize = layoutSize + w->getContentSize() + Size(m.right + m.left,  m.top + m.bottom);
         }
     }
     
@@ -1908,29 +1907,11 @@ void Layout::setLogLayout(bool logLayout) {
 void Layout::onChildSizeChanged(Widget* child, const Size& oldSize) {
     requestDoLayout();
 }
-
-void Layout::updateContentSizeToWrapContent() {
-    setContentSize(getLayoutAccumulatedSize());
-}
-
-void Layout::setWrapContent(bool wrapContent) {
-    _wrapContent = wrapContent;
-}
-
-bool Layout::getWrapContent() {
-    return _wrapContent;
-}
-
-const Size& Layout::getContentSize() const {
     
-    if (_doLayoutDirty && _wrapContent)
-    {
-        if (_wrapContent) {
-            const_cast<Layout*>(this)->updateContentSizeToWrapContent();
-        }
-    }
     
-    return _contentSize;
+cocos2d::Size Layout::getWrapContentSize() {
+    return getLayoutAccumulatedSize();
 }
+    
 }
 NS_CC_END

@@ -175,7 +175,8 @@ _propagateTouchEventsToChildren(false),
 _ccEventCallback(nullptr),
 _callbackType(""),
 _callbackName(""),
-_ignoringTouchMoved(false)
+_ignoringTouchMoved(false),
+_sizeDirty(true)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -236,7 +237,6 @@ bool Widget::init()
 
 void Widget::onEnter()
 {
-    updateSizeAndPosition();
     ProtectedNode::onEnter();
 }
 
@@ -400,11 +400,20 @@ void Widget::updateSizeAndPosition()
 {
     Size pSize = _parent->getContentSize();
     
+    if (pSize.width<0) {
+        pSize.width = _parent->getParent()->getContentSize().width;
+    }
+    
+    if (pSize.height<0) {
+        pSize.height = _parent->getParent()->getContentSize().height;
+    }
+    
     updateSizeAndPosition(pSize);
 }
     
 void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
 {
+    _sizeDirty = false;
     float contentSizeWidth = 0.0f;
     float contentSizeHeight = 0.0f;
     float sizePercentWidth = 0.0f;
@@ -509,6 +518,22 @@ void Widget::updateSizeAndPosition(const cocos2d::Size &parentSize)
         }
         default:
             break;
+    }
+    
+    //wrap content
+    if (_widthSizeType == SizeType::WRAP_CONTENT || _heigthSizeType == SizeType::WRAP_CONTENT) {
+        
+        if (_widthSizeType != SizeType::WRAP_CONTENT){_contentSize.width = contentSizeWidth;};
+        if (_heigthSizeType != SizeType::WRAP_CONTENT){_contentSize.height = contentSizeHeight;};
+        
+        Size accumulatedSize = getWrapContentSize();
+        if (_widthSizeType == SizeType::WRAP_CONTENT) {
+            contentSizeWidth = accumulatedSize.width;
+        }
+        if (_heigthSizeType == SizeType::WRAP_CONTENT) {
+            contentSizeHeight = accumulatedSize.height;
+        }
+
     }
     
     //restrict size - width
@@ -651,7 +676,7 @@ void Widget::onSizeChanged(const Size& oldSize)
         Widget* widgetChild = dynamic_cast<Widget*>(child);
         if (widgetChild && widgetChild->isRunning())
         {
-            widgetChild->updateSizeAndPosition();
+            widgetChild->requestUpdateSizeAndPosition();
         }
     }
 }
@@ -1723,6 +1748,25 @@ bool Widget::isPropagateTouchEventsToChildren()const
     
 void Widget::setIgnoreFollowingTouchMoved(bool ignoreFollowingTouchMoved){
     _ignoringTouchMoved = ignoreFollowingTouchMoved;
+}
+
+cocos2d::Size Widget::getWrapContentSize() {
+    //TODO
+    return Size(-1.0,-1.0);
+}
+    
+const Size& Widget::getContentSize() const {
+    
+    if (_sizeDirty)
+    {
+        const_cast<Widget*>(this)->updateSizeAndPosition();
+    }
+    
+    return _contentSize;
+}
+    
+void Widget::requestUpdateSizeAndPosition() {
+    _sizeDirty = true;
 }
     
 }

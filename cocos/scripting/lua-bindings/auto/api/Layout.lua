@@ -74,15 +74,6 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
--- Changes layout wrap content variable<br>
--- If wrapContent is true, layout size will equal the accumulated size of children combined<br>
--- Otherwise it will follow the normal size rules<br>
--- param wrapContent whether or not to wrap content
--- @function [parent=#Layout] setWrapContent 
--- @param self
--- @param #bool wrapContent
-        
---------------------------------
 -- 
 -- @function [parent=#Layout] setBackGroundImageOpacity 
 -- @param self
@@ -115,17 +106,6 @@
 -- @function [parent=#Layout] getBackGroundImageCapInsets 
 -- @param self
 -- @return rect_table#rect_table ret (return value: rect_table)
-        
---------------------------------
--- Returns the UILayout content size.<br>
--- The call to this method has the side effect of recalculating<br>
--- the effective content size of the text element if there is the need<br>
--- to do so.<br>
--- This happens when wrap content is set to true, since it requires<br>
--- to calculate the accumulated size of all children components
--- @function [parent=#Layout] getContentSize 
--- @param self
--- @return size_table#size_table ret (return value: size_table)
         
 --------------------------------
 -- 
@@ -191,13 +171,6 @@
 --------------------------------
 -- return To query whether the layout will pass the focus to its children or not. The default value is true
 -- @function [parent=#Layout] isPassFocusToChild 
--- @param self
--- @return bool#bool ret (return value: bool)
-        
---------------------------------
--- Returns wrap content variable<br>
--- return Wrap content variable
--- @function [parent=#Layout] getWrapContent 
 -- @param self
 -- @return bool#bool ret (return value: bool)
         
@@ -310,6 +283,12 @@
 -- see `removeAllChildrenWithCleanup(bool)`
 -- @function [parent=#Layout] removeAllChildren 
 -- @param self
+        
+--------------------------------
+-- 
+-- @function [parent=#Layout] getWrapContentSize 
+-- @param self
+-- @return size_table#size_table ret (return value: size_table)
         
 --------------------------------
 -- When a widget is in a layout, you could call this method to get the next focused widget within a specified direction.<br>

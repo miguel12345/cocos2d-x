@@ -305,26 +305,26 @@ void Text::labelScaleChangedWithSize()
     {
         setFontSize(calculateFontSizeToFit(_contentSize));
         
-        /*  At this point we have to check if we have an unspecified (<0) content size dimension.
+        /*  At this point we have to check if we have any of our dimensions is set to wrap content
             If so, we must adapt our content size to wrap the label renderer's content.
             After setContentSize, we force _labelRendererAdaptDirty to false because we known that we don't
             need to adapt the renderer again due to this change of the content size */
         
-        if (_contentSize.height<0) {
+        if (_heigthSizeType == SizeType::WRAP_CONTENT) {
             setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
             _labelRendererAdaptDirty = false;
         }
-        else if(_contentSize.width<0) {
+        else if(_widthSizeType == SizeType::WRAP_CONTENT) {
             setContentSize(Size(_labelRenderer->getContentSize().width,_contentSize.height));
             _labelRendererAdaptDirty = false;
         }
     }
-    else if (_contentSize.height<0) {
+    else if (_heigthSizeType == SizeType::WRAP_CONTENT) {
         _labelRenderer->setDimensions(_contentSize.width,0);
         setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
         _labelRendererAdaptDirty = false;
     }
-    else if(_contentSize.width<0) {
+    else if(_widthSizeType == SizeType::WRAP_CONTENT) {
         _labelRenderer->setDimensions(0,_contentSize.height);
         setContentSize(Size(_labelRenderer->getContentSize().width,0));
         _labelRendererAdaptDirty = false;
@@ -470,14 +470,9 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
     return std::min(fontSizeToFitHeight,200);
 }
 
-const Size& Text::getContentSize() const {
-    
-    if (_labelRendererAdaptDirty)
-    {
-        const_cast<Text*>(this)->adaptRenderers();
-    }
-    
-    return _contentSize;
+void Text::updateSizeAndPosition() {
+    Widget::updateSizeAndPosition();
+    labelScaleChangedWithSize();
 }
     
 }

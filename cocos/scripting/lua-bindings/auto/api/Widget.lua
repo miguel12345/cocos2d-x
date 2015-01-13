@@ -147,13 +147,6 @@
 -- @param #size_table minSize
         
 --------------------------------
--- @overload self, size_table         
--- @overload self         
--- @function [parent=#Widget] updateSizeAndPosition
--- @param self
--- @param #size_table parentSize
-
---------------------------------
 -- Gets the size type of widget.<br>
 -- see SizeType<br>
 -- param type that is widget's size type
@@ -211,6 +204,12 @@
 -- @return bool#bool ret (return value: bool)
         
 --------------------------------
+-- 
+-- @function [parent=#Widget] setIgnoreFollowingTouchMoved 
+-- @param self
+-- @param #bool ignoreFollowingTouchMoved
+        
+--------------------------------
 -- Gets the size type of widget for the height dimension.<br>
 -- see SizeType<br>
 -- param type that is widget's size type
@@ -244,6 +243,17 @@
 -- @function [parent=#Widget] setPositionType 
 -- @param self
 -- @param #int type
+        
+--------------------------------
+-- 
+-- @function [parent=#Widget] getContentSize 
+-- @param self
+-- @return size_table#size_table ret (return value: size_table)
+        
+--------------------------------
+-- 
+-- @function [parent=#Widget] requestUpdateSizeAndPosition 
+-- @param self
         
 --------------------------------
 -- Determines if the widget is highlighted<br>
@@ -436,6 +446,15 @@
 -- @function [parent=#Widget] setUnifySizeEnabled 
 -- @param self
 -- @param #bool enable
+        
+--------------------------------
+-- Returns the accumulated size of this widget's content<br>
+-- Subclass can and should override this if they have a custom<br>
+-- way of calculating the accumulated size<br>
+-- return Size
+-- @function [parent=#Widget] getWrapContentSize 
+-- @param self
+-- @return size_table#size_table ret (return value: size_table)
         
 --------------------------------
 -- Checks a point if is in widget's space<br>

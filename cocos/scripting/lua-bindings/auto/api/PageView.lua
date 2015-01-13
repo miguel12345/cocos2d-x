@@ -101,6 +101,16 @@
 -- @param self
         
 --------------------------------
+-- Sets whether to automatically manage its children visibility.<br>
+-- If this is set to true, the page view will automatically show/hide<br>
+-- its children in order to improve performance.<br>
+-- By default this value is set to true<br>
+-- param autoManageChildrenVisibility bool
+-- @function [parent=#PageView] setAutoManageChildrenVisibility 
+-- @param self
+-- @param #bool autoManageChildrenVisibility
+        
+--------------------------------
 -- Push back a page to pageview.<br>
 -- param page    page to be added to pageview.
 -- @function [parent=#PageView] addPage 

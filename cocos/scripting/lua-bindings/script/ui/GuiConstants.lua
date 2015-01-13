@@ -27,6 +27,7 @@ ccui.SizeType =
 {
     absolute = 0,
     percent = 1,
+    wrapContent = 2,
 }
 
 ccui.PositionType = {

@@ -1277,7 +1277,8 @@ void Director::applicationScreenSizeChanged(int newWidth,int newHeight) {
     {
         ui::Layout* rootLayout = dynamic_cast<ui::Layout*>(child);
         if (rootLayout) {
-            rootLayout->updateSizeAndPosition();
+            rootLayout->requestUpdateSizeAndPosition();
+            rootLayout->getContentSize();
         }
     }
 }

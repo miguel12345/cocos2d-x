@@ -83,7 +83,8 @@ public:
     enum class SizeType
     {
         ABSOLUTE,
-        PERCENT
+        PERCENT,
+        WRAP_CONTENT
     };
     
     enum class TouchEventType
@@ -592,10 +593,6 @@ public:
 
     virtual void onEnter() override;
     virtual void onExit() override;
-
-    void updateSizeAndPosition();
-
-    void updateSizeAndPosition(const Size& parentSize);
     
     void setActionTag(int tag);
 	int getActionTag()const;
@@ -801,6 +798,20 @@ public:
     const std::string& getCallbackType() const{ return _callbackType; }
     
     void setIgnoreFollowingTouchMoved(bool ignoreFollowingTouchMoved);
+    
+    /**
+     *  Returns the accumulated size of this widget's content
+     *
+     *  Subclass can and should override this if they have a custom
+     *  way of calculating the accumulated size
+     *
+     *  @return Size
+     */
+    virtual cocos2d::Size getWrapContentSize();
+    
+    const Size& getContentSize() const final;
+    
+    void requestUpdateSizeAndPosition();
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -880,6 +891,10 @@ protected:
 
     void cleanupWidget();
     LayoutComponent* getOrCreateLayoutComponent();
+    
+    virtual void updateSizeAndPosition();
+    
+    void updateSizeAndPosition(const Size& parentSize);
 
 protected:
     bool _unifySize;
@@ -956,6 +971,7 @@ protected:
     std::string _callbackType;
     std::string _callbackName;
     bool _ignoringTouchMoved;
+    bool _sizeDirty;
     
 private:
     class FocusNavigationController;

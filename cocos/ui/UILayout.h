@@ -344,32 +344,7 @@ public:
      */
     void onChildSizeChanged(Widget* child, const Size& oldSize);
     
-    /**
-     *  Changes layout wrap content variable
-     *  If wrapContent is true, layout size will equal the accumulated size of children combined
-     *  Otherwise it will follow the normal size rules
-     *
-     *  @param wrapContent whether or not to wrap content
-     */
-    void setWrapContent(bool wrapContent);
-    
-    /**
-     *  Returns wrap content variable
-     *
-     *  @return Wrap content variable
-     */
-    bool getWrapContent();
-    
-    /**
-     Returns the UILayout content size.
-     The call to this method has the side effect of recalculating
-     the effective content size of the text element if there is the need
-     to do so.
-     
-     This happens when wrap content is set to true, since it requires
-     to calculate the accumulated size of all children components
-     **/
-    const Size& getContentSize() const;
+    virtual cocos2d::Size getWrapContentSize() override;
 
 CC_CONSTRUCTOR_ACCESS:
     //override "init" method of widget.
@@ -515,12 +490,6 @@ protected:
      */
     bool checkFocusEnabledChild()const;
     
-    /**
-     *  This method updates the layout it the accumulated size of all of its children
-     *  Don't call it manually. It is only called when _wrapsContent is true
-     */
-    void updateContentSizeToWrapContent();
-    
 protected:
     
     //background
@@ -588,9 +557,6 @@ protected:
     bool _isFocusPassing;
     
     bool _logLayout;
-    
-    //if wrapContent is true, layout will have the necessary size to hold all of its children
-    bool _wrapContent;
 };
     
 }

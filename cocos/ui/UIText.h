@@ -234,15 +234,6 @@ public:
      */
     bool getAdaptFontSizeToFit();
     
-    /**
-        Returns the UIText content size.
-        The call to this method has the side effect of recalculating
-        the effective content size of the text element if there is the need
-        to do so
-     **/
-    const Size& getContentSize() const override;
-
-    
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     virtual bool init(const std::string& textContent,
@@ -279,6 +270,8 @@ protected:
      *  @return An integer representing the font size
      */
     int calculateFontSizeToFit(const Size& constraintAreaSize);
+    
+    virtual void updateSizeAndPosition() override;
     
 protected:
     bool _touchScaleChangeEnabled;
