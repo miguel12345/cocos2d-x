@@ -377,6 +377,8 @@ protected:
     void bounceBottomEvent();
     void bounceLeftEvent();
     void bounceRightEvent();
+    float calculateScrollVerticalSpeed() const;
+    float calculateScrollHorizontalSpeed() const;
     
 protected:
     Layout* _innerContainer;
@@ -434,6 +436,16 @@ protected:
 #pragma warning (pop)
 #endif
     ccScrollViewCallback _eventCallback;
+    
+    //we are aiming for the last 100 ms, which is roughly the last 6.25 frames, rounds up to 7
+    float _lastYOffsets[7] = {};
+    float _lastXOffsets[7] = {};
+    float _lastOffsetsDt[7] = {};
+    unsigned char _maximumNumOffsets = 7;
+    unsigned char _currentOffsetIndex = 0;
+    unsigned char _speedTimeFrameToConsider = 100;
+    bool _reachedMaxNumOffsets = false;
+    float _currentDt = 0.0f;
 };
 
 }

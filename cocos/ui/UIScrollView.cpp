@@ -1410,6 +1410,9 @@ void ScrollView::startRecordSlidAction()
         stopBounceChildren();
     }
     _slidTime = 0.0f;
+    _currentDt = 0.0f;
+    _currentOffsetIndex = 0;
+    _reachedMaxNumOffsets = false;
 }
 
 void ScrollView::endRecordSlidAction()
@@ -1421,14 +1424,13 @@ void ScrollView::endRecordSlidAction()
             return;
         }
         float totalDis = 0.0f;
+        float scrollSpeed = 0.0f;
         Vec2 dir;
-        Vec2 touchEndPositionInNodeSpace = this->convertToNodeSpace(_touchEndPosition);
-        Vec2 touchBeganPositionInNodeSpace = this->convertToNodeSpace(_touchBeganPosition);
         switch (_direction)
         {
             case Direction::VERTICAL:
-                totalDis = touchEndPositionInNodeSpace.y - touchBeganPositionInNodeSpace.y;
-                if (totalDis < 0.0f)
+                scrollSpeed = calculateScrollVerticalSpeed();
+                if (scrollSpeed < 0.0f)
                 {
                     dir = SCROLLDIR_DOWN;
                 }
@@ -1436,10 +1438,11 @@ void ScrollView::endRecordSlidAction()
                 {
                     dir = SCROLLDIR_UP;
                 }
+                
                 break;
             case Direction::HORIZONTAL:
-                totalDis = touchEndPositionInNodeSpace.x - touchBeganPositionInNodeSpace.x;
-                if (totalDis < 0.0f)
+                scrollSpeed = calculateScrollHorizontalSpeed();
+                if (scrollSpeed < 0.0f)
                 {
                     dir = SCROLLDIR_LEFT;
                 }
@@ -1450,16 +1453,24 @@ void ScrollView::endRecordSlidAction()
                 break;
             case Direction::BOTH:
             {
+                Vec2 touchEndPositionInNodeSpace = this->convertToNodeSpace(_touchEndPosition);
+                Vec2 touchBeganPositionInNodeSpace = this->convertToNodeSpace(_touchBeganPosition);
                 Vec2 subVector = touchEndPositionInNodeSpace - touchBeganPositionInNodeSpace;
                 totalDis = subVector.getLength();
                 dir = subVector.getNormalized();
+                scrollSpeed = MIN(fabs(totalDis)/(_slidTime), AUTOSCROLLMAXSPEED);
                 break;
             }
             default:
                 break;
         }
-        float orSpeed = MIN(fabs(totalDis)/(_slidTime), AUTOSCROLLMAXSPEED);
-        startAutoScrollChildrenWithOriginalSpeed(dir, orSpeed, true, -1000);
+        
+        if (scrollSpeed<0.0f) {
+            scrollSpeed = -scrollSpeed;
+        }
+        
+        startAutoScrollChildrenWithOriginalSpeed(dir, scrollSpeed, true, -1000);
+    
         _slidTime = 0.0f;
     }
 }
@@ -1575,6 +1586,16 @@ void ScrollView::recordSlidTime(float dt)
     if (_bePressed)
     {
         _slidTime += dt;
+        cocos2d::Vec2 currentChildPoint = _moveChildPoint;
+        _lastXOffsets[_currentOffsetIndex] = currentChildPoint.x;
+        _lastYOffsets[_currentOffsetIndex] = currentChildPoint.y;
+        _currentDt += dt;
+        _lastOffsetsDt[_currentOffsetIndex] = _currentDt;
+        _currentOffsetIndex ++;
+        if (_currentOffsetIndex>=_maximumNumOffsets) {
+            _currentOffsetIndex = 0;
+            _reachedMaxNumOffsets = true;
+        }
     }
 }
 
@@ -1877,6 +1898,75 @@ Widget* ScrollView::findNextFocusedWidget(cocos2d::ui::Widget::FocusDirection di
     {
         return Widget::findNextFocusedWidget(direction, current);
     }
+}
+
+float ScrollView::calculateScrollVerticalSpeed() const{
+    
+    unsigned short lastIndex = _currentOffsetIndex;
+    unsigned char maximumNumOffsets = _maximumNumOffsets;
+    
+    if (lastIndex==0) {
+        lastIndex = maximumNumOffsets-1;
+    }
+    else {
+        lastIndex = _currentOffsetIndex-1;
+    }
+    float lastOffset = _lastYOffsets[lastIndex];
+    float lastDt = _lastOffsetsDt[lastIndex];
+    
+    unsigned short firstIndex = lastIndex;
+    if (!_reachedMaxNumOffsets) {
+        firstIndex = 0;
+    }
+    else {
+        if (firstIndex == (maximumNumOffsets-1)) {
+            firstIndex = 0;
+        }
+        else {
+            firstIndex ++;
+        }
+    }
+    
+    float firstOffset = _lastYOffsets[firstIndex];
+    float firstDt = _lastOffsetsDt[firstIndex];
+    float totalDis = lastOffset-firstOffset;
+    float totalDt = lastDt-firstDt;
+    float speed = totalDis/(totalDt);
+    return speed;
+}
+    
+float ScrollView::calculateScrollHorizontalSpeed() const{
+    unsigned short lastIndex = _currentOffsetIndex;
+    unsigned char maximumNumOffsets = _maximumNumOffsets;
+    
+    if (lastIndex==0) {
+        lastIndex = maximumNumOffsets-1;
+    }
+    else {
+        lastIndex = _currentOffsetIndex-1;
+    }
+    float lastOffset = _lastXOffsets[lastIndex];
+    float lastDt = _lastOffsetsDt[lastIndex];
+    
+    unsigned short firstIndex = lastIndex;
+    if (!_reachedMaxNumOffsets) {
+        firstIndex = 0;
+    }
+    else {
+        if (firstIndex == (maximumNumOffsets-1)) {
+            firstIndex = 0;
+        }
+        else {
+            firstIndex ++;
+        }
+    }
+    
+    float firstOffset = _lastXOffsets[firstIndex];
+    float firstDt = _lastOffsetsDt[firstIndex];
+    float totalDis = lastOffset-firstOffset;
+    float totalDt = lastDt-firstDt;
+    float speed = totalDis/(totalDt);
+    return speed;
 }
     
 }
