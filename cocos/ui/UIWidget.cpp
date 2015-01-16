@@ -176,7 +176,8 @@ _ccEventCallback(nullptr),
 _callbackType(""),
 _callbackName(""),
 _ignoringTouchMoved(false),
-_sizeDirty(true)
+_sizeDirty(true),
+_reportToParentSizeChanged(true)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -666,10 +667,13 @@ Node* Widget::getVirtualRenderer()
 
 void Widget::onSizeChanged(const Size& oldSize)
 {
-    Layout* parentLayout = dynamic_cast<Layout*>(getParent());
-    if (parentLayout) {
-        parentLayout->onChildSizeChanged(this,oldSize);
+    if (_reportToParentSizeChanged) {
+        Layout* parentLayout = dynamic_cast<Layout*>(getParent());
+        if (parentLayout) {
+            parentLayout->onChildSizeChanged(this,oldSize);
+        }
     }
+    
     
     for (auto& child : getChildren())
     {
@@ -1767,6 +1771,14 @@ const Size& Widget::getContentSize() const {
     
 void Widget::requestUpdateSizeAndPosition() {
     _sizeDirty = true;
+}
+
+void Widget::setReportToParentSizeChanged(bool reportToParentSizeChanged) {
+    _reportToParentSizeChanged = reportToParentSizeChanged;
+}
+   
+bool Widget::getReportToParentSizeChanged() const{
+    return _reportToParentSizeChanged;
 }
     
 }

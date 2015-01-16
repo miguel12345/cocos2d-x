@@ -811,7 +811,31 @@ public:
     
     const Size& getContentSize() const final;
     
+    /**
+     *  Request the widget to update its size and position
+     *  the next time they are needed. Since this function
+     *  only sets a flag, we can call it many times without
+     *  incurring performance penalties
+     */
     void requestUpdateSizeAndPosition();
+    
+    /**
+     *  Sets whether this widget should report to its parent
+     *  the change of its size. If you want the layout to
+     *  always remain correct, this should be set to true. If
+     *  you don't mind the incorrectness of the layout 
+     *  and want performance this should be set to false.
+     *
+     *  The default value is true
+     *
+     *  It is recommended that you set this to false only 
+     *  when you need to update the content size continously,
+     *  for example by using ResizeTo action
+     *
+     *  @param reportToParentSizeChanged reportToParentSizeChanged
+     */
+    void setReportToParentSizeChanged(bool reportToParentSizeChanged);
+    bool getReportToParentSizeChanged() const;
 
 CC_CONSTRUCTOR_ACCESS:
 
@@ -972,6 +996,7 @@ protected:
     std::string _callbackName;
     bool _ignoringTouchMoved;
     bool _sizeDirty;
+    bool _reportToParentSizeChanged;
     
 private:
     class FocusNavigationController;

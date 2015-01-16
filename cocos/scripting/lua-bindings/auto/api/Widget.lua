@@ -156,6 +156,12 @@
         
 --------------------------------
 -- 
+-- @function [parent=#Widget] getReportToParentSizeChanged 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- 
 -- @function [parent=#Widget] getCallbackType 
 -- @param self
 -- @return string#string ret (return value: string)
@@ -251,7 +257,10 @@
 -- @return size_table#size_table ret (return value: size_table)
         
 --------------------------------
--- 
+-- Request the widget to update its size and position<br>
+-- the next time they are needed. Since this function<br>
+-- only sets a flag, we can call it many times without<br>
+-- incurring performance penalties
 -- @function [parent=#Widget] requestUpdateSizeAndPosition 
 -- @param self
         
@@ -446,6 +455,21 @@
 -- @function [parent=#Widget] setUnifySizeEnabled 
 -- @param self
 -- @param #bool enable
+        
+--------------------------------
+-- Sets whether this widget should report to its parent<br>
+-- the change of its size. If you want the layout to<br>
+-- always remain correct, this should be set to true. If<br>
+-- you don't mind the incorrectness of the layout <br>
+-- and want performance this should be set to false.<br>
+-- The default value is true<br>
+-- It is recommended that you set this to false only <br>
+-- when you need to update the content size continously,<br>
+-- for example by using ResizeTo action<br>
+-- param reportToParentSizeChanged reportToParentSizeChanged
+-- @function [parent=#Widget] setReportToParentSizeChanged 
+-- @param self
+-- @param #bool reportToParentSizeChanged
         
 --------------------------------
 -- Returns the accumulated size of this widget's content<br>
