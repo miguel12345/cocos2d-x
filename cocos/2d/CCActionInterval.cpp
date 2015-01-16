@@ -2449,4 +2449,65 @@ void TargetedAction::setForcedTarget(Node* forcedTarget)
     }
 }
 
+
+//
+// ResizeTo
+//
+
+ResizeTo* ResizeTo::create(float duration, float width, float height)
+{
+    ResizeTo * resizeTo = new (std::nothrow) ResizeTo();
+    resizeTo->initWithSize(duration, width, height);
+    resizeTo->autorelease();
+    
+    return resizeTo;
+}
+
+bool ResizeTo::initWithSize(float duration, float width, float height)
+{
+    if (ActionInterval::initWithDuration(duration))
+    {
+        _endWidth = width;
+        _endHeight = height;
+        
+        return true;
+    }
+    
+    return false;
+}
+
+ResizeTo* ResizeTo::clone() const
+{
+    // no copy constructor
+    auto a = new (std::nothrow) ResizeTo();
+    a->initWithSize(_duration, _endWidth, _endHeight);
+    a->autorelease();
+    return a;
+}
+
+ResizeTo* ResizeTo::reverse() const
+{
+    CCASSERT(false, "reverse() not supported in ScaleTo");
+    return nullptr;
+}
+
+
+void ResizeTo::startWithTarget(Node *target)
+{
+    ActionInterval::startWithTarget(target);
+    _startWidth = target->getContentSize().width;
+    _startHeight = target->getContentSize().height;
+    _deltaWidth = _endWidth - _startWidth;
+    _deltaHeight = _endHeight - _startHeight;
+}
+
+void ResizeTo::update(float time)
+{
+    if (_target)
+    {
+        _target->setContentSize(Size(_startWidth + _deltaWidth * time, _startHeight + _deltaHeight * time));
+    }
+}
+
+
 NS_CC_END

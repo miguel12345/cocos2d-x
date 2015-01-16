@@ -307,6 +307,11 @@
 
 
 --------------------------------------------------------
+-- the cc ResizeTo
+-- @field [parent=#cc] ResizeTo#ResizeTo ResizeTo preloaded module
+
+
+--------------------------------------------------------
 -- the cc ActionCamera
 -- @field [parent=#cc] ActionCamera#ActionCamera ActionCamera preloaded module
 

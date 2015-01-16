@@ -1102,6 +1102,43 @@ private:
 // end of actions group
 /// @}
 
+/** @brief Scales a Node object to a zoom factor by modifying it's scale attribute.
+ @warning This action doesn't support "reverse"
+ @warning The physics body contained in Node doesn't support this action.
+ */
+class CC_DLL ResizeTo : public ActionInterval
+{
+public:
+    /** creates the action with and X factor and a Y factor */
+    static ResizeTo* create(float duration, float width, float height);
+    
+    //
+    // Overrides
+    //
+    virtual ResizeTo* clone() const override;
+    virtual ResizeTo* reverse(void) const override;
+    virtual void startWithTarget(Node *target) override;
+    virtual void update(float time) override;
+    
+CC_CONSTRUCTOR_ACCESS:
+    ResizeTo() {}
+    virtual ~ResizeTo() {};
+    
+    /** initializes the action with the same scale factor for X and Y */
+    bool initWithSize(float duration, float width, float height);
+    
+protected:
+    float _startWidth;
+    float _startHeight;
+    float _endWidth;
+    float _endHeight;
+    float _deltaWidth;
+    float _deltaHeight;
+    
+private:
+    CC_DISALLOW_COPY_AND_ASSIGN(ResizeTo);
+};
+
 NS_CC_END
 
 #endif //__ACTION_CCINTERVAL_ACTION_H__
