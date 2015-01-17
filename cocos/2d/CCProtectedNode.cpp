@@ -380,6 +380,15 @@ void ProtectedNode::updateDisplayedOpacity(GLubyte parentOpacity)
     
     if (_cascadeOpacityEnabled)
     {
+        if (_hideWhenFullyTransparent) {
+            if (_displayedOpacity==0) {
+                setVisible(false);
+            }
+            else if (!_visible && _displayedOpacity>0) {
+                setVisible(true);
+            };
+        }
+        
         for(auto child : _children){
             child->updateDisplayedOpacity(_displayedOpacity);
         }
