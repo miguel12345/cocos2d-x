@@ -1931,8 +1931,7 @@ FadeTo* FadeTo::clone() const
 
 FadeTo* FadeTo::reverse() const
 {
-	CCASSERT(false, "reverse() not supported in FadeTo");
-	return nullptr;
+    return FadeTo::create(_duration, _fromOpacity);
 }
 
 void FadeTo::startWithTarget(Node *target)
@@ -2487,8 +2486,7 @@ ResizeTo* ResizeTo::clone() const
 
 ResizeTo* ResizeTo::reverse() const
 {
-    CCASSERT(false, "reverse() not supported in ScaleTo");
-    return nullptr;
+    return ResizeTo::create(_duration, _startWidth, _startHeight);
 }
 
 
