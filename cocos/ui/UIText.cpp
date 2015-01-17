@@ -135,6 +135,7 @@ ssize_t Text::getStringLength()const
 
 void Text::setFontSize(int size)
 {
+    CCASSERT(size>0, "Size must be greater than 0");
     if (_type == Type::SYSTEM)
     {
         _labelRenderer->setSystemFontSize(size);
@@ -312,12 +313,11 @@ void Text::labelScaleChangedWithSize()
         
         if (_heigthSizeType == SizeType::WRAP_CONTENT) {
             setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
-            _labelRendererAdaptDirty = false;
         }
         else if(_widthSizeType == SizeType::WRAP_CONTENT) {
             setContentSize(Size(_labelRenderer->getContentSize().width,_contentSize.height));
-            _labelRendererAdaptDirty = false;
         }
+        _labelRendererAdaptDirty = false;
     }
     else if (_heigthSizeType == SizeType::WRAP_CONTENT) {
         _labelRenderer->setDimensions(_contentSize.width,0);
@@ -437,6 +437,13 @@ void Text::setAdaptFontSizeToFit(bool adaptFontSizeToFit) {
 bool Text::getAdaptFontSizeToFit() {
     return _adaptLabelScaleWithContentSize;
 }
+ 
+//Just a quick floor for this file
+static int int_floor(double x)
+{
+    int i = (int)x; /* truncate */
+    return i - ( i > x ); /* convert trunc to floor */
+}
 
 int Text::calculateFontSizeToFit(const Size& areaSize) {
     
@@ -456,7 +463,7 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
     //Then we have all the information to calculate the best font size
     //for the string to fit perfectly inside the constraint area
     if (areaSize.width>=0) {
-        int fontSizeToFitWidth = floor((areaSizeWidth * referenceFontSize) / rendererContentSize.width);
+        int fontSizeToFitWidth = int_floor((areaSizeWidth * referenceFontSize) / rendererContentSize.width);
         
         float finalHeight = ((float)fontSizeToFitWidth / (float)referenceFontSize) * rendererContentSize.height;
         
@@ -465,7 +472,7 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
         }
     }
     
-    int fontSizeToFitHeight = floor((areaSize.height * referenceFontSize) / rendererContentSize.height);
+    int fontSizeToFitHeight = int_floor((areaSize.height * referenceFontSize) / rendererContentSize.height);
     
     return std::min(fontSizeToFitHeight,200);
 }
