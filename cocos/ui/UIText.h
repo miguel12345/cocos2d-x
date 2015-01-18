@@ -50,6 +50,20 @@ public:
         SYSTEM,
         TTF
     };
+    
+    enum class FontSizeType
+    {
+        ABSOLUTE,
+        PERCENTAGE
+    };
+    
+    enum class FontSizePercentageSource
+    {
+        NONE,
+        WIDTH,
+        HEIGHT
+    };
+    
     /**
      * Default constructor
      */
@@ -234,6 +248,18 @@ public:
      */
     bool getAdaptFontSizeToFit();
     
+    
+    /**
+     * TODO
+     *
+     * @param size font size.
+     */
+    void setFontSizePercentage(float percentage, FontSizePercentageSource percentageSource = FontSizePercentageSource::HEIGHT);
+    int getFontSizePercentage();
+    
+    void setFontSizeType(FontSizeType fontSizeType);
+    FontSizeType getFontSizeType();
+    
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     virtual bool init(const std::string& textContent,
@@ -288,6 +314,9 @@ protected:
     bool _adaptFontSizeToFit;
     std::unordered_map<std::string, Size> _fontLetterSizeCache;
     Size _invalidFontLetterSize;
+    FontSizeType _fontSizeType;
+    FontSizePercentageSource _fontSizePercentageSource;
+    float _fontSizePercentage;
 };
 
 }

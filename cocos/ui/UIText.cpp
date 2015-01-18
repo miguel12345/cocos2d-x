@@ -47,7 +47,10 @@ _type(Type::SYSTEM),
 _adaptLabelScaleWithContentSize(true),
 _lineBreakWithoutSpace(false),
 _adaptFontSizeToFit(false),
-_invalidFontLetterSize(Size(-1,-1))
+_invalidFontLetterSize(Size(-1,-1)),
+_fontSizeType(FontSizeType::ABSOLUTE),
+_fontSizePercentageSource(FontSizePercentageSource::NONE),
+_fontSizePercentage(0.0f)
 {
 }
 
@@ -88,7 +91,7 @@ Text* Text::create(const std::string &textContent, const std::string &fontName, 
     CC_SAFE_DELETE(text);
     return nullptr;
 }
-    
+ 
 bool Text::init(const std::string &textContent, const std::string &fontName, int fontSize)
 {
     bool ret = true;
@@ -302,9 +305,43 @@ void Text::labelScaleChangedWithSize()
         _labelRenderer->setScale(1.0f);
         _normalScaleValueX = _normalScaleValueY = 1.0f;
     }
+    else if (_fontSizeType == FontSizeType::PERCENTAGE) {
+        
+        if (_fontSizePercentageSource == FontSizePercentageSource::HEIGHT) {
+            setFontSize(_contentSize.height*_fontSizePercentage);
+        }
+        else if (_fontSizePercentageSource == FontSizePercentageSource::WIDTH) {
+            setFontSize(_contentSize.width*_fontSizePercentage);
+        }
+        
+        if (_heigthSizeType == SizeType::WRAP_CONTENT) {
+            _labelRenderer->setDimensions(_contentSize.width,0);
+            setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
+        }
+        else if(_widthSizeType == SizeType::WRAP_CONTENT) {
+            _labelRenderer->setDimensions(0,_contentSize.height);
+            setContentSize(Size(_labelRenderer->getContentSize().width,0));
+        }
+        else {
+            _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
+        }
+        _labelRendererAdaptDirty = false;
+
+    }
     else if (_adaptFontSizeToFit)
     {
-        setFontSize(calculateFontSizeToFit(_contentSize));
+        if (_fontSizeType == FontSizeType::PERCENTAGE) {
+            if (_fontSizePercentageSource == FontSizePercentageSource::HEIGHT) {
+                setFontSize(_contentSize.height*_fontSizePercentage);
+            }
+            else if (_fontSizePercentageSource == FontSizePercentageSource::WIDTH) {
+                setFontSize(_contentSize.width*_fontSizePercentage);
+            }
+            _labelRenderer->setDimensions(_contentSize.width,_contentSize.height);
+        }
+        else {
+            setFontSize(calculateFontSizeToFit(_contentSize));
+        }
         
         /*  At this point we have to check if we have any of our dimensions is set to wrap content
             If so, we must adapt our content size to wrap the label renderer's content.
@@ -480,6 +517,32 @@ int Text::calculateFontSizeToFit(const Size& areaSize) {
 void Text::updateSizeAndPosition() {
     Widget::updateSizeAndPosition();
     labelScaleChangedWithSize();
+}
+
+void Text::setFontSizePercentage(float percentage, Text::FontSizePercentageSource percentageSource /*= Text::FontSizePercentageSource::HEIGHT*/) {
+    
+    if (_fontSizePercentageSource != percentageSource || percentage!= _fontSizePercentage) {
+        _fontSizeType = FontSizeType::PERCENTAGE;
+        _fontSizePercentageSource = percentageSource;
+        _fontSizePercentage = percentage;
+        _labelRendererAdaptDirty = true;
+    }
+    
+}
+    
+int Text::getFontSizePercentage() {
+    return _fontSizePercentage;
+}
+
+void Text::setFontSizeType(FontSizeType fontSizeType) {
+    if (fontSizeType != _fontSizeType) {
+        _fontSizeType = fontSizeType;
+        _labelRendererAdaptDirty = true;
+    }
+}
+
+Text::FontSizeType Text::getFontSizeType() {
+    return _fontSizeType;
 }
     
 }

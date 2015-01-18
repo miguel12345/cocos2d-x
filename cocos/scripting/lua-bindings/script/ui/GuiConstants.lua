@@ -200,3 +200,14 @@ ccui.Widget.SizePercentSourceDimension = {
     width = 1,
     height = 2
 }
+
+ccui.Text.FontSizePercentageSource = {
+   none = 0,
+   width = 1,
+   height = 2,
+}
+
+ccui.Text.FontSizeType = {
+    absolute = 0,
+    percentage = 1,
+}

@@ -47,10 +47,24 @@
 -- @return color4b_table#color4b_table ret (return value: color4b_table)
         
 --------------------------------
+-- TODO<br>
+-- param size font size.
+-- @function [parent=#Text] setFontSizePercentage 
+-- @param self
+-- @param #float percentage
+-- @param #int percentageSource
+        
+--------------------------------
 -- 
 -- @function [parent=#Text] setTextVerticalAlignment 
 -- @param self
 -- @param #int alignment
+        
+--------------------------------
+-- 
+-- @function [parent=#Text] getFontSizeType 
+-- @param self
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- Sets the font name of label.<br>
@@ -191,9 +205,21 @@
         
 --------------------------------
 -- 
+-- @function [parent=#Text] getFontSizePercentage 
+-- @param self
+-- @return int#int ret (return value: int)
+        
+--------------------------------
+-- 
 -- @function [parent=#Text] setTextHorizontalAlignment 
 -- @param self
 -- @param #int alignment
+        
+--------------------------------
+-- 
+-- @function [parent=#Text] setFontSizeType 
+-- @param self
+-- @param #int fontSizeType
         
 --------------------------------
 -- @overload self, string, string, int         
