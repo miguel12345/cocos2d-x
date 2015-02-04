@@ -533,9 +533,10 @@ static int int_floor(double x)
 int Text::calculateFontSizeToFit(const Size& areaSize) {
     
     float areaSizeWidth = areaSize.width;
+    float areaSizeHeight = areaSize.height;
     TTFConfig config = _labelRenderer->getTTFConfig();
     
-    CCASSERT(areaSizeWidth>=0 || areaSizeHeight>=0, "At least one of the constraint area dimensions must be positive");
+    CCASSERT(areaSizeWidth>=0 || areaSizeHeight>=0 , "At least one of the constraint area dimensions must be positive");
     CCASSERT(config.fontSize>0, "The renderer must have a valid font size at this point");
 
     //We use the current ttf config as the reference size
