@@ -390,3 +390,13 @@ void setStringForKeyJNI(const char* key, const char* value)
         t.env->DeleteLocalRef(stringArg2);
     }
 }
+
+void exitApplicationJNI() {
+    JniMethodInfo t;
+    
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "exit", "()V")) {
+        t.env->CallStaticVoidMethod(t.classID, t.methodID);
+        
+        t.env->DeleteLocalRef(t.classID);
+    }
+}

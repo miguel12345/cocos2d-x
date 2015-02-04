@@ -37,6 +37,7 @@ public class Cocos2dxHandler extends Handler {
     // ===========================================================
     public final static int HANDLER_SHOW_DIALOG = 1;
     public final static int HANDLER_SHOW_EDITBOX_DIALOG = 2;
+    public final static int HANDLER_EXIT = 3;
     
     // ===========================================================
     // Fields
@@ -70,9 +71,12 @@ public class Cocos2dxHandler extends Handler {
         case Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG:
             showEditBoxDialog(msg);
             break;
+        case Cocos2dxHandler.HANDLER_EXIT:
+            exit();
+            break;
         }
     }
-    
+
     private void showDialog(Message msg) {
         Cocos2dxActivity theActivity = this.mActivity.get();
         DialogMessage dialogMessage = (DialogMessage)msg.obj;
@@ -100,7 +104,12 @@ public class Cocos2dxHandler extends Handler {
                 editBoxMessage.returnType,
                 editBoxMessage.maxLength).show();
     }
-    
+
+    private void exit() {
+        Cocos2dxActivity theActivity = this.mActivity.get();
+        theActivity.finish();
+    }
+
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================

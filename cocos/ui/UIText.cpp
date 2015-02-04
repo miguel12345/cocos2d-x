@@ -50,7 +50,8 @@ _adaptFontSizeToFit(false),
 _invalidFontLetterSize(Size(-1,-1)),
 _fontSizeType(FontSizeType::ABSOLUTE),
 _fontSizePercentageSource(FontSizePercentageSource::NONE),
-_fontSizePercentage(0.0f)
+_fontSizePercentage(0.0f),
+_ttfConfigDirty(true)
 {
 }
 
@@ -143,14 +144,12 @@ void Text::setFontSize(int size)
     {
         _labelRenderer->setSystemFontSize(size);
     }
-    else
-    {
-        TTFConfig config = _labelRenderer->getTTFConfig();
-        config.fontSize = size;
-        _labelRenderer->setTTFConfig(config);
+
+    if (_fontSize != size) {
+        _fontSize = size;
+        _labelRendererAdaptDirty = true;
+        _ttfConfigDirty = true;
     }
-    _fontSize = size;
-    _labelRendererAdaptDirty = true;
 }
     
 int Text::getFontSize()const
@@ -162,10 +161,6 @@ void Text::setFontName(const std::string& name)
 {
     if(FileUtils::getInstance()->isFileExist(name))
     {
-        TTFConfig config = _labelRenderer->getTTFConfig();
-        config.fontFilePath = name;
-        config.fontSize = _fontSize;
-        _labelRenderer->setTTFConfig(config);
         _type = Type::TTF;
     }
     else
@@ -179,6 +174,7 @@ void Text::setFontName(const std::string& name)
     }
     _fontName = name;
     _labelRendererAdaptDirty = true;
+    _ttfConfigDirty = true;
 }
     
 const std::string& Text::getFontName()const
@@ -198,7 +194,6 @@ void Text::setTextAreaSize(const Size &size)
     {
         _customSize=size;
     }
-    updateContentSizeWithTextureSize(_labelRenderer->getContentSize());
     _labelRendererAdaptDirty = true;
 }
     
@@ -280,6 +275,15 @@ void Text::onSizeChanged(const Size& oldSize)
     
 void Text::adaptRenderers()
 {
+    
+    if (_ttfConfigDirty) {
+        if (_type == cocos2d::ui::Text::Type::TTF) {
+            updateRendererTTFConfig();
+        }
+        
+        _ttfConfigDirty = false;
+    }
+    
     if (_labelRendererAdaptDirty)
     {
         labelScaleChangedWithSize();
@@ -308,17 +312,41 @@ void Text::labelScaleChangedWithSize()
     else if (_fontSizeType == FontSizeType::PERCENTAGE) {
         
         if (_fontSizePercentageSource == FontSizePercentageSource::HEIGHT) {
-            setFontSize(_contentSize.height*_fontSizePercentage);
+            if (_contentSize.height<0) {
+                Widget* widgetParent = getWidgetParent();
+                if (widgetParent) {
+                    setFontSize(widgetParent->getContentSize().height*_fontSizePercentage);
+                }
+            }
+            else {
+                setFontSize(_contentSize.height*_fontSizePercentage);
+            }
         }
         else if (_fontSizePercentageSource == FontSizePercentageSource::WIDTH) {
-            setFontSize(_contentSize.width*_fontSizePercentage);
+            if (_contentSize.width<0) {
+                Widget* widgetParent = getWidgetParent();
+                if (widgetParent) {
+                    setFontSize(widgetParent->getContentSize().width*_fontSizePercentage);
+                }
+            }
+            else {
+                setFontSize(_contentSize.width*_fontSizePercentage);
+            }
         }
         
         if (_heigthSizeType == SizeType::WRAP_CONTENT) {
+            if (_ttfConfigDirty) {
+                updateRendererTTFConfig();
+                _ttfConfigDirty = false;
+            }
             _labelRenderer->setDimensions(_contentSize.width,0);
             setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
         }
         else if(_widthSizeType == SizeType::WRAP_CONTENT) {
+            if (_ttfConfigDirty) {
+                updateRendererTTFConfig();
+                _ttfConfigDirty = false;
+            }
             _labelRenderer->setDimensions(0,_contentSize.height);
             setContentSize(Size(_labelRenderer->getContentSize().width,0));
         }
@@ -349,19 +377,35 @@ void Text::labelScaleChangedWithSize()
             need to adapt the renderer again due to this change of the content size */
         
         if (_heigthSizeType == SizeType::WRAP_CONTENT) {
+            if (_ttfConfigDirty) {
+                updateRendererTTFConfig();
+                _ttfConfigDirty = false;
+            }
             setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
         }
         else if(_widthSizeType == SizeType::WRAP_CONTENT) {
+            if (_ttfConfigDirty) {
+                updateRendererTTFConfig();
+                _ttfConfigDirty = false;
+            }
             setContentSize(Size(_labelRenderer->getContentSize().width,_contentSize.height));
         }
         _labelRendererAdaptDirty = false;
     }
     else if (_heigthSizeType == SizeType::WRAP_CONTENT) {
+        if (_ttfConfigDirty) {
+            updateRendererTTFConfig();
+            _ttfConfigDirty = false;
+        }
         _labelRenderer->setDimensions(_contentSize.width,0);
         setContentSize(Size(_contentSize.width,_labelRenderer->getContentSize().height));
         _labelRendererAdaptDirty = false;
     }
     else if(_widthSizeType == SizeType::WRAP_CONTENT) {
+        if (_ttfConfigDirty) {
+            updateRendererTTFConfig();
+            _ttfConfigDirty = false;
+        }
         _labelRenderer->setDimensions(0,_contentSize.height);
         setContentSize(Size(_labelRenderer->getContentSize().width,0));
         _labelRendererAdaptDirty = false;
@@ -438,6 +482,10 @@ void Text::copySpecialProperties(Widget *widget)
         setAdaptFontSizeToFit(label->getAdaptFontSizeToFit());
         setLineBreakWithoutSpace(label->getLineBreakWithoutSpace());
         setAdaptLabelScaleWithContentSize(label->getAdaptLabelScaleWithContentSize());
+        setFontSizeType(label->getFontSizeType());
+        setFontSizePercentage(label->getFontSizePercentage());
+        _fontSizePercentageSource = label->_fontSizePercentageSource;
+        setTextColor(label->getTextColor());
     }
 }
     
@@ -485,7 +533,6 @@ static int int_floor(double x)
 int Text::calculateFontSizeToFit(const Size& areaSize) {
     
     float areaSizeWidth = areaSize.width;
-    float areaSizeHeight = areaSize.height;
     TTFConfig config = _labelRenderer->getTTFConfig();
     
     CCASSERT(areaSizeWidth>=0 || areaSizeHeight>=0, "At least one of the constraint area dimensions must be positive");
@@ -530,7 +577,7 @@ void Text::setFontSizePercentage(float percentage, Text::FontSizePercentageSourc
     
 }
     
-int Text::getFontSizePercentage() {
+float Text::getFontSizePercentage() {
     return _fontSizePercentage;
 }
 
@@ -543,6 +590,15 @@ void Text::setFontSizeType(FontSizeType fontSizeType) {
 
 Text::FontSizeType Text::getFontSizeType() {
     return _fontSizeType;
+}
+
+void Text::updateRendererTTFConfig() {
+    
+    TTFConfig rendererTTFConfig = _labelRenderer->getTTFConfig();
+    rendererTTFConfig.fontFilePath = _fontName;
+    rendererTTFConfig.fontSize = _fontSize;
+    _labelRenderer->setTTFConfig(rendererTTFConfig);
+    
 }
     
 }

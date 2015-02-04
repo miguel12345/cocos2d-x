@@ -362,6 +362,14 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
       Log.d(TAG, "isEmulator=" + isEmulator);
       return isEmulator;
    }
+    
+    @Override
+    public void exit() {
+        Message msg = new Message();
+        msg.what = Cocos2dxHandler.HANDLER_EXIT;
+        this.mHandler.sendMessage(msg);
+    }
+    
 
     // ===========================================================
     // Inner and Anonymous Classes

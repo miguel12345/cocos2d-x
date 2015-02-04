@@ -180,6 +180,10 @@ void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
     cocos2d::Director::getInstance()->applicationScreenSizeChanged(newWidth,newHeight);
 }
 
+void Application::exit() {
+    
+}
+
 NS_CC_END
 
 #endif // CC_PLATFORM_IOS

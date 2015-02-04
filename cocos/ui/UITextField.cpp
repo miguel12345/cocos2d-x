@@ -302,7 +302,10 @@ _passwordStyleText(""),
 _textFieldRendererAdaptDirty(true),
 _fontName("Thonburi"),
 _fontSize(10),
-_fontType(FontType::SYSTEM)
+_fontType(FontType::SYSTEM),
+_fontSizeType(FontSizeType::ABSOLUTE),
+_fontSizePercentageSource(FontSizePercentageSource::NONE),
+_fontSizePercentage(0.0f)
 {
 }
 
@@ -438,7 +441,6 @@ void TextField::setPlaceHolder(const std::string& value)
 {
     _textFieldRenderer->setPlaceHolder(value);
     _textFieldRendererAdaptDirty = true;
-    updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
     
 const std::string& TextField::getPlaceHolder()const
@@ -477,7 +479,6 @@ void TextField::setFontSize(int size)
     }
     _fontSize = size;
     _textFieldRendererAdaptDirty = true;
-    updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
     
 int TextField::getFontSize()const
@@ -504,7 +505,6 @@ void TextField::setFontName(const std::string& name)
     }
     _fontName = name;
     _textFieldRendererAdaptDirty = true;
-    updateContentSizeWithTextureSize(_textFieldRenderer->getContentSize());
 }
     
 const std::string& TextField::getFontName()const
@@ -754,7 +754,43 @@ void TextField::textfieldRendererScaleChangedWithSize()
     {
         _textFieldRenderer->setDimensions(_contentSize.width, _contentSize.height);
     }
-    _textFieldRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
+    
+    if (_fontSizeType == FontSizeType::PERCENTAGE) {
+        
+        if (_fontSizePercentageSource == FontSizePercentageSource::HEIGHT) {
+            if (_contentSize.height<0) {
+                Widget* widgetParent = getWidgetParent();
+                if (widgetParent) {
+                    setFontSize(widgetParent->getContentSize().height*_fontSizePercentage);
+                }
+            }
+            else {
+                setFontSize(_contentSize.height*_fontSizePercentage);
+            }
+        }
+        else if (_fontSizePercentageSource == FontSizePercentageSource::WIDTH) {
+            if (_contentSize.width<0) {
+                Widget* widgetParent = getWidgetParent();
+                if (widgetParent) {
+                    setFontSize(widgetParent->getContentSize().width*_fontSizePercentage);
+                }
+            }
+            else {
+                setFontSize(_contentSize.width*_fontSizePercentage);
+            }
+        }
+        
+        _textFieldRendererAdaptDirty = false;
+        
+    }
+    Size cenas = _textFieldRenderer->getContentSize();
+    CCLOG("CENAS (%f;%f)",cenas.width,cenas.height);
+    if (cenas.width>_contentSize.width) {
+        _textFieldRenderer->setPosition((_contentSize.width / 2.0f)-((cenas.width-_contentSize.width)/2.0f), _contentSize.height / 2.0f);
+    }
+    else {
+        _textFieldRenderer->setPosition(_contentSize.width / 2.0f, _contentSize.height / 2.0f);
+    }
 }
 
 Size TextField::getVirtualRendererSize() const
@@ -821,6 +857,32 @@ void TextField::setTextVerticalAlignment(TextVAlignment alignment)
     _textFieldRenderer->setVerticalAlignment(alignment);
 }
 
+void TextField::setFontSizePercentage(float percentage, TextField::FontSizePercentageSource percentageSource /*= Text::FontSizePercentageSource::HEIGHT*/) {
+    
+    if (_fontSizePercentageSource != percentageSource || percentage!= _fontSizePercentage) {
+        _fontSizeType = FontSizeType::PERCENTAGE;
+        _fontSizePercentageSource = percentageSource;
+        _fontSizePercentage = percentage;
+        _textFieldRendererAdaptDirty = true;
+    }
+    
+}
+
+int TextField::getFontSizePercentage() {
+    return _fontSizePercentage;
+}
+
+void TextField::setFontSizeType(FontSizeType fontSizeType) {
+    if (fontSizeType != _fontSizeType) {
+        _fontSizeType = fontSizeType;
+        _textFieldRendererAdaptDirty = true;
+    }
+}
+
+TextField::FontSizeType TextField::getFontSizeType() {
+    return _fontSizeType;
+}
+    
 }
 
 NS_CC_END

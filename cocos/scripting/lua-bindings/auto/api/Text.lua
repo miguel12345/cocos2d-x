@@ -207,7 +207,7 @@
 -- 
 -- @function [parent=#Text] getFontSizePercentage 
 -- @param self
--- @return int#int ret (return value: int)
+-- @return float#float ret (return value: float)
         
 --------------------------------
 -- 

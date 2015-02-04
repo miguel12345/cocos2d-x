@@ -11655,7 +11655,7 @@ int lua_cocos2dx_ui_Text_getFontSizePercentage(lua_State* tolua_S)
             tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_Text_getFontSizePercentage'", nullptr);
             return 0;
         }
-        int ret = cobj->getFontSizePercentage();
+        double ret = cobj->getFontSizePercentage();
         tolua_pushnumber(tolua_S,(lua_Number)ret);
         return 1;
     }
@@ -17031,6 +17031,71 @@ int lua_cocos2dx_ui_TextField_getDeleteBackward(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_TextField_setFontSizePercentage(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::TextField* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.TextField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_TextField_setFontSizePercentage'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        double arg0;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccui.TextField:setFontSizePercentage");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_setFontSizePercentage'", nullptr);
+            return 0;
+        }
+        cobj->setFontSizePercentage(arg0);
+        return 0;
+    }
+    if (argc == 2) 
+    {
+        double arg0;
+        cocos2d::ui::TextField::FontSizePercentageSource arg1;
+
+        ok &= luaval_to_number(tolua_S, 2,&arg0, "ccui.TextField:setFontSizePercentage");
+
+        ok &= luaval_to_int32(tolua_S, 3,(int *)&arg1, "ccui.TextField:setFontSizePercentage");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_setFontSizePercentage'", nullptr);
+            return 0;
+        }
+        cobj->setFontSizePercentage(arg0, arg1);
+        return 0;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.TextField:setFontSizePercentage",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_TextField_setFontSizePercentage'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_TextField_getPlaceHolder(lua_State* tolua_S)
 {
     int argc = 0;
@@ -17121,6 +17186,53 @@ int lua_cocos2dx_ui_TextField_getAttachWithIME(lua_State* tolua_S)
 #if COCOS2D_DEBUG >= 1
     tolua_lerror:
     tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_TextField_getAttachWithIME'.",&tolua_err);
+#endif
+
+    return 0;
+}
+int lua_cocos2dx_ui_TextField_getFontSizeType(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::TextField* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.TextField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_TextField_getFontSizeType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_getFontSizeType'", nullptr);
+            return 0;
+        }
+        int ret = (int)cobj->getFontSizeType();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.TextField:getFontSizeType",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_TextField_getFontSizeType'.",&tolua_err);
 #endif
 
     return 0;
@@ -18432,6 +18544,53 @@ int lua_cocos2dx_ui_TextField_setTouchAreaEnabled(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_TextField_getFontSizePercentage(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::TextField* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.TextField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_TextField_getFontSizePercentage'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 0) 
+    {
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_getFontSizePercentage'", nullptr);
+            return 0;
+        }
+        int ret = cobj->getFontSizePercentage();
+        tolua_pushnumber(tolua_S,(lua_Number)ret);
+        return 1;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.TextField:getFontSizePercentage",argc, 0);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_TextField_getFontSizePercentage'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_TextField_hitTest(lua_State* tolua_S)
 {
     int argc = 0;
@@ -18627,6 +18786,55 @@ int lua_cocos2dx_ui_TextField_getTouchSize(lua_State* tolua_S)
 
     return 0;
 }
+int lua_cocos2dx_ui_TextField_setFontSizeType(lua_State* tolua_S)
+{
+    int argc = 0;
+    cocos2d::ui::TextField* cobj = nullptr;
+    bool ok  = true;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_Error tolua_err;
+#endif
+
+
+#if COCOS2D_DEBUG >= 1
+    if (!tolua_isusertype(tolua_S,1,"ccui.TextField",0,&tolua_err)) goto tolua_lerror;
+#endif
+
+    cobj = (cocos2d::ui::TextField*)tolua_tousertype(tolua_S,1,0);
+
+#if COCOS2D_DEBUG >= 1
+    if (!cobj) 
+    {
+        tolua_error(tolua_S,"invalid 'cobj' in function 'lua_cocos2dx_ui_TextField_setFontSizeType'", nullptr);
+        return 0;
+    }
+#endif
+
+    argc = lua_gettop(tolua_S)-1;
+    if (argc == 1) 
+    {
+        cocos2d::ui::TextField::FontSizeType arg0;
+
+        ok &= luaval_to_int32(tolua_S, 2,(int *)&arg0, "ccui.TextField:setFontSizeType");
+        if(!ok)
+        {
+            tolua_error(tolua_S,"invalid arguments in function 'lua_cocos2dx_ui_TextField_setFontSizeType'", nullptr);
+            return 0;
+        }
+        cobj->setFontSizeType(arg0);
+        return 0;
+    }
+    luaL_error(tolua_S, "%s has wrong number of arguments: %d, was expecting %d \n", "ccui.TextField:setFontSizeType",argc, 1);
+    return 0;
+
+#if COCOS2D_DEBUG >= 1
+    tolua_lerror:
+    tolua_error(tolua_S,"#ferror in function 'lua_cocos2dx_ui_TextField_setFontSizeType'.",&tolua_err);
+#endif
+
+    return 0;
+}
 int lua_cocos2dx_ui_TextField_create(lua_State* tolua_S)
 {
     int argc = 0;
@@ -18767,8 +18975,10 @@ int lua_register_cocos2dx_ui_TextField(lua_State* tolua_S)
         tolua_function(tolua_S,"getString",lua_cocos2dx_ui_TextField_getString);
         tolua_function(tolua_S,"setPasswordStyleText",lua_cocos2dx_ui_TextField_setPasswordStyleText);
         tolua_function(tolua_S,"getDeleteBackward",lua_cocos2dx_ui_TextField_getDeleteBackward);
+        tolua_function(tolua_S,"setFontSizePercentage",lua_cocos2dx_ui_TextField_setFontSizePercentage);
         tolua_function(tolua_S,"getPlaceHolder",lua_cocos2dx_ui_TextField_getPlaceHolder);
         tolua_function(tolua_S,"getAttachWithIME",lua_cocos2dx_ui_TextField_getAttachWithIME);
+        tolua_function(tolua_S,"getFontSizeType",lua_cocos2dx_ui_TextField_getFontSizeType);
         tolua_function(tolua_S,"setFontName",lua_cocos2dx_ui_TextField_setFontName);
         tolua_function(tolua_S,"getInsertText",lua_cocos2dx_ui_TextField_getInsertText);
         tolua_function(tolua_S,"setInsertText",lua_cocos2dx_ui_TextField_setInsertText);
@@ -18796,10 +19006,12 @@ int lua_register_cocos2dx_ui_TextField(lua_State* tolua_S)
         tolua_function(tolua_S,"isMaxLengthEnabled",lua_cocos2dx_ui_TextField_isMaxLengthEnabled);
         tolua_function(tolua_S,"setDetachWithIME",lua_cocos2dx_ui_TextField_setDetachWithIME);
         tolua_function(tolua_S,"setTouchAreaEnabled",lua_cocos2dx_ui_TextField_setTouchAreaEnabled);
+        tolua_function(tolua_S,"getFontSizePercentage",lua_cocos2dx_ui_TextField_getFontSizePercentage);
         tolua_function(tolua_S,"hitTest",lua_cocos2dx_ui_TextField_hitTest);
         tolua_function(tolua_S,"setMaxLength",lua_cocos2dx_ui_TextField_setMaxLength);
         tolua_function(tolua_S,"setTouchSize",lua_cocos2dx_ui_TextField_setTouchSize);
         tolua_function(tolua_S,"getTouchSize",lua_cocos2dx_ui_TextField_getTouchSize);
+        tolua_function(tolua_S,"setFontSizeType",lua_cocos2dx_ui_TextField_setFontSizeType);
         tolua_function(tolua_S,"create", lua_cocos2dx_ui_TextField_create);
         tolua_function(tolua_S,"createInstance", lua_cocos2dx_ui_TextField_createInstance);
     tolua_endmodule(tolua_S);

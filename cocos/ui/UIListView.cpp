@@ -93,9 +93,18 @@ void ListView::updateInnerContainerSize()
         {
             size_t length = _items.size();
             float totalHeight = (length - 1) * _itemsMargin;
+            size_t index = 0;
             for (auto& item : _items)
             {
-                totalHeight += item->getContentSize().height;
+                if (item->getVisibility() == Visibility::COLLAPSED) {
+                    if (index != 0) {
+                        totalHeight -= _itemsMargin;
+                    }
+                }
+                else {
+                    totalHeight += item->getContentSize().height;
+                }
+                index ++;
             }
             float finalWidth = _contentSize.width;
             float finalHeight = totalHeight;
@@ -106,9 +115,18 @@ void ListView::updateInnerContainerSize()
         {
             size_t length = _items.size();
             float totalWidth = (length - 1) * _itemsMargin;
+            size_t index = 0;
             for (auto& item : _items)
             {
-                totalWidth += item->getContentSize().width;
+                if (item->getVisibility() == Visibility::COLLAPSED) {
+                    if (index != 0) {
+                        totalWidth -= _itemsMargin;
+                    }
+                }
+                else {
+                    totalWidth += item->getContentSize().height;
+                }
+                index ++;
             }
             float finalWidth = totalWidth;
             float finalHeight = _contentSize.height;
@@ -434,7 +452,7 @@ void ListView::requestRefreshView()
 {
     _refreshViewDirty = true;
 }
-
+ 
 void ListView::refreshView()
 {
     ssize_t length = _items.size();

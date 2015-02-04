@@ -142,6 +142,13 @@ public:
      * @lua NA
      */
     virtual bool openURL(const std::string &url) = 0;
+    
+    /**
+     *  Requests the app to exit
+     *  This only works on Android
+     *
+     */
+    virtual void exit() = 0;
 };
 
 // end of platform group

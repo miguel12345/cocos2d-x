@@ -475,6 +475,10 @@ public class Cocos2dxHelper {
         editor.commit();
     }
     
+    public static void exit() {
+        android.os.Process.killProcess(android.os.Process.myPid());
+    }
+    
     // ===========================================================
     // Inner and Anonymous Classes
     // ===========================================================
@@ -484,5 +488,6 @@ public class Cocos2dxHelper {
         public void showEditTextDialog(final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength);
 
         public void runOnGLThread(final Runnable pRunnable);
+        public void exit();
     }
 }

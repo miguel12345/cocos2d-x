@@ -65,12 +65,6 @@ void ConfigParser::readConfig()
             {
                 _initViewSize.width = objectInitView["width"].GetUint();
                 _initViewSize.height = objectInitView["height"].GetUint();
-                if (_initViewSize.height>_initViewSize.width)
-                {
-                    float tmpvalue = _initViewSize.height;
-                    _initViewSize.height = _initViewSize.width;
-                    _initViewSize.width = tmpvalue;
-                }
                 
             }
             if (objectInitView.HasMember("name") && objectInitView["name"].IsString())

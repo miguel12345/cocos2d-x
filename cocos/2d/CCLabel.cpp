@@ -943,6 +943,8 @@ void Label::setFontDefinition(const FontDefinition& textDefinition)
 
 void Label::updateContent()
 {
+    CCLOG("DOING LABEL HEAVY STUFF FOR Text %s",getString().c_str());
+
     std::u16string utf16String;
     if (StringUtils::UTF8ToUTF16(_originalUTF8String, utf16String))
     {

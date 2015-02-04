@@ -193,6 +193,10 @@ void Application::applicationScreenSizeChanged(int newWidth, int newHeight) {
     cocos2d::Director::getInstance()->applicationScreenSizeChanged(newWidth,newHeight);
 }
 
+void Application::exit() {
+    exitApplicationJNI();
+}
+
 NS_CC_END
 
 #endif // CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID

@@ -163,6 +163,10 @@ public:
     virtual void updateDisplayedColor(const Color3B& parentColor) override;
     virtual void disableCascadeColor() override;
     virtual void disableCascadeOpacity()override;
+    
+    void setHideWhenFullyTransparent(bool hideWhenFullyTransparent);
+    bool isHideWhenFullyTransparent();
+
 CC_CONSTRUCTOR_ACCESS:
     ProtectedNode();
     virtual ~ProtectedNode();
@@ -174,6 +178,7 @@ protected:
     
     Vector<Node*> _protectedChildren;        ///< array of children nodes
     bool _reorderProtectedChildDirty;
+    bool _hideWhenFullyTransparent;
     
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(ProtectedNode);

@@ -37,7 +37,9 @@
 
 NS_CC_BEGIN
 
-ProtectedNode::ProtectedNode() : _reorderProtectedChildDirty(false)
+ProtectedNode::ProtectedNode() :
+_reorderProtectedChildDirty(false),
+_hideWhenFullyTransparent(false)
 {
 }
 
@@ -438,6 +440,15 @@ void ProtectedNode::disableCascadeOpacity()
     for(auto child : _protectedChildren){
         child->updateDisplayedOpacity(255);
     }
+}
+
+
+void ProtectedNode::setHideWhenFullyTransparent(bool hideWhenFullyTransparent) {
+    _hideWhenFullyTransparent = hideWhenFullyTransparent;
+}
+
+bool ProtectedNode::isHideWhenFullyTransparent() {
+    return _hideWhenFullyTransparent;
 }
 
 NS_CC_END

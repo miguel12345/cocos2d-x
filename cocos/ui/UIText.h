@@ -255,7 +255,7 @@ public:
      * @param size font size.
      */
     void setFontSizePercentage(float percentage, FontSizePercentageSource percentageSource = FontSizePercentageSource::HEIGHT);
-    int getFontSizePercentage();
+    float getFontSizePercentage();
     
     void setFontSizeType(FontSizeType fontSizeType);
     FontSizeType getFontSizeType();
@@ -299,6 +299,8 @@ protected:
     
     virtual void updateSizeAndPosition() override;
     
+    void updateRendererTTFConfig();
+    
 protected:
     bool _touchScaleChangeEnabled;
     float _normalScaleValueX;
@@ -308,6 +310,7 @@ protected:
     float _onSelectedScaleOffset;
     Label* _labelRenderer;
     bool _labelRendererAdaptDirty;
+    bool _ttfConfigDirty;
     Type _type;
     bool _adaptLabelScaleWithContentSize;
     bool _lineBreakWithoutSpace;

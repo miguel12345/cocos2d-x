@@ -997,6 +997,7 @@ protected:
     bool _ignoringTouchMoved;
     bool _sizeDirty;
     bool _reportToParentSizeChanged;
+    bool _swallowTouches;
     
 private:
     class FocusNavigationController;

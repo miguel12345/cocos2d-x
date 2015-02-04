@@ -132,7 +132,6 @@ Node::Node(void)
 , _cascadeColorEnabled(false)
 , _cascadeOpacityEnabled(true)
 , _cameraMask(1)
-, _hideWhenFullyTransparent(false)
 {
     // set default scheduler and actionManager
     Director *director = Director::getInstance();
@@ -2294,14 +2293,6 @@ void Node::setCameraMask(unsigned short mask, bool applyChildren)
             child->setCameraMask(mask, applyChildren);
         }
     }
-}
-
-void Node::setHideWhenFullyTransparent(bool hideWhenFullyTransparent) {
-    _hideWhenFullyTransparent = hideWhenFullyTransparent;
-}
-
-bool Node::isHideWhenFullyTransparent() {
-    return _hideWhenFullyTransparent;
 }
 
 // MARK: Deprecated

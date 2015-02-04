@@ -33,6 +33,11 @@
 -- @return char#char ret (return value: char)
         
 --------------------------------
+-- 
+-- @function [parent=#Application] exit 
+-- @param self
+        
+--------------------------------
 -- brief    Callback by Director to limit FPS.<br>
 -- param interval The time, expressed in seconds, between current frame and next.
 -- @function [parent=#Application] setAnimationInterval 

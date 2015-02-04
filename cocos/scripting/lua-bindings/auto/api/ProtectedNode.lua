@@ -29,6 +29,18 @@
 -- @param #bool cleanup
         
 --------------------------------
+-- 
+-- @function [parent=#ProtectedNode] setHideWhenFullyTransparent 
+-- @param self
+-- @param #bool hideWhenFullyTransparent
+        
+--------------------------------
+-- 
+-- @function [parent=#ProtectedNode] isHideWhenFullyTransparent 
+-- @param self
+-- @return bool#bool ret (return value: bool)
+        
+--------------------------------
 -- Reorders a child according to a new z value.<br>
 -- param child     An already added child node. It MUST be already added.<br>
 -- param localZOrder Z order for drawing priority. Please refer to setLocalZOrder(int)

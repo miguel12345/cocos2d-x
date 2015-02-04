@@ -1526,6 +1526,10 @@ void ScrollView::handleReleaseLogic(Touch *touch)
 
 bool ScrollView::onTouchBegan(Touch *touch, Event *unusedEvent)
 {
+    if (_bePressed) {
+        return false;
+    }
+    
     bool pass = Layout::onTouchBegan(touch, unusedEvent);
     if (!_isInterceptTouch)
     {
@@ -1931,7 +1935,13 @@ float ScrollView::calculateScrollVerticalSpeed() const{
     float firstDt = _lastOffsetsDt[firstIndex];
     float totalDis = lastOffset-firstOffset;
     float totalDt = lastDt-firstDt;
+    
+    if (totalDt == 0.0f && totalDis == 0.0f) {
+        return 0.0f;
+    }
+    
     float speed = totalDis/(totalDt);
+    CCASSERT(!isnan(speed), "Nan speed");
     return speed;
 }
     

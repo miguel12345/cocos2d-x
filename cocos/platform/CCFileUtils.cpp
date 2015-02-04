@@ -754,6 +754,8 @@ std::string FileUtils::fullPathForFilename(const std::string &filename)
         {
             fullpath = this->getPathForFilename(newFilename, resolutionIt, searchIt);
             
+            CCLOG("getPathForFilename(newFilename, resolutionIt, searchIt) %s,%s,%s",newFilename.c_str(),resolutionIt.c_str(),searchIt.c_str());
+            
             if (fullpath.length() > 0)
             {
                 // Using the filename passed in as key.

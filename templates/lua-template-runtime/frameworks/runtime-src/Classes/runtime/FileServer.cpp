@@ -230,7 +230,7 @@ _responseEndThread(false)
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS || CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     // need to be opened by Code IDE
-    _isUsingWritePath = true;
+    _isUsingWritePath = false;
 #else
     _isUsingWritePath = true;
 #endif

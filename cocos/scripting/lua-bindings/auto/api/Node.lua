@@ -414,12 +414,6 @@
 -- @param #bool ignore
         
 --------------------------------
--- 
--- @function [parent=#Node] setHideWhenFullyTransparent 
--- @param self
--- @param #bool hideWhenFullyTransparent
-        
---------------------------------
 -- Changes the Y skew angle of the node in degrees.<br>
 -- The difference between `setRotationalSkew()` and `setSkew()` is that the first one simulate Flash's skew functionality<br>
 -- while the second one uses the real skew function.<br>
@@ -1000,12 +994,6 @@
 -- @function [parent=#Node] getNormalizedPosition 
 -- @param self
 -- @return vec2_table#vec2_table ret (return value: vec2_table)
-        
---------------------------------
--- 
--- @function [parent=#Node] isHideWhenFullyTransparent 
--- @param self
--- @return bool#bool ret (return value: bool)
         
 --------------------------------
 -- Gets the X rotation (angle) of the node in degrees which performs a horizontal rotation skew.<br>

@@ -1561,9 +1561,6 @@ public:
     unsigned short getCameraMask() const { return _cameraMask; }
     void setCameraMask(unsigned short mask, bool applyChildren = true);
     
-    void setHideWhenFullyTransparent(bool hideWhenFullyTransparent);
-    bool isHideWhenFullyTransparent();
-
 CC_CONSTRUCTOR_ACCESS:
     // Nodes should be created using create();
     Node();
@@ -1713,8 +1710,6 @@ protected:
     std::function<void()> _onExitCallback;
     std::function<void()> _onEnterTransitionDidFinishCallback;
     std::function<void()> _onExitTransitionDidStartCallback;
-    
-    bool _hideWhenFullyTransparent;
 
 private:
     CC_DISALLOW_COPY_AND_ASSIGN(Node);

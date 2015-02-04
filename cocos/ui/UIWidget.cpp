@@ -177,7 +177,8 @@ _callbackType(""),
 _callbackName(""),
 _ignoringTouchMoved(false),
 _sizeDirty(true),
-_reportToParentSizeChanged(true)
+_reportToParentSizeChanged(true),
+_swallowTouches(true)
 #if MF_ALLOW_WIDGET_DEBUG_DRAW
     ,
 _debugDraw(false),
@@ -228,8 +229,6 @@ bool Widget::init()
         onFocusChanged = CC_CALLBACK_2(Widget::onFocusChange,this);
         onNextFocusedWidget = nullptr;
         this->setAnchorPoint(Vec2(0.5f, 0.5f));
-
-        ignoreContentAdaptWithSize(true);
         
         return true;
     }
@@ -399,15 +398,21 @@ void Widget::setMinSize(const Size &minSize) {
 
 void Widget::updateSizeAndPosition()
 {
-    Size pSize = _parent->getContentSize();
+    Size pSize = Size::ZERO;
     
-    if (pSize.width<0) {
-        pSize.width = _parent->getParent()->getContentSize().width;
+    if (_parent) {
+        
+        pSize = _parent->getContentSize();
+        
+        if (pSize.width<0) {
+            pSize.width = _parent->getParent()->getContentSize().width;
+        }
+        
+        if (pSize.height<0) {
+            pSize.height = _parent->getParent()->getContentSize().height;
+        }
     }
     
-    if (pSize.height<0) {
-        pSize.height = _parent->getParent()->getContentSize().height;
-    }
     
     updateSizeAndPosition(pSize);
 }
@@ -718,7 +723,7 @@ void Widget::setTouchEnabled(bool enable)
     {
         _touchListener = EventListenerTouchOneByOne::create();
         CC_SAFE_RETAIN(_touchListener);
-        _touchListener->setSwallowTouches(true);
+        _touchListener->setSwallowTouches(_swallowTouches);
         _touchListener->onTouchBegan = CC_CALLBACK_2(Widget::onTouchBegan, this);
         _touchListener->onTouchMoved = CC_CALLBACK_2(Widget::onTouchMoved, this);
         _touchListener->onTouchEnded = CC_CALLBACK_2(Widget::onTouchEnded, this);
@@ -891,6 +896,7 @@ void Widget::setSwallowTouches(bool swallow)
     {
         _touchListener->setSwallowTouches(swallow);
     }
+    _swallowTouches = swallow;
 }
     
 bool Widget::isSwallowTouches()const
@@ -1097,6 +1103,7 @@ void Widget::addTouchEventListener(Ref *target, SEL_TouchEvent selector)
 void Widget::addTouchEventListener(const ccWidgetTouchCallback& callback)
 {
     this->_touchEventCallback = callback;
+    
 }
     
 void Widget::addClickEventListener(const ccWidgetClickCallback &callback)
@@ -1383,6 +1390,8 @@ void Widget::copyProperties(Widget *widget)
     _focusEnabled = widget->_focusEnabled;
     _propagateTouchEvents = widget->_propagateTouchEvents;
     _propagateTouchEventsToChildren = widget->_propagateTouchEventsToChildren;
+    _widthSizeType = widget->_widthSizeType;
+    _heigthSizeType = widget->_heigthSizeType;
     
     copySpecialProperties(widget);
 

@@ -36,6 +36,13 @@
         
 --------------------------------
 -- 
+-- @function [parent=#TextField] setFontSizePercentage 
+-- @param self
+-- @param #float percentage
+-- @param #int percentageSource
+        
+--------------------------------
+-- 
 -- @function [parent=#TextField] getPlaceHolder 
 -- @param self
 -- @return string#string ret (return value: string)
@@ -45,6 +52,12 @@
 -- @function [parent=#TextField] getAttachWithIME 
 -- @param self
 -- @return bool#bool ret (return value: bool)
+        
+--------------------------------
+-- 
+-- @function [parent=#TextField] getFontSizeType 
+-- @param self
+-- @return int#int ret (return value: int)
         
 --------------------------------
 -- 
@@ -209,6 +222,12 @@
         
 --------------------------------
 -- 
+-- @function [parent=#TextField] getFontSizePercentage 
+-- @param self
+-- @return int#int ret (return value: int)
+        
+--------------------------------
+-- 
 -- @function [parent=#TextField] hitTest 
 -- @param self
 -- @param #vec2_table pt
@@ -231,6 +250,12 @@
 -- @function [parent=#TextField] getTouchSize 
 -- @param self
 -- @return size_table#size_table ret (return value: size_table)
+        
+--------------------------------
+-- 
+-- @function [parent=#TextField] setFontSizeType 
+-- @param self
+-- @param #int fontSizeType
         
 --------------------------------
 -- @overload self, string, string, int         

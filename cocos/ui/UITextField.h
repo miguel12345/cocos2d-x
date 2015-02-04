@@ -120,6 +120,20 @@ public:
         INSERT_TEXT,
         DELETE_BACKWARD,
     };
+    
+    enum class FontSizeType
+    {
+        ABSOLUTE,
+        PERCENTAGE
+    };
+    
+    enum class FontSizePercentageSource
+    {
+        NONE,
+        WIDTH,
+        HEIGHT
+    };
+    
     typedef std::function<void(Ref*, EventType)> ccTextFieldCallback;
     
     TextField();
@@ -196,6 +210,12 @@ public:
     void setTextHorizontalAlignment(TextHAlignment alignment);
     void setTextVerticalAlignment(TextVAlignment alignment);
     
+    void setFontSizePercentage(float percentage, FontSizePercentageSource percentageSource = FontSizePercentageSource::HEIGHT);
+    int getFontSizePercentage();
+    
+    void setFontSizeType(FontSizeType fontSizeType);
+    FontSizeType getFontSizeType();
+    
 CC_CONSTRUCTOR_ACCESS:
     virtual bool init() override;
     
@@ -246,6 +266,9 @@ private:
     std::string _fontName;
     int _fontSize;
     FontType _fontType;
+    FontSizeType _fontSizeType;
+    FontSizePercentageSource _fontSizePercentageSource;
+    float _fontSizePercentage;
 };
 
 }
